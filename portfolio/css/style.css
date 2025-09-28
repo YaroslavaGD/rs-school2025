@@ -2,6 +2,8 @@
   --color-dark: #222222;
   --color-red: #FF3C3C;
   --color-white: #FFFFFF;
+  --font-primary: 'Mulish', sans-serif;
+  --font-secondary: 'Oswald', sans-serif;
 }
 
 *, 
@@ -12,6 +14,13 @@
 
 body {
   margin: 0;
+  font-family: var(--font-primary);
+  font-weight: 400; /* Mulish Regular */
+}
+
+h1, h2, h3 {
+  font-family: var(--font-secondary);
+  font-weight: 400; /* Oswald Regular */
 }
 
 /* ------------ header ------------ */
@@ -55,6 +64,8 @@ body {
 }
 
 .nav__link {
+  font-family: var(--font-secondary);
+  font-weight: 400; /* Oswald Regular */
   color: var(--color-white);
   text-decoration: none;
   text-transform: uppercase;
