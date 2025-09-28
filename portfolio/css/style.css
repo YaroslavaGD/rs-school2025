@@ -1,0 +1,76 @@
+:root {
+  --color-dark: #222222;
+  --color-red: #FF3C3C;
+  --color-white: #FFFFFF;
+}
+
+*, 
+*::after, 
+*::before {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
+
+/* ------------ header ------------ */
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  background-color: var(--color-dark);
+  color: var(--color-white);
+  padding: 18px;
+}
+
+
+/* ------------ logo ------------ */
+
+.logo {
+  display: block;
+  padding: 2px;
+}
+
+.logo__img {
+  width: 20px;
+  height: 20px;
+}
+
+/* ------------ nav ------------ */
+.nav__list {
+  display: flex;
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}
+
+.nav__item {
+  padding: 0 20px;
+  cursor: pointer;
+}
+
+.nav__item:last-child {
+  padding-right: 0;
+}
+
+.nav__link {
+  color: var(--color-white);
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: color 0.3s ease-in;
+}
+
+.nav__item:hover .nav__link {
+  color: var(--color-red);
+}
+
+/* ------------ section ------------ */
+.section {
+  padding: 60px 20px;
+}
+
+.section--dark {
+  background-color: var(--color-dark);
+  color: var(--color-white);
+}
