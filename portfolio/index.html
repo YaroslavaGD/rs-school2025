@@ -29,16 +29,36 @@
   </header>
   <main>
     <section class="section section--dark hero" id="hero">
+      <aside>
+        <span class="hero__year">2025</span>
+        <span class="hero__note">Best Photographer by MAX</span>
+      </aside>
       <div>
-
-      </div>
-      <div>
-        <h1>Professional photographer</h1>
+        <h1>Professional<br>photographer</h1>
         <p>Capture the Moment. Tell Your Story.</p>
       </div>
-      <div>
+      <figure class="hero__images">
+        <picture>
+          <source srcset="images/regular/img-10-220.webp 1x, images/retina/img-10-440.webp 2x" type="image/webp" media="(min-width: 1024px)">
+          <source srcset="images/regular/img-10-220.jpg 1x, images/retina/img-10-440.jpg 2x" type="image/jpg" media="(min-width: 1024px)">
+          <img src="images/regular/img-10-220.jpg" alt="Person in coat with mountains"
+              width="220" height="220" loading="lazy">
+        </picture>
+        <picture>
+          <!-- desktop -->
+          <source srcset="images/regular/img-11-280.webp 1x, images/retina/img-11-560.webp 2x" type="image/webp" media="(min-width: 1024px)">
+          <source srcset="images/regular/img-11-280.jpg 1x, images/retina/img-11-560.png 2x" type="image/jpg" media="(min-width: 1024px)">
 
-      </div>
+          <!-- tablet/mobile -->
+
+          <img src="images/regular/img-11-280.jpg" alt="Portrait of a woman"
+              width="280" height="374" loading="lazy">
+        </picture>
+        <figcaption class="hero__intro">
+          Hi! I’m Vera, a photographer.<br>
+          For me, photography is more than just an image.
+        </figcaption>
+      </figure>
     </section>
     <section class="section about" id="about">
       <h2>About me</h2>

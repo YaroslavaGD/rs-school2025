@@ -12,6 +12,10 @@
   box-sizing: border-box;
 }
 
+html {
+  font-size: 16px;
+}
+
 body {
   margin: 0;
   font-family: var(--font-primary);
@@ -21,6 +25,22 @@ body {
 h1, h2, h3 {
   font-family: var(--font-secondary);
   font-weight: 400; /* Oswald Regular */
+}
+
+h1 {
+  font-size: 7.25rem;
+}
+
+h2 {
+  font-size: 2rem;
+}
+
+h3 {
+  font-size: 1.25rem;
+}
+
+p {
+  font-size: 1rem;
 }
 
 /* ------------ header ------------ */
