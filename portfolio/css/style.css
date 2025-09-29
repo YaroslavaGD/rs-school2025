@@ -20,6 +20,7 @@ body {
   margin: 0;
   font-family: var(--font-primary);
   font-weight: 400; /* Mulish Regular */
+  color: var(--color-dark);
 }
 
 h1, h2, h3 {
@@ -51,6 +52,26 @@ p {
 
 .container {
   max-width: 1440px;
+}
+
+/* ------------ button ------------ */
+.button {
+  background-color: var(--color-dark);
+  border: none;
+  color: var(--color-white);
+  font-size: 1rem;
+  line-height: 1.5rem;
+  padding: 1.125rem 1.25rem;
+  min-width: 12.5rem;
+  margin: 0;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background-color 0.3s ease-in, color 0.3s ease-in;
+}
+
+.button:hover {
+  background-color: var(--color-red);
+  color: var(--color-dark);
 }
 
 /* ------------ header ------------ */
@@ -336,4 +357,20 @@ p {
   height: 100%;
   object-fit: cover;
   object-position: center;
+}
+
+/* ------------ price ------------ */
+.price {
+  width: 100%;
+  line-height: 2.5rem;
+}
+
+.price__title {
+  text-transform: uppercase;
+  margin: 0;
+  margin-bottom: 0.2rem;
+}
+
+.price__text {
+  margin: 0;
 }
