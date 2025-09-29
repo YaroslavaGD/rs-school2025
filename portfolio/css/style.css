@@ -1,5 +1,6 @@
 :root {
   --color-dark: #222222;
+  --color-grey: #989898;
   --color-red: #FF3C3C;
   --color-white: #FFFFFF;
   --font-primary: 'Mulish', sans-serif;
@@ -549,4 +550,97 @@ p {
   margin: 0;
   font-size: 1rem;
   line-height: 1.5rem;
+}
+
+/* ------------ footer ------------ */
+
+.footer-inner {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.footer__top {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+  padding: 2.5rem 1rem 1.1rem;
+}
+
+.footer__title {
+  text-transform: uppercase;
+  font-size: 1.25rem;
+  line-height: 1.75rem;
+  text-align: center;
+  margin: 0;
+  margin-bottom: 1.3rem;
+}
+
+.footer__form {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+
+.footer__input {
+  width: 100%;
+  max-width: 23.775rem;
+  padding: 0.95rem 0.725rem 1rem;
+  border: 1px solid var(--color-dark);
+  border-radius: 0;
+  font-family: var(--font-secondary);
+  font-size: 1rem;
+  line-height: 1.5rem;
+  text-transform: uppercase;
+  outline: none;
+  transition: border-color 0.3s ease-in;
+}
+
+.footer__input:hover,
+.footer__input:focus,
+.footer__input:focus-visible {
+  border-color: var(--color-red);
+}
+
+.footer__button {
+  border: 1px solid var(--color-dark);
+}
+
+.footer__button:hover {
+  border-color: var(--color-red);
+}
+
+.footer__bottom {
+  padding: 1.25rem;
+  background-color: var(--color-dark);
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.footer-nav__item {
+  padding: 1.27rem;
+  text-decoration: none;
+  color: var(--color-white);
+  text-transform: uppercase;
+  font-family: var(--font-secondary);
+  line-height: 1.25rem;
+  transition: color 0.3s ease-in;
+}
+
+.footer-nav__item:hover {
+  color: var(--color-red);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
 }
