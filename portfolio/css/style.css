@@ -298,6 +298,7 @@ p {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  margin: 0;
 }
 
 .hero__last-col {
@@ -305,6 +306,7 @@ p {
   flex-direction: column;
   justify-content: space-between;
   align-items: flex-end;
+  margin: 0;
 }
 
 .hero__intro {
