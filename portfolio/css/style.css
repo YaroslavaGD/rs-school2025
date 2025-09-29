@@ -59,6 +59,7 @@ p {
   background-color: var(--color-dark);
   border: none;
   color: var(--color-white);
+  font-family: var(--font-secondary);
   font-size: 1rem;
   line-height: 1.5rem;
   padding: 1.125rem 1.25rem;
@@ -90,7 +91,6 @@ p {
   width: 100%;
 
 }
-
 
 /* ------------ logo ------------ */
 
@@ -373,4 +373,93 @@ p {
 
 .price__text {
   margin: 0;
+  margin-bottom: 2rem;
+}
+
+.price__flex {
+  display: grid;
+  gap: 2.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  align-items: stretch;
+}
+
+.price__card {
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem;
+  max-width: 20rem;
+  min-height:  31.25rem;
+  border: 1px solid var(--color-dark);
+  cursor: pointer;
+  transition: border-color 0.3s ease-in;
+}
+
+.price__card:hover {
+  border-color: var(--color-red);
+}
+
+.price__plan {
+  font-size: 1.25rem;
+  line-height: 1.75rem;
+  text-transform: uppercase;
+  margin: 0;
+  margin-bottom: 0.8rem;
+}
+
+.price__features {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  margin-bottom: 0.2rem;
+  padding: 0;
+  list-style-type: none;
+  gap: 4px;
+}
+
+.price__features-item {
+  position: relative;
+  font-size: 1rem;
+  line-height: 1.5rem;
+  padding-left: 0.7rem;
+}
+
+.price__features-item::before {
+  content: '';
+  display: block;
+  position: absolute;
+  background-color: var(--color-dark);
+  width: 6px;
+  height: 6px;
+  left: -1px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.price__number {
+  margin: 0;
+  font-family: var(--font-secondary);
+}
+
+.price__button-container {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.price__note {
+  font-style: italic;
+  font-size: 1rem;
+  line-height: 1.25rem;
+  margin: 0;
+  margin-bottom: 0.65rem;
+}
+
+.price__button {
+  width: 100%;
+}
+
+.price__card:hover .price__button {
+  background-color: var(--color-red);
+  color: var(--color-dark);
 }
