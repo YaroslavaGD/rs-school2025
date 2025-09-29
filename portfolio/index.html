@@ -380,24 +380,24 @@
       </div>
     </section>
   </main>
-  <footer class="container-out footer" id="footer">
-    <div class="container footer-inner">
+  <footer class="footer" id="footer">
+    <div class="footer-inner">
       <div class="footer__top">
         <h2 id="footer-form-title" class="footer__title">Like my portfolio? Sign up for a shoot!</h2>
-        <form action="#" method="post" aria-labelledby="footer-form-title">
-          <label for="name">Your name</label>
-          <input type="text" id="name" name="name" placeholder="Your name" required aria-required="true">
-          <label for="phone">Phone number</label>
-          <input type="tel" id="phone" name="phone" placeholder="+1" required aria-required="true">
-          <button type="submit" aria-label="Book a photo session">Book now</button>
+        <form class="footer__form" action="#" method="post" aria-labelledby="footer-form-title">
+          <label class="sr-only" for="name">Your name</label>
+          <input class="footer__input" type="text" id="name" name="name" placeholder="Your name" required aria-required="true">
+          <label class="sr-only" for="phone">Phone number</label>
+          <input class="footer__input" type="tel" id="phone" name="phone" placeholder="+1" required aria-required="true">
+          <button class="button footer__button" type="submit" aria-label="Book a photo session">Book now</button>
         </form>
       </div>
-      <nav class="footer__bottom" aria-label="Social links">
-        <a href="#">Intstagram</a>
-        <a href="#">Telegram</a>
-        <a href="#">WhatsApp</a>
-        <a href="#">Europe</a>
-        <a href="tel:+12349843572" aria-label="Contact phone number">+1 234 9843572</a>
+      <nav class="footer__bottom footer-nav" aria-label="Social links">
+        <a class="footer-nav__item" href="#">Intstagram</a>
+        <a class="footer-nav__item" href="#">Telegram</a>
+        <a class="footer-nav__item" href="#">WhatsApp</a>
+        <a class="footer-nav__item" href="#">Europe</a>
+        <a class="footer-nav__item" href="tel:+12349843572" aria-label="Contact phone number">+1 234 9843572</a>
       </nav>
     </div>
   </footer>
