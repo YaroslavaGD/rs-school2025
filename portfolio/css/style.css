@@ -827,4 +827,17 @@ p {
     gap: 1.25rem;
     padding: 0 2.1rem;
   }
+
+  .faq {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .faq-list {
+    padding-right: 0.3rem;
+  }
+
+  .footer__top {
+    padding: 2.45rem 1.35rem 1.1rem;
+  }
 }
