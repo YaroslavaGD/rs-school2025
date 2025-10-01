@@ -63,23 +63,18 @@
         </div>
         <div class="hero__images">
           <figure class="hero__second-col">
-            <picture >
-              <source srcset="images/regular/img-10-220.webp 1x, images/retina/img-10-440.webp 2x" type="image/webp" media="(min-width: 1024px)">
-              <source srcset="images/regular/img-10-220.jpg 1x, images/retina/img-10-440.jpg 2x" type="image/jpeg" media="(min-width: 1024px)">
-              <img src="images/regular/img-10-220.jpg" alt="Person in coat with mountains"
-                  width="220" height="220" loading="lazy">
+            <picture class="hero__picture hero__picture--1">
+              <source srcset="images/regular/img-10-220.webp 1x, images/retina/img-10-440.webp 2x" type="image/webp">
+              <source srcset="images/regular/img-10-220.jpg 1x, images/retina/img-10-440.jpg 2x" type="image/jpeg">
+              <img class="hero__img" src="images/regular/img-10-220.jpg" alt="Person in coat with mountains" loading="lazy">
             </picture>
           </figure>
           <figure class="hero__last-col">
-            <picture>
-              <!-- desktop -->
-              <source srcset="images/regular/img-11-280.webp 1x, images/retina/img-11-560.webp 2x" type="image/webp" media="(min-width: 1024px)">
-              <source srcset="images/regular/img-11-280.jpg 1x, images/retina/img-11-560.jpg 2x" type="image/jpeg" media="(min-width: 1024px)">
-    
-              <!-- tablet/mobile -->
-    
-              <img src="images/regular/img-11-280.jpg" alt="Portrait of a woman"
-                  width="280" height="374" loading="lazy">
+            <picture class="hero__picture hero__picture--2">
+              <source srcset="images/regular/img-11-280.webp 1x, images/retina/img-11-560.webp 2x" type="image/webp">
+              <source srcset="images/regular/img-11-280.jpg 1x, images/retina/img-11-560.jpg 2x" type="image/jpeg" >
+
+              <img class="hero__img" src="images/regular/img-11-280.jpg" alt="Portrait of a woman" loading="lazy">
             </picture>
             <figcaption class="hero__intro">
               Hi! I'm Vera, a photographer.<br>
@@ -166,7 +161,7 @@
             <img class="about__img" src="images/about/img-photographer-2-340.jpg" alt="Portrait of a woman" loading="lazy">
           </picture>
         </div>
-        <div class="about__col">
+        <div class="about__col about__col--last">
           <picture class="about__picture">
             <!-- desktop -->
             <source 
@@ -205,7 +200,7 @@
         </div>
       </div>
     </section>
-    <section class="section section--dark container-out" id="portfolio">
+    <section class="section section--dark container-out portfolio-out" id="portfolio">
       <div class="container portfolio">
         <h2 class="portfolio__title">My portfolio</h2>
         <p class="portfolio__subtitle">Every shoot is a story. Here you’ll find portraits, love stories, family sessions, and more.</p>
