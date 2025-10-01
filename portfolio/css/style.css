@@ -322,6 +322,30 @@ p {
   line-height: 1.5rem;
 }
 
+.hero__picture {
+  display: block;
+  width: 100%;
+  overflow: hidden;
+}
+
+.hero__picture--1 {
+  width: 220px;
+  height: 220px;
+}
+
+.hero__picture--2 {
+  width: 280px;
+  height: 374px;
+}
+
+.hero__img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
 /* ------------ about ------------ */
 .about-out {
   padding-bottom: 1.3rem;
@@ -397,7 +421,6 @@ p {
   position: relative;
   width: 100%;
   height: 654px;
-  /* overflow: hidden; */
 }
 
 .slider {
