@@ -795,4 +795,36 @@ p {
     width: 220px;
     height: 294px;
   }
+
+  .about-out {
+    padding-bottom: 1.25rem;
+  }
+
+  .about {
+    flex-shrink: 0;
+    flex-wrap: wrap;
+    gap: 0;
+  }
+
+  .about__text {
+    max-width: 100%;
+    margin-bottom: 2.5rem;
+  }
+
+  .about__col--last .about__picture {
+    display: none;
+  }
+
+  .slider {
+    transform: translateX(-216.5%);
+  }
+
+  .portfolio-out {
+    padding-bottom: 3.76rem;
+  }
+
+  .price__flex {
+    gap: 1.25rem;
+    padding: 0 2.1rem;
+  }
 }
