@@ -143,6 +143,12 @@ p {
   color: var(--color-red);
 }
 
+.nav-button {
+  display: none;
+  width: 3.75rem;
+  height: 3.75rem;
+}
+
 /* ------------ main ------------ */
 .main {
   overflow-x: hidden;
@@ -762,6 +768,38 @@ p {
 }
 
 @media (max-width: 769px) {
+  .nav {
+    display: none;
+  }
+
+  .nav-button {
+    display: block;
+    position: absolute;
+    top: 0;
+    right: 0;
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+  }
+  .nav-button::before,
+  .nav-button::after {
+    content: '';
+    position: absolute;
+    display: block;
+    background-color: var(--color-white);
+    height: 2px;
+  }
+  .nav-button::before {
+    width: 12px;
+    left: 1.75rem;
+    top: 1.55rem;
+  }
+  .nav-button::after {
+    width: 20px;
+    left: 1.25rem;
+    top: 2.05rem;
+  }
 
   .hero {
     position: relative;
