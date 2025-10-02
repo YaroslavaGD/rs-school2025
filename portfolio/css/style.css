@@ -143,6 +143,12 @@ p {
   color: var(--color-red);
 }
 
+.nav-button {
+  display: none;
+  width: 3.75rem;
+  height: 3.75rem;
+}
+
 /* ------------ main ------------ */
 .main {
   overflow-x: hidden;
@@ -761,7 +767,39 @@ p {
   border: 0;
 }
 
-@media (max-width: 769px) {
+@media (max-width: 915px) {
+  .nav {
+    display: none;
+  }
+
+  .nav-button {
+    display: block;
+    position: absolute;
+    top: 0;
+    right: 0;
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+  }
+  .nav-button::before,
+  .nav-button::after {
+    content: '';
+    position: absolute;
+    display: block;
+    background-color: var(--color-white);
+    height: 2px;
+  }
+  .nav-button::before {
+    width: 12px;
+    left: 1.75rem;
+    top: 1.55rem;
+  }
+  .nav-button::after {
+    width: 20px;
+    left: 1.25rem;
+    top: 2.05rem;
+  }
 
   .hero {
     position: relative;
@@ -840,4 +878,101 @@ p {
   .footer__top {
     padding: 2.45rem 1.35rem 1.1rem;
   }
+}
+
+@media (max-width: 400px) {
+  .hero {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+  .hero__side {
+    display: none;
+  }
+
+  .hero-out {
+    padding-top: 3rem;
+  }
+
+  .hero__content {
+    padding: 0;
+  }
+
+  .hero__title {
+    font-size: 3.5rem;
+    line-height: 4rem;
+  }
+
+  .hero__stats {
+      gap: 3.8rem;
+  }
+
+  .hero__scroll {
+    display: none;
+  }
+
+  .hero__stats-item {
+    flex-shrink: 0;
+  }
+
+  .hero__subtitle {
+    margin-bottom: 1.25rem;
+  }
+
+  .hero__picture--2 {
+    margin-bottom: 3.75rem;
+  }
+
+  .slider {
+      transform: translateX(-520.5%);
+  }
+
+  .price__title {
+    margin-bottom: 0.8rem;
+  }
+
+  .price__text {
+    line-height: 1.5rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .price__flex {
+    padding: 0 0.6rem;
+  }
+
+  .faq-out {
+    padding-top: 3.4rem;
+  }
+
+  .faq {
+    gap: 2.7rem;
+  }
+
+  .faq__title {
+    margin-bottom: 0.65rem;
+    line-height: 2.75rem;
+  }
+
+  .footer__top {
+    padding: 2.45rem 1.1rem 1.2rem;
+  }
+
+  .footer__form {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+  .footer__input {
+    padding: 0.95rem 0.725rem 1.1rem;
+  }
+
+  .footer__button {
+    width: 100%;
+  }
+
+  .footer__bottom {
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
 }
