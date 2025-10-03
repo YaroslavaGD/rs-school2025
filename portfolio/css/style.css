@@ -721,6 +721,28 @@ p {
   border: 0;
 }
 
+@media (max-width: 1437px) {
+  .hero {
+    flex-wrap: wrap;
+  }
+
+  .hero__content {
+    min-width: auto;
+  }
+
+  .hero__title {
+    font-size: 4.25rem;
+    line-height: 5rem;
+  }
+}
+
+
+@media (max-width: 1113px) {
+  .hero__second-col {
+        display: none;
+  }
+}
+
 @media (max-width: 915px) {
   .nav {
     display: none;
@@ -760,6 +782,7 @@ p {
     min-height: auto;
     min-height: 39.9rem;
     gap: 0;
+    flex-wrap: wrap;
   }
 
   .hero__side {
@@ -834,12 +857,43 @@ p {
   }
 }
 
-@media (max-width: 400px) {
+@media (max-width: 745px) {
+  .hero__content {
+    padding-left: 2.4rem;
+  }
+
+  .footer__top {
+    padding: 2.45rem 1.1rem 1.2rem;
+  }
+
+  .footer__form {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+  .footer__input {
+    padding: 0.95rem 0.725rem 1.1rem;
+  }
+
+  .footer__button {
+    width: 100%;
+    max-width: 23.775rem;
+  }
+
+  .footer__bottom {
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+}
+
+@media (max-width: 705px) {
   .hero {
     flex-direction: row;
     flex-wrap: wrap;
-    justify-content: flex-end;
+    justify-content: center;
+    gap: 2rem;
   }
+
   .hero__side {
     display: none;
   }
@@ -877,6 +931,18 @@ p {
     margin-bottom: 3.75rem;
   }
 
+  .price__flex {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+@media (max-width: 550px) {
+  .hero {
+    gap: 0;
+  }
+
   .slider {
       transform: translateX(-520.5%);
   }
@@ -907,28 +973,13 @@ p {
     line-height: 2.75rem;
   }
 
-  .footer__top {
-    padding: 2.45rem 1.1rem 1.2rem;
-  }
+  
 
-  .footer__form {
-    flex-direction: row;
-    flex-wrap: wrap;
+}
+@media (max-width: 420px) {
+  .hero {
+    justify-content: flex-end;
   }
-  .footer__input {
-    padding: 0.95rem 0.725rem 1.1rem;
-  }
-
-  .footer__button {
-    width: 100%;
-  }
-
-  .footer__bottom {
-    flex-direction: column;
-    flex-wrap: wrap;
-    align-items: center;
-  }
-
 }
 
 @media (hover: hover) and (pointer: fine) {
