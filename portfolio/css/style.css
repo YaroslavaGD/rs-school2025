@@ -72,10 +72,6 @@ p {
   transition: background-color 0.3s ease-in, color 0.3s ease-in;
 }
 
-.button:hover {
-  background-color: var(--color-red);
-  color: var(--color-dark);
-}
 
 /* ------------ header ------------ */
 .header {
@@ -108,11 +104,6 @@ p {
   transition: fill 0.3s ease-in;
 }
 
-.logo__img:hover {
-  fill: var(--color-white);
-}
-
-
 /* ------------ nav ------------ */
 .nav__list {
   display: flex;
@@ -137,10 +128,6 @@ p {
   text-decoration: none;
   text-transform: uppercase;
   transition: color 0.3s ease-in;
-}
-
-.nav__item:hover .nav__link {
-  color: var(--color-red);
 }
 
 .nav-button {
@@ -279,13 +266,6 @@ p {
   gap: 0.45rem;
   cursor: pointer;
   padding-top: 1.25rem;
-}
-
-.hero__scroll-container:hover .hero__scroll-link,
-.hero__scroll-container:hover .hero__scroll-arrow {
-  color: var(--color-red);
-  
-  stroke: var(--color-red);
 }
 
 .hero__scroll-link {
@@ -520,9 +500,6 @@ p {
   transition: border-color 0.3s ease-in;
 }
 
-.price__card:hover {
-  border-color: var(--color-red);
-}
 
 .price__plan {
   font-size: 1.25rem;
@@ -583,11 +560,6 @@ p {
 
 .price__button {
   width: 100%;
-}
-
-.price__card:hover .price__button {
-  background-color: var(--color-red);
-  color: var(--color-dark);
 }
 
 /* ------------ faq ------------ */
@@ -659,15 +631,6 @@ p {
   opacity: 0;
 }
 
-.faq-list__item:hover .faq-list__title::after,
-.faq-list__item:hover .faq-list__title::before {
-  background-color: var(--color-red);
-}
-
-.faq-list__item:hover .faq-list__title {
-  color: var(--color-red);
-}
-
 .faq-list__content {
   margin: 0;
   font-size: 1rem;
@@ -720,7 +683,6 @@ p {
   transition: border-color 0.3s ease-in;
 }
 
-.footer__input:hover,
 .footer__input:focus,
 .footer__input:focus-visible {
   border-color: var(--color-red);
@@ -728,10 +690,6 @@ p {
 
 .footer__button {
   border: 1px solid var(--color-dark);
-}
-
-.footer__button:hover {
-  border-color: var(--color-red);
 }
 
 .footer__bottom {
@@ -752,10 +710,6 @@ p {
   transition: color 0.3s ease-in;
 }
 
-.footer-nav__item:hover {
-  color: var(--color-red);
-}
-
 .sr-only {
   position: absolute;
   width: 1px;
@@ -765,6 +719,28 @@ p {
   overflow: hidden;
   clip: rect(0, 0, 0, 0);
   border: 0;
+}
+
+@media (max-width: 1437px) {
+  .hero {
+    flex-wrap: wrap;
+  }
+
+  .hero__content {
+    min-width: auto;
+  }
+
+  .hero__title {
+    font-size: 4.25rem;
+    line-height: 5rem;
+  }
+}
+
+
+@media (max-width: 1113px) {
+  .hero__second-col {
+        display: none;
+  }
 }
 
 @media (max-width: 915px) {
@@ -806,6 +782,7 @@ p {
     min-height: auto;
     min-height: 39.9rem;
     gap: 0;
+    flex-wrap: wrap;
   }
 
   .hero__side {
@@ -880,12 +857,43 @@ p {
   }
 }
 
-@media (max-width: 400px) {
+@media (max-width: 745px) {
+  .hero__content {
+    padding-left: 2.4rem;
+  }
+
+  .footer__top {
+    padding: 2.45rem 1.1rem 1.2rem;
+  }
+
+  .footer__form {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+  .footer__input {
+    padding: 0.95rem 0.725rem 1.1rem;
+  }
+
+  .footer__button {
+    width: 100%;
+    max-width: 23.775rem;
+  }
+
+  .footer__bottom {
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+}
+
+@media (max-width: 705px) {
   .hero {
     flex-direction: row;
     flex-wrap: wrap;
-    justify-content: flex-end;
+    justify-content: center;
+    gap: 2rem;
   }
+
   .hero__side {
     display: none;
   }
@@ -923,6 +931,18 @@ p {
     margin-bottom: 3.75rem;
   }
 
+  .price__flex {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+@media (max-width: 550px) {
+  .hero {
+    gap: 0;
+  }
+
   .slider {
       transform: translateX(-520.5%);
   }
@@ -953,26 +973,63 @@ p {
     line-height: 2.75rem;
   }
 
-  .footer__top {
-    padding: 2.45rem 1.1rem 1.2rem;
+  
+
+}
+@media (max-width: 420px) {
+  .hero {
+    justify-content: flex-end;
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .button:hover {
+    background-color: var(--color-red);
+    color: var(--color-dark);
   }
 
-  .footer__form {
-    flex-direction: row;
-    flex-wrap: wrap;
-  }
-  .footer__input {
-    padding: 0.95rem 0.725rem 1.1rem;
+  .price__card:hover {
+    border-color: var(--color-red);
   }
 
-  .footer__button {
-    width: 100%;
+  .logo__img:hover {
+    fill: var(--color-white);
   }
 
-  .footer__bottom {
-    flex-direction: column;
-    flex-wrap: wrap;
-    align-items: center;
+  .nav__item:hover .nav__link {
+    color: var(--color-red);
+  }
+
+  .hero__scroll-container:hover .hero__scroll-link,
+  .hero__scroll-container:hover .hero__scroll-arrow {
+    color: var(--color-red);
+    
+    stroke: var(--color-red);
+  }
+
+  .price__card:hover .price__button {
+    background-color: var(--color-red);
+    color: var(--color-dark);
+  }
+
+  .faq-list__item:hover .faq-list__title::after,
+  .faq-list__item:hover .faq-list__title::before {
+    background-color: var(--color-red);
+  }
+
+  .faq-list__item:hover .faq-list__title {
+    color: var(--color-red);
+  }
+  
+  .footer__input:hover {
+    border-color: var(--color-red);
+  }
+  .footer__button:hover {
+    border-color: var(--color-red);
+  }
+
+  .footer-nav__item:hover {
+    color: var(--color-red);
   }
 
 }
