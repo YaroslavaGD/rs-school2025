@@ -72,10 +72,6 @@ p {
   transition: background-color 0.3s ease-in, color 0.3s ease-in;
 }
 
-.button:hover {
-  background-color: var(--color-red);
-  color: var(--color-dark);
-}
 
 /* ------------ header ------------ */
 .header {
@@ -108,11 +104,6 @@ p {
   transition: fill 0.3s ease-in;
 }
 
-.logo__img:hover {
-  fill: var(--color-white);
-}
-
-
 /* ------------ nav ------------ */
 .nav__list {
   display: flex;
@@ -137,10 +128,6 @@ p {
   text-decoration: none;
   text-transform: uppercase;
   transition: color 0.3s ease-in;
-}
-
-.nav__item:hover .nav__link {
-  color: var(--color-red);
 }
 
 .nav-button {
@@ -279,13 +266,6 @@ p {
   gap: 0.45rem;
   cursor: pointer;
   padding-top: 1.25rem;
-}
-
-.hero__scroll-container:hover .hero__scroll-link,
-.hero__scroll-container:hover .hero__scroll-arrow {
-  color: var(--color-red);
-  
-  stroke: var(--color-red);
 }
 
 .hero__scroll-link {
@@ -520,9 +500,6 @@ p {
   transition: border-color 0.3s ease-in;
 }
 
-.price__card:hover {
-  border-color: var(--color-red);
-}
 
 .price__plan {
   font-size: 1.25rem;
@@ -583,11 +560,6 @@ p {
 
 .price__button {
   width: 100%;
-}
-
-.price__card:hover .price__button {
-  background-color: var(--color-red);
-  color: var(--color-dark);
 }
 
 /* ------------ faq ------------ */
@@ -659,15 +631,6 @@ p {
   opacity: 0;
 }
 
-.faq-list__item:hover .faq-list__title::after,
-.faq-list__item:hover .faq-list__title::before {
-  background-color: var(--color-red);
-}
-
-.faq-list__item:hover .faq-list__title {
-  color: var(--color-red);
-}
-
 .faq-list__content {
   margin: 0;
   font-size: 1rem;
@@ -720,7 +683,6 @@ p {
   transition: border-color 0.3s ease-in;
 }
 
-.footer__input:hover,
 .footer__input:focus,
 .footer__input:focus-visible {
   border-color: var(--color-red);
@@ -728,10 +690,6 @@ p {
 
 .footer__button {
   border: 1px solid var(--color-dark);
-}
-
-.footer__button:hover {
-  border-color: var(--color-red);
 }
 
 .footer__bottom {
@@ -750,10 +708,6 @@ p {
   font-family: var(--font-secondary);
   line-height: 1.25rem;
   transition: color 0.3s ease-in;
-}
-
-.footer-nav__item:hover {
-  color: var(--color-red);
 }
 
 .sr-only {
@@ -973,6 +927,58 @@ p {
     flex-direction: column;
     flex-wrap: wrap;
     align-items: center;
+  }
+
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .button:hover {
+    background-color: var(--color-red);
+    color: var(--color-dark);
+  }
+
+  .price__card:hover {
+    border-color: var(--color-red);
+  }
+
+  .logo__img:hover {
+    fill: var(--color-white);
+  }
+
+  .nav__item:hover .nav__link {
+    color: var(--color-red);
+  }
+
+  .hero__scroll-container:hover .hero__scroll-link,
+  .hero__scroll-container:hover .hero__scroll-arrow {
+    color: var(--color-red);
+    
+    stroke: var(--color-red);
+  }
+
+  .price__card:hover .price__button {
+    background-color: var(--color-red);
+    color: var(--color-dark);
+  }
+
+  .faq-list__item:hover .faq-list__title::after,
+  .faq-list__item:hover .faq-list__title::before {
+    background-color: var(--color-red);
+  }
+
+  .faq-list__item:hover .faq-list__title {
+    color: var(--color-red);
+  }
+  
+  .footer__input:hover {
+    border-color: var(--color-red);
+  }
+  .footer__button:hover {
+    border-color: var(--color-red);
+  }
+
+  .footer-nav__item:hover {
+    color: var(--color-red);
   }
 
 }
