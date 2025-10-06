@@ -490,17 +490,31 @@
         </div>
       </div>
     </section>
+
+    <div class="modal">
+      <div class="modal__window">
+          <h3 class="modal__title">Like my portfolio? Sign up for a shoot!</h3>
+          <form class="form modal__form" action="#" method="post" aria-labelledby="footer-form-title">
+            <label class="sr-only" for="name">Your name</label>
+            <input class="form__input" type="text" id="name" name="name" placeholder="Your name" required aria-required="true">
+            <label class="sr-only" for="phone">Phone number</label>
+            <input class="form__input" type="tel" id="phone" name="phone" placeholder="+1" required aria-required="true">
+            <button class="button form__button" type="submit" aria-label="Book a photo session">Book now</button>
+          </form>
+          <button class="modal__button"></button>
+      </div>
+    </div>
   </main>
   <footer class="footer" id="footer">
     <div class="footer-inner">
       <div class="footer__top">
         <h2 id="footer-form-title" class="footer__title">Like my portfolio? Sign up for a shoot!</h2>
-        <form class="footer__form" action="#" method="post" aria-labelledby="footer-form-title">
+        <form class="form" action="#" method="post" aria-labelledby="footer-form-title">
           <label class="sr-only" for="name">Your name</label>
-          <input class="footer__input" type="text" id="name" name="name" placeholder="Your name" required aria-required="true">
+          <input class="form__input" type="text" id="name" name="name" placeholder="Your name" required aria-required="true">
           <label class="sr-only" for="phone">Phone number</label>
-          <input class="footer__input" type="tel" id="phone" name="phone" placeholder="+1" required aria-required="true">
-          <button class="button footer__button" type="submit" aria-label="Book a photo session">Book now</button>
+          <input class="form__input" type="tel" id="phone" name="phone" placeholder="+1" required aria-required="true">
+          <button class="button form__button" type="submit" aria-label="Book a photo session">Book now</button>
         </form>
       </div>
       <nav class="footer__bottom footer-nav" aria-label="Social links">

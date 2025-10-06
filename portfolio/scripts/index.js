@@ -60,6 +60,7 @@ accordion.forEach((targetElement, index) => {
     }
   });
 });
+
 window.addEventListener('DOMContentLoaded', () => {
   const savedIndex = localStorage.getItem('openAccordionId');
   if (savedIndex !== null && accordion[savedIndex]) {
