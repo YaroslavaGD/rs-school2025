@@ -5,6 +5,11 @@ const navItems = [... document.querySelectorAll('.nav__item')];
 
 const accordion = [...document.querySelectorAll('.faq-list__item')];
 
+const modal = document.querySelector('.modal');
+const modalWindow = modal.querySelector('.modal__window');
+const modalButton = modal.querySelector('.modal__button');
+const modalPriceButtons = [... document.querySelectorAll('.price__button')];
+
 // MENU-FUNCTIONS
 const toggleMenu = () => {
   const isOpen = navButton.classList.contains('nav-button--open');
@@ -43,6 +48,36 @@ window.addEventListener('resize', function() {
     nav.classList.remove('nav--open');
   }
 }, false);
+
+//MODAL
+const toggleModal = () => {
+  const isOpen = modal.classList.contains('modal--open');
+  modal.classList.toggle('modal--open');
+  page.classList.toggle('page--clip');
+}
+
+modalPriceButtons.forEach(priceButton => {
+  priceButton.addEventListener('click', e => {
+    e.stopPropagation();
+    toggleModal();
+  });
+});
+
+modalButton.addEventListener('click', e => {
+  e.stopPropagation();
+  toggleModal();
+});
+
+document.addEventListener('click', e => {
+  const target = e.target;
+  const isModalWindow = target == modalWindow || modalWindow.contains(target);
+  const isModalButton = target == modalButton;
+  const isModalOpen = modal.classList.contains('modal--open');
+
+  if (!isModalWindow && !isModalButton && isModalOpen) {
+    toggleModal();
+  }
+});
 
 // ACCORDION
 accordion.forEach((targetElement, index) => {
