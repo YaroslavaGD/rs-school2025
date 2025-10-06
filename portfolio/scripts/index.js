@@ -3,6 +3,8 @@ const navButton = document.querySelector('.nav-button');
 const nav = document.querySelector('.nav');
 const navItems = [... document.querySelectorAll('.nav__item')];
 
+const accordion = [...document.querySelectorAll('.faq-list__item')];
+
 // MENU-FUNCTIONS
 const toggleMenu = () => {
   const isOpen = navButton.classList.contains('nav-button--open');
@@ -41,3 +43,27 @@ window.addEventListener('resize', function() {
     nav.classList.remove('nav--open');
   }
 }, false);
+
+// ACCORDION
+accordion.forEach((targetElement, index) => {
+  targetElement.addEventListener('click', e => {
+    accordion.forEach(anyElement => {
+      if (anyElement !== targetElement) anyElement.removeAttribute('open');
+    })
+  });
+
+  targetElement.addEventListener('toggle', () => {
+    if (targetElement.open) {
+      localStorage.setItem('openAccordionId', index);
+    } else {
+      localStorage.removeItem('openAccordionId');
+    }
+  });
+});
+window.addEventListener('DOMContentLoaded', () => {
+  const savedIndex = localStorage.getItem('openAccordionId');
+  if (savedIndex !== null && accordion[savedIndex]) {
+    accordion.forEach(element => element.removeAttribute('open'));
+    accordion[savedIndex].setAttribute('open', 'true');
+  }
+});
