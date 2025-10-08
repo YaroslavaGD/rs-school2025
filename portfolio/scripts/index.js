@@ -26,7 +26,10 @@ navButton.addEventListener('click', (e) => {
 
 navItems.forEach(element => {
   element.addEventListener('click', e => {
-    toggleMenu();
+    if (window.innerWidth <= 768) {
+      toggleMenu();
+      page.classList.remove('page--clip');
+    }
   })
 });
 
