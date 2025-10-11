@@ -10,6 +10,10 @@ const modalWindow = modal.querySelector('.modal__window');
 const modalButton = modal.querySelector('.modal__button');
 const modalPriceButtons = [... document.querySelectorAll('.price__button')];
 
+const sliderWrapper = document.querySelector('.slider-wrapper');
+const slider = document.querySelector('.slider');
+const sliderItems = [... document.querySelectorAll('.slider__item')];
+
 // MENU-FUNCTIONS
 const toggleMenu = () => {
   const isOpen = navButton.classList.contains('nav-button--open');
@@ -106,3 +110,26 @@ window.addEventListener('DOMContentLoaded', () => {
     accordion[savedIndex].setAttribute('open', 'true');
   }
 });
+
+const initSlider = () => {
+  let mainWidth = 0;
+
+  sliderItems.forEach(element => {
+    mainWidth += element.clientWidth;
+  });
+
+  const gap = 20;
+  const centerPosition =  (mainWidth + (sliderItems.length - 1) * gap) / 2;
+  const wrapperOffset = sliderWrapper.clientWidth / 2;
+  const initPosition = centerPosition - wrapperOffset;
+
+  console.log('sliderWrap = ', sliderWrapper.clientWidth);
+  console.log('sliderItems = ', sliderItems.length);
+  console.log('mainWidth = ', mainWidth + (sliderItems.length - 1) * 20);
+  console.log('centerPosition = ', centerPosition);
+  console.log('initPosition = ', initPosition);
+
+  slider.style = `transform: translateX(-${initPosition}px)`;
+};
+
+initSlider();
