@@ -11,21 +11,45 @@
 .kalimba-container {
   display: flex;
   gap: 10px;
-  background: #dcdcdc;
+  background: #e6e6e6;
   padding: 20px;
   border-radius: 20px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  max-width: 700px;
+  margin: auto;
 }
 
 .tine {
-  width: 40px;
-  height: 150px;
-  background: #9ac5a5;
+  width: 60px;
+  height: calc(100vh / 2);
+  background: #9cc7a6;
   display: flex;
   align-items: flex-end;
   justify-content: center;
   font-size: 18px;
   color: #333333;
-  border-radius: 6px;
+  border-radius: 10px;
   box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  transition: all 0.15s ease-in;
+}
+
+.tine:hover {
+  background: #87b595;
+}
+
+.tine.active {
+  background: #6ea67d;
+  transform: translateY(4px);
+}
+
+.note {
+  font-size: 16px;
+  font-weight: bold;
+  color: #333333;
+}
+
+.key {
+  font-size: 14px;
+  color: #555555;
 }
