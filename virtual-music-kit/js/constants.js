@@ -17,3 +17,7 @@ export const keyToNote = {
   U: 'C6',
   I: 'E6',
 };
+
+export const kalimbaEvents = {
+  NOTE_PLAY: 'note:play',
+};

@@ -1,4 +1,4 @@
-import { keyToNote } from './constants.js';
+import { kalimbaEvents, keyToNote } from './constants.js';
 import { EventBus } from './eventBus.js';
 
 export function createKalimba() {
@@ -39,8 +39,7 @@ document.addEventListener('keyup', (e) => {
 });
 
 function triggerPlay(key) {
-  console.log('play');
-  EventBus.emit('note:play', { key });
+  EventBus.emit(kalimbaEvents.NOTE_PLAY, { key });
 
   const tine = document.querySelector(`.tine[data-key='${key}']`);
   if (tine) tine.classList.add('active');

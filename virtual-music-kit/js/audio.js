@@ -1,4 +1,4 @@
-import { keyToNote } from './constants.js';
+import { kalimbaEvents, keyToNote } from './constants.js';
 import { EventBus } from './eventBus.js';
 
 const sounds = {};
@@ -8,7 +8,7 @@ export function initAudio() {
     const name = `../sounds/${i + 1}_Kalimba_${note}.wav`;
     sounds[note] = new Audio(name);
 
-    EventBus.on('note:play', ({ key }) => playSound(key));
+    EventBus.on(kalimbaEvents.NOTE_PLAY, ({ key }) => playSound(key));
   });
 }
 
