@@ -5,8 +5,12 @@ import { EventBus } from './eventBus.js';
 export function createKalimba() {
   const kalimba = document.createElement('div');
   kalimba.classList.add('kalimba');
-  const container = document.createElement('div');
-  container.classList.add('kalimba-container');
+  const mainText = document.createElement('h1');
+  mainText.classList.add('kalimba__title');
+  mainText.textContent = 'Kalimba';
+
+  const tinesContainer = document.createElement('div');
+  tinesContainer.classList.add('kalimba-container');
 
   Object.entries(keyToNote).forEach(([key, note]) => {
     const noteType = note[note.length - 1];
@@ -51,10 +55,11 @@ export function createKalimba() {
       EventBus.emit(kalimbaEvents.KEY_EDIT, { key, note });
     });
 
-    container.appendChild(tine);
+    tinesContainer.appendChild(tine);
   });
-  kalimba.appendChild(container);
+  kalimba.appendChild(tinesContainer);
   kalimba.appendChild(initEditKey());
+  kalimba.appendChild(mainText);
   document.body.appendChild(kalimba);
 
 
