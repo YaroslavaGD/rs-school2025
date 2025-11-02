@@ -5,9 +5,9 @@ let inputEl;
 
 export function initEditKey() {
   inputEl = document.createElement('input');
-  inputEl.classList.add('key-edit-input');
-  inputEl.placeholder = 'Press new key and Enter';
-  inputEl.style.display = 'none';
+  inputEl.classList.add('edit-input');
+  inputEl.maxLength = 34;
+  inputEl.name = 'edit-input';
   document.body.appendChild(inputEl);
 
   let currentNote = null;
@@ -15,8 +15,8 @@ export function initEditKey() {
   EventBus.on(kalimbaEvents.KEY_EDIT, ({ note }) => {
     currentNote = note;
     inputEl.value = '';
-    inputEl.style.display = 'block';
     inputEl.focus();
+    inputEl.placeholder = 'Press new key and Enter';
   });
 
   inputEl.addEventListener('keydown', (e) => {
@@ -31,8 +31,11 @@ export function initEditKey() {
 
       keyToNote[newKey] = currentNote;
       EventBus.emit(kalimbaEvents.KEY_UPDATE, { note: currentNote, newKey});
-      inputEl.style.display = 'none';
       currentNote = null;
+      inputEl.value = '';
+      inputEl.placeholder = '';
     }
   });
+
+  return inputEl;
 }

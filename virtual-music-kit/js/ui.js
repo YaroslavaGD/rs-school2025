@@ -1,20 +1,45 @@
 import { kalimbaEvents, keyToNote } from './constants.js';
+import { initEditKey } from './editKey.js';
 import { EventBus } from './eventBus.js';
 
 export function createKalimba() {
+  const kalimba = document.createElement('div');
+  kalimba.classList.add('kalimba');
   const container = document.createElement('div');
   container.classList.add('kalimba-container');
 
   Object.entries(keyToNote).forEach(([key, note]) => {
-    const tine = document.createElement('div');
+    const noteType = note[note.length - 1];
+    const tine = document.createElement('button');
     tine.classList.add('tine');
+    if (noteType == '6') tine.classList.add('tine--6');
+    if (noteType == '5') tine.classList.add('tine--5');
+    if (noteType == '4') tine.classList.add('tine--4');
     tine.dataset.key = key;
     tine.dataset.note = note;
-    tine.innerHTML = `
-      <div class="note">${note}</div>
-      <div class="key">${key}</div>
-      <button class="edit-btn">✎</button>
-    `;
+
+    const tineInn = document.createElement('div');
+    tineInn.classList.add('tine__container');
+
+    const divInfo = document.createElement('div');
+
+    const divKey = document.createElement('div');
+    divKey.classList.add('key');
+    divKey.textContent = key;
+
+    const divNote = document.createElement('div');
+    divNote.classList.add('note');
+    divNote.textContent = note;
+
+    const editBtn = document.createElement('button');
+    editBtn.classList.add('edit-btn');
+    editBtn.textContent = '✎';
+
+    divInfo.appendChild(divNote);
+    divInfo.appendChild(divKey);
+    tineInn.appendChild(editBtn);
+    tineInn.appendChild(divInfo);
+    tine.appendChild(tineInn);
 
     tine.addEventListener('mousedown', (e) => {
       const currentKey = e.currentTarget.dataset.key;
@@ -28,11 +53,13 @@ export function createKalimba() {
 
     container.appendChild(tine);
   });
+  kalimba.appendChild(container);
+  kalimba.appendChild(initEditKey());
+  document.body.appendChild(kalimba);
 
-  document.body.appendChild(container);
 
   document.addEventListener('keydown', (e) => {
-    const key = e.key.toUpperCase();
+    const key = e.key?.toUpperCase();
     const tine = document.querySelector(`.tine[data-key='${key}']`);
 
     if(!tine || tine.classList.contains('active')) return;
@@ -42,7 +69,7 @@ export function createKalimba() {
 }
 
 document.addEventListener('keyup', (e) => {
-  const key = e.key.toUpperCase();
+  const key = e.key?.toUpperCase();
   const tine = document.querySelector(`.tine[data-key='${key}']`);
 
   if(!tine || !tine.classList.contains('active')) return;
