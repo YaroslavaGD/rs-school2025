@@ -53,3 +53,21 @@
   font-size: 14px;
   color: #555555;
 }
+
+.edit-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.key-edit-input {
+  position: fixed;
+  top: 10px;
+  left: 50%;
+  transform: translate(-50%);
+  padding: 8px;
+  font-size: 16px;
+  border: 2px solid #777777;
+  border-radius: 8px;
+  z-index: 1000;
+}

@@ -20,4 +20,6 @@ export const keyToNote = {
 
 export const kalimbaEvents = {
   NOTE_PLAY: 'note:play',
+  KEY_EDIT: 'key:edit',
+  KEY_UPDATE: 'key:update',
 };
