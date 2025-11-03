@@ -2,7 +2,7 @@ import { kalimbaEvents, keyToNote } from './constants.js';
 import { EventBus } from './eventBus.js';
 
 const sounds = {};
-const soundFolder = '../sounds/';
+const soundFolder = './sounds/';
 const soundExtension = '.wav';
 
 export function initAudio() {
