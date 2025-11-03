@@ -15,8 +15,13 @@
   --color-input-back: #72610b;
   --color-input-shadow: #584a02;
   --color-input-glare: #eacfbc;
+  --svg-fill-color: #bc8915;
+  --note-color: #555555;
+  --key-color: #333333;
+  --text-dark-color: #311c07;
+  --edit-back-color: #eacfbc;
   --font-primary: 'Mulish', sans-serif;
-  --font-secondary: 'Oswald', sans-serif;
+  --font-main: 'Oswald', sans-serif;
   --tine-base-height: 390px;
   --tine-base-width: 30px;
 }
@@ -35,7 +40,7 @@
   height: 100vh;
   background: var(--color-app-back);
 
-  font-family: "Oswald", sans-serif;
+  font-family: var(--font-main);
   font-optical-sizing: auto;
   font-weight: 500;
   font-style: normal;
@@ -76,7 +81,7 @@
 .kalimba__title {
   text-transform: uppercase;
   text-align: center;
-  font-family: "Oswald", sans-serif;
+  font-family: var(--font-main);
   font-optical-sizing: auto;
   font-weight: 500;
   font-style: normal;
@@ -103,7 +108,7 @@
   border-radius: 10px;
   box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
   cursor: pointer;
-  transition: all 0.3s ease-in;
+  transition: all 0.15s ease-in;
 }
 
 .tine::before {
@@ -114,7 +119,7 @@
   width: var(--tine-base-width);
   background-color: var(--color-note6-shadow);
   border-radius: 10px;
-  transition: all 0.3s ease-in;
+  transition: all 0.15s ease-in;
 }
 
 .tine--5::before {
@@ -206,13 +211,13 @@
 
 .note {
   font-size: 14px;
-  color: #555555;
+  color: var(--note-color);
 }
 
 .key {
   font-size: 16px;
   font-weight: bold;
-  color: #333333;
+  color: var(--key-color);
 }
 
 .edit-btn {
@@ -223,19 +228,19 @@
   height: 30px;
   border-radius: 50%;
   cursor: pointer;
-  color: #555555;
+  color: var(--note-color);
   transition: all 0.3s ease-in;
 }
 
 .edit-btn:hover {
-  color: #311c07;
-  background-color: #eacfbc;
+  color: var(--text-dark-color);
+  background-color: var(--edit-back-color);
 }
 
 .edit-btn--active,
 .edit-btn:active {
-  color: #311c07;
-  background-color: #eacfbc;
+  color: var(--text-dark-color);
+  background-color: var(--edit-back-color);
   transform: rotate(45deg);
 }
 
@@ -271,4 +276,14 @@
 
 .edit-input::placeholder {
   color: var(--color-note4-main);
+}
+
+.symbols {
+  display: flex;
+  flex-direction: row;
+}
+
+.symbols__decor svg{
+  width: 50px;
+  height: auto;
 }

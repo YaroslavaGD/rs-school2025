@@ -1,6 +1,8 @@
-import { kalimbaEvents, keyToNote } from './constants.js';
+import { colorMap, kalimbaEvents, keyToNote } from './constants.js';
 import { initEditKey } from './editKey.js';
 import { EventBus } from './eventBus.js';
+
+let activeTine = null;
 
 export function createKalimba() {
   const kalimba = document.createElement('div');
@@ -11,6 +13,12 @@ export function createKalimba() {
 
   const tinesContainer = document.createElement('div');
   tinesContainer.classList.add('kalimba-container');
+
+  const symbolsContainer = document.createElement('div');
+  symbolsContainer.classList.add('symbols');
+
+
+
 
   Object.entries(keyToNote).forEach(([key, note]) => {
     const noteType = note[note.length - 1];
@@ -48,8 +56,21 @@ export function createKalimba() {
     tine.addEventListener('mousedown', (e) => {
       const currentKey = e.currentTarget.dataset.key;
       triggerPlay(currentKey);
+      applyKeyColor(currentKey);
+      tine.classList.add('active');
+      activeTine = tine;
     });
-    tine.addEventListener('mouseup', () => deactivate(tine));
+    tine.addEventListener('mouseup', (e) => {
+      deactivate(tine);
+    });
+    tine.addEventListener('touchstart', (e) => {
+      e.preventDefault();
+      const currentKey = e.currentTarget.dataset.key;
+      triggerPlay(currentKey);
+      applyKeyColor(currentKey);
+      tine.classList.add('active');
+      activeTine = tine;
+    });
     tine.querySelector('.edit-btn').addEventListener('click', (e) => {
       e.stopPropagation();
       EventBus.emit(kalimbaEvents.KEY_EDIT, { key, note });
@@ -59,6 +80,8 @@ export function createKalimba() {
   });
   kalimba.appendChild(tinesContainer);
   kalimba.appendChild(initEditKey());
+  addDecorSVGs(symbolsContainer);
+  kalimba.appendChild(symbolsContainer);
   kalimba.appendChild(mainText);
   document.body.appendChild(kalimba);
 
@@ -71,6 +94,7 @@ export function createKalimba() {
     triggerPlay(key);
     tine.classList.add('active');
   });
+
 }
 
 document.addEventListener('keyup', (e) => {
@@ -99,3 +123,63 @@ function triggerPlay(key) {
 function deactivate(tine) {
   tine.classList.remove('active');
 }
+
+export function addDecorSVGs(container) {
+  const svgPaths = [
+    './img/kalimba_symbols/symbol1.svg',
+    './img/kalimba_symbols/symbol2.svg',
+    './img/kalimba_symbols/symbol3.svg',
+    './img/kalimba_symbols/symbol4.svg',
+    './img/kalimba_symbols/symbol5.svg',
+    './img/kalimba_symbols/symbol6.svg',
+    './img/kalimba_symbols/symbol7.svg',
+    './img/kalimba_symbols/symbol8.svg',
+    './img/kalimba_symbols/symbol9.svg',
+    './img/kalimba_symbols/symbol10.svg',
+    './img/kalimba_symbols/symbol11.svg',
+  ];
+
+  svgPaths.forEach((path, index) => {
+    fetch(path)
+      .then(res => res.text())
+      .then(svgContent => {
+        const wrapper = document.createElement('div');
+        wrapper.classList.add('symbols__decor');
+        wrapper.dataset.index = index;
+        wrapper.innerHTML = svgContent;
+
+        wrapper.querySelectorAll('path').forEach(p => {
+          p.style.fill = 'var(--svg-fill-color)';
+          p.style.transition = 'fill 0.3s ease';
+        });
+
+        container.appendChild(wrapper);
+      });
+  });
+}
+
+function handleKeyColor(e) {
+  if (!e.key) return;
+  applyKeyColor(e.key);
+}
+
+function applyKeyColor(key) {
+  const color = colorMap[key.toUpperCase()] || '#f4d1ad';
+  document.documentElement.style.setProperty('--svg-fill-color', color);
+}
+
+document.addEventListener('keydown', handleKeyColor);
+
+document.addEventListener('mouseup', () => {
+  if (activeTine) {
+    deactivate(activeTine);
+    activeTine = null;
+  }
+});
+
+document.addEventListener('touchend', () => {
+  if (activeTine) {
+    deactivate(activeTine);
+    activeTine = null;
+  }
+});
