@@ -22,6 +22,9 @@ export const kalimbaEvents = {
   NOTE_PLAY: 'note:play',
   KEY_EDIT: 'key:edit',
   KEY_UPDATE: 'key:update',
+  SEQUENCE_MODE: 'sequence:mode',
+  SEQUENCE_START: 'sequence:start',
+  SEQUENCE_END: 'sequence:end',
 };
 
 export const colorMap = {

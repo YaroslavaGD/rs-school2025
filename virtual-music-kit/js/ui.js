@@ -7,6 +7,7 @@ let activeTine = null;
 export function createKalimba() {
   const kalimba = document.createElement('div');
   kalimba.classList.add('kalimba');
+
   const mainText = document.createElement('h1');
   mainText.classList.add('kalimba__title');
   mainText.textContent = 'Kalimba';
@@ -16,9 +17,6 @@ export function createKalimba() {
 
   const symbolsContainer = document.createElement('div');
   symbolsContainer.classList.add('symbols');
-
-
-
 
   Object.entries(keyToNote).forEach(([key, note]) => {
     const noteType = note[note.length - 1];
@@ -78,11 +76,23 @@ export function createKalimba() {
 
     tinesContainer.appendChild(tine);
   });
+
+  const inputEl = initEditKey();
+
+  const sequenceBtn = document.createElement('button');
+  sequenceBtn.classList.add('sequence-btn');
+  sequenceBtn.textContent = '▶ Play Sequence';
+  sequenceBtn.addEventListener('click', () => {
+    console.log('sequence-click');
+    EventBus.emit(kalimbaEvents.SEQUENCE_MODE);
+  });
+
   kalimba.appendChild(tinesContainer);
-  kalimba.appendChild(initEditKey());
+  kalimba.appendChild(inputEl);
   addDecorSVGs(symbolsContainer);
   kalimba.appendChild(symbolsContainer);
   kalimba.appendChild(mainText);
+  kalimba.appendChild(sequenceBtn);
   document.body.appendChild(kalimba);
 
 
@@ -95,23 +105,35 @@ export function createKalimba() {
     tine.classList.add('active');
   });
 
+  document.addEventListener('keyup', (e) => {
+    const key = e.key?.toUpperCase();
+    const tine = document.querySelector(`.tine[data-key='${key}']`);
+  
+    if(!tine || !tine.classList.contains('active')) return;
+    deactivate(tine);
+  });
+  
+  EventBus.on(kalimbaEvents.KEY_UPDATE, ({ note, newKey }) => {
+    const tine = document.querySelector(`.tine[data-note='${note}']`);
+    if (tine) {
+      tine.dataset.key = newKey;
+      tine.querySelector('.key').textContent = newKey;
+    }
+  });
+  
+  EventBus.on(kalimbaEvents.SEQUENCE_START, () => {
+    sequenceBtn.disabled = true;
+    sequenceBtn.classList.add('disabled');
+    tinesContainer.style.pointerEvents = 'none';
+  });
+
+  EventBus.on(kalimbaEvents.SEQUENCE_END, () => {
+    sequenceBtn.disabled = false;
+    sequenceBtn.classList.remove('disabled');
+    tinesContainer.style.pointerEvents = 'auto';
+  });
 }
 
-document.addEventListener('keyup', (e) => {
-  const key = e.key?.toUpperCase();
-  const tine = document.querySelector(`.tine[data-key='${key}']`);
-
-  if(!tine || !tine.classList.contains('active')) return;
-  deactivate(tine);
-});
-
-EventBus.on(kalimbaEvents.KEY_UPDATE, ({ note, newKey }) => {
-  const tine = document.querySelector(`.tine[data-note='${note}']`);
-  if (tine) {
-    tine.dataset.key = newKey;
-    tine.querySelector('.key').textContent = newKey;
-  }
-});
 
 function triggerPlay(key) {
   EventBus.emit(kalimbaEvents.NOTE_PLAY, { key });
