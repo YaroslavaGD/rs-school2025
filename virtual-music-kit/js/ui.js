@@ -44,6 +44,9 @@ export function createKalimba() {
     const editBtn = document.createElement('button');
     editBtn.classList.add('edit-btn');
     editBtn.textContent = '✎';
+    editBtn.addEventListener('touchstart', (ev) => {
+      ev.stopPropagation();
+    }, { passive: true });
 
     divInfo.appendChild(divNote);
     divInfo.appendChild(divKey);
@@ -58,17 +61,21 @@ export function createKalimba() {
       tine.classList.add('active');
       activeTine = tine;
     });
+
     tine.addEventListener('mouseup', (e) => {
       deactivate(tine);
     });
+
     tine.addEventListener('touchstart', (e) => {
-      e.preventDefault();
+      if (e.target && e.target.closest && e.target.closest('.edit-btn')) return;
+      if (e.cancelable) e.preventDefault();
       const currentKey = e.currentTarget.dataset.key;
       triggerPlay(currentKey);
       applyKeyColor(currentKey);
       tine.classList.add('active');
       activeTine = tine;
-    });
+    }, { passive: false });
+
     tine.querySelector('.edit-btn').addEventListener('click', (e) => {
       e.stopPropagation();
       EventBus.emit(kalimbaEvents.KEY_EDIT, { key, note });
@@ -220,9 +227,9 @@ function applyKeyColor(key) {
 }
 
 function mapEventToKeyLetter(e) {
-  if (e && e.key && typeof e.code === 'string' && e.code.startsWith('Key')) {
+  if (e && typeof e.code === 'string' && e.code.startsWith('Key')) {
     return e.code.slice(3).toUpperCase();
-  }
+ }
 
   const key = e && e.key ? String(e.key).toUpperCase() : '';
   if (key && /^[A-Z]$/.test(key)) return key;
