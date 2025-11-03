@@ -44,6 +44,9 @@ export function createKalimba() {
     const editBtn = document.createElement('button');
     editBtn.classList.add('edit-btn');
     editBtn.textContent = '✎';
+    editBtn.addEventListener('touchstart', (ev) => {
+      ev.stopPropagation();
+    }, { passive: true });
 
     divInfo.appendChild(divNote);
     divInfo.appendChild(divKey);
@@ -58,17 +61,21 @@ export function createKalimba() {
       tine.classList.add('active');
       activeTine = tine;
     });
+
     tine.addEventListener('mouseup', (e) => {
       deactivate(tine);
     });
+
     tine.addEventListener('touchstart', (e) => {
-      e.preventDefault();
+      if (e.target && e.target.closest && e.target.closest('.edit-btn')) return;
+      if (e.cancelable) e.preventDefault();
       const currentKey = e.currentTarget.dataset.key;
       triggerPlay(currentKey);
       applyKeyColor(currentKey);
       tine.classList.add('active');
       activeTine = tine;
-    });
+    }, { passive: false });
+
     tine.querySelector('.edit-btn').addEventListener('click', (e) => {
       e.stopPropagation();
       EventBus.emit(kalimbaEvents.KEY_EDIT, { key, note });
@@ -83,7 +90,6 @@ export function createKalimba() {
   sequenceBtn.classList.add('sequence-btn');
   sequenceBtn.textContent = '▶ Play Sequence';
   sequenceBtn.addEventListener('click', () => {
-    console.log('sequence-click');
     EventBus.emit(kalimbaEvents.SEQUENCE_MODE);
   });
 
@@ -97,8 +103,11 @@ export function createKalimba() {
 
 
   document.addEventListener('keydown', (e) => {
-    const key = e.key?.toUpperCase();
-    if (key === '') return;
+    if (e.repeat) return;
+
+    if (document.querySelector('.tine.active')) return;
+    const key = mapEventToKeyLetter(e);
+    if (!key) return;
 
     const tine = document.querySelector(`.tine[data-key='${key}']`);
 
@@ -108,11 +117,17 @@ export function createKalimba() {
   });
 
   document.addEventListener('keyup', (e) => {
-    const key = e.key?.toUpperCase();
+    const key = mapEventToKeyLetter(e);
+    if (!key) return;
     const tine = document.querySelector(`.tine[data-key='${key}']`);
   
     if(!tine || !tine.classList.contains('active')) return;
     deactivate(tine);
+  });
+
+  document.addEventListener('mouseleave', () => {
+    if (activeTine) deactivate(activeTine);
+    activeTine = null;
   });
   
   EventBus.on(kalimbaEvents.KEY_UPDATE, ({ note, newKey }) => {
@@ -126,29 +141,46 @@ export function createKalimba() {
   EventBus.on(kalimbaEvents.SEQUENCE_START, () => {
     sequenceBtn.disabled = true;
     sequenceBtn.classList.add('disabled');
+    tinesContainer.classList.add('disabled');
     tinesContainer.style.pointerEvents = 'none';
   });
 
   EventBus.on(kalimbaEvents.SEQUENCE_END, () => {
     sequenceBtn.disabled = false;
     sequenceBtn.classList.remove('disabled');
+    
+    tinesContainer.classList.remove('disabled');
     tinesContainer.style.pointerEvents = 'auto';
   });
+
 }
+
+document.addEventListener('keydown', handleKeyColor);
+
+document.addEventListener('mouseup', () => {
+  if (activeTine) {
+    deactivate(activeTine);
+    activeTine = null;
+  }
+});
+
+document.addEventListener('touchend', () => {
+  if (activeTine) {
+    deactivate(activeTine);
+    activeTine = null;
+  }
+});
 
 
 function triggerPlay(key) {
   EventBus.emit(kalimbaEvents.NOTE_PLAY, { key });
-
-  const tine = document.querySelector(`.tine[data-key='${key}']`);
-  if (tine) tine.classList.add('active');
 }
 
 function deactivate(tine) {
   tine.classList.remove('active');
 }
 
-export function addDecorSVGs(container) {
+function addDecorSVGs(container) {
   const svgPaths = [
     './img/kalimba_symbols/symbol1.svg',
     './img/kalimba_symbols/symbol2.svg',
@@ -183,27 +215,23 @@ export function addDecorSVGs(container) {
 }
 
 function handleKeyColor(e) {
-  if (!e.key) return;
-  applyKeyColor(e.key);
+  const key = mapEventToKeyLetter(e);
+  if (!key) return;
+  applyKeyColor(key);
 }
 
 function applyKeyColor(key) {
+  if (document.querySelector('.tine.active')) return;
   const color = colorMap[key.toUpperCase()] || '#f4d1ad';
   document.documentElement.style.setProperty('--svg-fill-color', color);
 }
 
-document.addEventListener('keydown', handleKeyColor);
+function mapEventToKeyLetter(e) {
+  if (e && typeof e.code === 'string' && e.code.startsWith('Key')) {
+    return e.code.slice(3).toUpperCase();
+ }
 
-document.addEventListener('mouseup', () => {
-  if (activeTine) {
-    deactivate(activeTine);
-    activeTine = null;
-  }
-});
-
-document.addEventListener('touchend', () => {
-  if (activeTine) {
-    deactivate(activeTine);
-    activeTine = null;
-  }
-});
+  const key = e && e.key ? String(e.key).toUpperCase() : '';
+  if (key && /^[A-Z]$/.test(key)) return key;
+  return null;
+}

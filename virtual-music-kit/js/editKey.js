@@ -10,21 +10,27 @@ export function initEditKey() {
   inputEl.classList.add('edit-input');
   inputEl.name = 'edit-input';
   inputEl.maxLength = Object.keys(keyToNote).length * 2;
+  inputEl.style.display = 'none';
   document.body.appendChild(inputEl);
 
-  EventBus.on(kalimbaEvents.KEY_EDIT, ({ note }) => {
+  EventBus.on(kalimbaEvents.KEY_EDIT, ({ key, note }) => {
     mode = 'edit';
     currentNote = note;
     inputEl.value = '';
-    inputEl.placeholder = 'Press new key and Enter';
+    inputEl.placeholder = `Current key = ${key}. Press new key...`;
+    showInput();
     inputEl.focus();
+    inputEl.select();
   });
 
   EventBus.on(kalimbaEvents.SEQUENCE_MODE, () => {
     mode = 'sequence';
     currentNote = null;
+    inputEl.disabled = false;
     inputEl.value = '';
     inputEl.placeholder = 'Type sequence (A–Z) and press Enter';
+    inputEl.addEventListener('input', onSequenceInput);
+    showInput();
     inputEl.focus();
   });
 
@@ -32,27 +38,34 @@ export function initEditKey() {
     if (e.key === 'Enter') {
       if (mode === 'edit') handleEditConfirm();
       else if (mode === 'sequence') await handleSequencePlay();
-      // const newKey = inputEl.value.trim().toUpperCase();
-
-      // if (!newKey.match(/^[A-Z]$/)) return alert('Use English letter keys only!');
-      // if (Object.keys(keyToNote).includes(newKey)) return alert('This key is already used.');
-
-      // const oldKey = Object.entries(keyToNote).find(([k, v]) => v === currentNote)?.[0];
-      // if (oldKey) delete keyToNote[oldKey];
-
-      // keyToNote[newKey] = currentNote;
-      // EventBus.emit(kalimbaEvents.KEY_UPDATE, { note: currentNote, newKey});
-      // currentNote = null;
-      // inputEl.value = '';
-      // inputEl.placeholder = '';
+    } else if (e.key === 'Escape') {
+      hideInput();
     }
+  });
+
+  inputEl.addEventListener('blur', () => {
+    hideInput();
   });
 
   return inputEl;
 }
 
+
+function showInput() {
+  inputEl.style.display = 'block';
+}
+
+function hideInput() {
+  inputEl.style.display = 'none';
+  inputEl.value = '';
+  inputEl.placeholder = '';
+  currentNote = null;
+  inputEl.removeEventListener('input', onSequenceInput);
+  mode = null;
+}
+
 function handleEditConfirm() {
-    console.log('edit-mode');
+  if (currentNote) {
     const newKey = inputEl.value.trim().toUpperCase();
 
     if (!newKey.match(/^[A-Z]$/)) return alert('Use English letter keys only!');
@@ -63,13 +76,16 @@ function handleEditConfirm() {
 
     keyToNote[newKey] = currentNote;
     EventBus.emit(kalimbaEvents.KEY_UPDATE, { note: currentNote, newKey});
+    inputEl.disabled = true;
     inputEl.value = '';
     inputEl.placeholder = '';
     currentNote = null;
+
+    hideInput();
+  }
 }
 
 async function handleSequencePlay() {
-  console.log('sequence-mode');
   const sequence = inputEl.value.toUpperCase().split('');
   const validKeys = Object.keys(keyToNote);
   const filtered = sequence.filter(k => validKeys.includes(k));
@@ -88,4 +104,16 @@ async function handleSequencePlay() {
 
   inputEl.disabled = false;
   EventBus.emit(kalimbaEvents.SEQUENCE_END);
+}
+
+function onSequenceInput() {
+  const validKeys = Object.keys(keyToNote);
+
+  let sanitized = (inputEl.value || '')
+    .toUpperCase()
+    .split('')
+    .filter(ch => validKeys.includes(ch))
+    .slice(0, inputEl.maxLength)
+    .join('');
+  if (sanitized !== inputEl.value) inputEl.value = sanitized;
 }

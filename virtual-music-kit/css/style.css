@@ -14,10 +14,13 @@
   --color-app-back: #2d2708;
   --color-input-back: #72610b;
   --color-input-shadow: #584a02;
+  --color-input-hover-back: #9c840d;
+  --color-input-hover-shadow: #816d07;
   --color-input-glare: #eacfbc;
   --svg-fill-color: #bc8915;
   --note-color: #555555;
-  --key-color: #333333;
+  --key-color: #311c07;
+  --key-disabled-color: #555555;
   --text-dark-color: #311c07;
   --edit-back-color: #eacfbc;
   --font-primary: 'Mulish', sans-serif;
@@ -92,6 +95,10 @@
   display: flex;
   gap: 3px;
   z-index: 1;
+}
+
+.kalimba-container.disabled {
+  opacity: 0.95;
 }
 
 .tine {
@@ -218,6 +225,11 @@
   font-size: 16px;
   font-weight: bold;
   color: var(--key-color);
+  transition: color 0.15s ease-in;
+}
+
+.disabled .key {
+  color: var(--key-disabled-color);
 }
 
 .edit-btn {
@@ -229,7 +241,7 @@
   border-radius: 50%;
   cursor: pointer;
   color: var(--note-color);
-  transition: all 0.3s ease-in;
+  transition: all 0.15s ease-in;
 }
 
 .edit-btn:hover {
@@ -278,6 +290,11 @@
   color: var(--color-note4-main);
 }
 
+.edit-input:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
 .symbols {
   display: flex;
   flex-direction: row;
@@ -286,4 +303,38 @@
 .symbols__decor svg{
   width: 50px;
   height: auto;
+}
+
+.sequence-btn {
+  position: absolute;
+  top: 130px;
+  left: 50%;
+  display: block;
+  z-index: 1;
+  width: 562px;
+  transform: translate(-50%);
+  padding: 15px;
+  border: none;
+  background: var(--color-input-back);
+  border-bottom: 20px solid var(--color-input-shadow);
+  color: var(--color-kalimba-back);
+  border-radius: 16px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.15s ease-in;
+}
+
+.sequence-btn.disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.sequence-btn:hover:not(.disabled) {
+  background: var(--color-input-hover-back);
+  border-color: var(--color-input-hover-shadow);
+}
+
+.sequence-btn:active:not(.disabled) {
+  background: var(--color-tine-active-main);
+  border-color: var(--color-tine-active-shadow);
 }
