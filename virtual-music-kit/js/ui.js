@@ -97,6 +97,7 @@ export function createKalimba() {
 
 
   document.addEventListener('keydown', (e) => {
+    if (document.querySelector('.tine.active')) return;
     const key = e.key?.toUpperCase();
     if (key === '') return;
 
@@ -113,6 +114,11 @@ export function createKalimba() {
   
     if(!tine || !tine.classList.contains('active')) return;
     deactivate(tine);
+  });
+
+  document.addEventListener('mouseleave', () => {
+    if (activeTine) deactivate(activeTine);
+    activeTine = null;
   });
   
   EventBus.on(kalimbaEvents.KEY_UPDATE, ({ note, newKey }) => {
@@ -134,6 +140,7 @@ export function createKalimba() {
     sequenceBtn.classList.remove('disabled');
     tinesContainer.style.pointerEvents = 'auto';
   });
+
 }
 
 
@@ -188,6 +195,7 @@ function handleKeyColor(e) {
 }
 
 function applyKeyColor(key) {
+  if (document.querySelector('.tine.active')) return;
   const color = colorMap[key.toUpperCase()] || '#f4d1ad';
   document.documentElement.style.setProperty('--svg-fill-color', color);
 }
