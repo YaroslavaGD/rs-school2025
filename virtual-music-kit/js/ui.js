@@ -83,7 +83,6 @@ export function createKalimba() {
   sequenceBtn.classList.add('sequence-btn');
   sequenceBtn.textContent = '▶ Play Sequence';
   sequenceBtn.addEventListener('click', () => {
-    console.log('sequence-click');
     EventBus.emit(kalimbaEvents.SEQUENCE_MODE);
   });
 
