@@ -17,7 +17,8 @@
   --color-input-glare: #eacfbc;
   --svg-fill-color: #bc8915;
   --note-color: #555555;
-  --key-color: #333333;
+  --key-color: #311c07;
+  --key-disabled-color: #555555;
   --text-dark-color: #311c07;
   --edit-back-color: #eacfbc;
   --font-primary: 'Mulish', sans-serif;
@@ -92,6 +93,10 @@
   display: flex;
   gap: 3px;
   z-index: 1;
+}
+
+.kalimba-container.disabled {
+  opacity: 0.95;
 }
 
 .tine {
@@ -218,6 +223,11 @@
   font-size: 16px;
   font-weight: bold;
   color: var(--key-color);
+  transition: color 0.15s ease-in;
+}
+
+.disabled .key {
+  color: var(--key-disabled-color);
 }
 
 .edit-btn {
@@ -229,7 +239,7 @@
   border-radius: 50%;
   cursor: pointer;
   color: var(--note-color);
-  transition: all 0.3s ease-in;
+  transition: all 0.15s ease-in;
 }
 
 .edit-btn:hover {

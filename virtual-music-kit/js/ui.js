@@ -135,12 +135,15 @@ export function createKalimba() {
   EventBus.on(kalimbaEvents.SEQUENCE_START, () => {
     sequenceBtn.disabled = true;
     sequenceBtn.classList.add('disabled');
+    tinesContainer.classList.add('disabled');
     tinesContainer.style.pointerEvents = 'none';
   });
 
   EventBus.on(kalimbaEvents.SEQUENCE_END, () => {
     sequenceBtn.disabled = false;
     sequenceBtn.classList.remove('disabled');
+    
+    tinesContainer.classList.remove('disabled');
     tinesContainer.style.pointerEvents = 'auto';
   });
 
