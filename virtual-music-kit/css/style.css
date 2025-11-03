@@ -278,6 +278,11 @@
   color: var(--color-note4-main);
 }
 
+.edit-input:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
 .symbols {
   display: flex;
   flex-direction: row;
@@ -286,4 +291,10 @@
 .symbols__decor svg{
   width: 50px;
   height: auto;
+}
+
+.sequence-btn.disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
 }
