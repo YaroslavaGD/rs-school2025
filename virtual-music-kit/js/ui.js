@@ -98,6 +98,8 @@ export function createKalimba() {
 
   document.addEventListener('keydown', (e) => {
     const key = e.key?.toUpperCase();
+    if (key === '') return;
+
     const tine = document.querySelector(`.tine[data-key='${key}']`);
 
     if(!tine || tine.classList.contains('active')) return;
