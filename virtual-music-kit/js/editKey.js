@@ -17,7 +17,7 @@ export function initEditKey() {
     mode = 'edit';
     currentNote = note;
     inputEl.value = '';
-    inputEl.placeholder =  `Current key = ${key}. Press new key...`;
+    inputEl.placeholder = `Current key = ${key}. Press new key...`;
     showInput();
     inputEl.focus();
     inputEl.select();
@@ -29,6 +29,7 @@ export function initEditKey() {
     inputEl.disabled = false;
     inputEl.value = '';
     inputEl.placeholder = 'Type sequence (A–Z) and press Enter';
+    inputEl.addEventListener('input', onSequenceInput);
     showInput();
     inputEl.focus();
   });
@@ -59,6 +60,7 @@ function hideInput() {
   inputEl.value = '';
   inputEl.placeholder = '';
   currentNote = null;
+  inputEl.removeEventListener('input', onSequenceInput);
   mode = null;
 }
 
@@ -102,4 +104,16 @@ async function handleSequencePlay() {
 
   inputEl.disabled = false;
   EventBus.emit(kalimbaEvents.SEQUENCE_END);
+}
+
+function onSequenceInput() {
+  const validKeys = Object.keys(keyToNote);
+
+  let sanitized = (inputEl.value || '')
+    .toUpperCase()
+    .split('')
+    .filter(ch => validKeys.includes(ch))
+    .slice(0, inputEl.maxLength)
+    .join('');
+  if (sanitized !== inputEl.value) inputEl.value = sanitized;
 }
