@@ -298,6 +298,8 @@
 .symbols {
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
 .symbols__decor svg{
@@ -337,4 +339,64 @@
 .sequence-btn:active:not(.disabled) {
   background: var(--color-tine-active-main);
   border-color: var(--color-tine-active-shadow);
+}
+
+@media (max-width: 769px) {
+  .kalimba {
+    min-height: calc(100vh - 20px);
+  }
+}
+
+@media (max-width: 600px) {
+  .kalimba {
+    min-height: calc(100vh - 20px);
+    width: 100%;
+    padding: 35px 16px;
+  }
+
+  .kalimba__title {
+    font-size: 1.8em;
+  }
+
+  .kalimba-container {
+    gap: 2px;
+    justify-content: center;
+  }
+
+  .edit-btn {
+    width: 20px;
+    font-size: 15px;
+    line-height: 15px;
+    padding: 0;
+    text-align: center;
+    height: 20px;
+  }
+
+  .sequence-btn {
+    max-width: 562px;
+    width: calc(100% - 45px);
+    font-size: 15px;
+  }
+
+  .edit-input {
+    max-width: 562px;
+    width: calc(100% - 45px);
+    font-size: 12px;
+  }
+
+  .tine {
+    max-width: var(--tine-base-width);
+    width: 100%;
+    min-width: 15px;
+  }
+
+  .tine::before {
+    max-width: var(--tine-base-width);
+    width: 100%;
+    min-width: 15px;
+  }
+  .symbols__decor svg{
+    width: 40px;
+    height: auto;
+  }
 }
