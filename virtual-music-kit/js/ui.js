@@ -41,12 +41,28 @@ export function createKalimba() {
     divNote.classList.add('note');
     divNote.textContent = note;
 
-    const editBtn = document.createElement('button');
+    const editBtn = document.createElement('div');
     editBtn.classList.add('edit-btn');
+    editBtn.setAttribute('role', 'button');
+    editBtn.setAttribute('tabindex', '0');
+    editBtn.setAttribute('aria-label', 'Edit key');
     editBtn.textContent = '✎';
+
     editBtn.addEventListener('touchstart', (ev) => {
       ev.stopPropagation();
     }, { passive: true });
+
+    editBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      EventBus.emit(kalimbaEvents.KEY_EDIT, { key, note });
+    });
+
+    editBtn.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        EventBus.emit(kalimbaEvents.KEY_EDIT, { key, note });
+      }
+    });
 
     divInfo.appendChild(divNote);
     divInfo.appendChild(divKey);
