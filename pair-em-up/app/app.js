@@ -1,5 +1,6 @@
 import { EventBus } from './eventBus.js';
 import { Store } from './store.js';
+import { UI } from './ui.js';
 
 const App = (() => {
   return {
@@ -10,8 +11,7 @@ const App = (() => {
 
       Store.subscribe((state) => {
         if (state.screen === 'start') {
-          //TODO: render start screen
-          console.log('Render start screen');
+          UI.renderStart(root);
         } else if (state.screen === 'game') {
           //TODO: render game screen
           console.log('Render game screen');
