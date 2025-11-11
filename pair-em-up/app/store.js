@@ -1,5 +1,11 @@
-const Store = (() => {
-  let state = {};
+export const Store = (() => {
+  let state = {
+    mode: null, // 'classic', 'random', 'chaotic'
+    screen: 'start', // 'start', 'game', 'results'
+    grid: [],
+    score: 0,
+    linesCount: 0,
+  };
 
   const subscribers = [];
 
