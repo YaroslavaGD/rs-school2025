@@ -33,6 +33,10 @@ const App = (() => {
         });
       });
 
+      EventBus.on('ui:back', () => {
+        Store.setState({ screen: 'start' });
+      });
+
       //TODO: start timer
 
       Store.setState({ screen: 'start' });

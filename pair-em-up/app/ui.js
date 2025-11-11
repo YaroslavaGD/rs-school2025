@@ -33,7 +33,18 @@ export const UI = (() => {
     renderGame(root, state) {
       console.log('renderGame');
       const gameDiv = document.createElement('div');
-      gameDiv.textContent = `Mode: ${state.mode}, Score: ${state.score}`;
+
+      const info = document.createElement('div');
+      info.textContent = `Mode: ${state.mode}, Score: ${state.score}`;
+      gameDiv.appendChild(info);
+
+      const backBtn = document.createElement('button');
+      backBtn.textContent = 'Back to Menu';
+      backBtn.addEventListener('click', () => {
+        EventBus.emit('ui:back', {}); 
+      });
+      gameDiv.appendChild(backBtn);
+
       root.appendChild(gameDiv);
     },
 
