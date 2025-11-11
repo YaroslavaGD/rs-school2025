@@ -1,6 +1,9 @@
+import { EventBus } from "./eventBus.js";
+
 export const UI = (() => {
   return {
     renderStart(root) {
+      console.log('renderStart');
       const start = document.createElement('div');
       start.id = 'start-screen';
       start.classList.add('start-screen');
@@ -9,63 +12,57 @@ export const UI = (() => {
       title.classList.add('start-screen__title')
       title.innerText = `Pair '\em Up`;
       
-      const mode = document.createElement('ul');
-      mode.classList.add('mode');
+      const modeContainer = document.createElement('ul');
+      modeContainer.classList.add('mode');
 
-      for (let i = 0; i < 3; i += 1) {
-        const modeLi = document.createElement('li');
-        modeLi.classList.add('mode__item');
+      const modes = [
+        { value: 'classic', label: 'Classic' },
+        { value: 'random', label: 'Random' },
+        { value: 'chaotic', label: 'Chaotic' },
+      ];
 
-        const modeLabel = document.createElement('label');
-        modeLabel.classList.add('mode__label');
-
-        const modeRadio = document.createElement('input');
-        modeRadio.type = 'radio';
-        modeRadio.name = 'mode';
-        modeRadio.classList.add('mode__radio');
-
-        const modeText = document.createElement('span');
-        modeText.classList.add('mode__text');
-
-        if (i === 0) {
-          modeRadio.checked = true;
-          modeRadio.value = 'classic';
-          modeRadio.id = 'mode-classic';
-          modeRadio.setAttribute('checked', true);
-
-          modeLabel.setAttribute('for', 'mode-classic');
-          modeText.innerText = 'Classic';
-        }
-
-        if (i === 1) {
-          modeRadio.value = 'random';
-          modeRadio.id = 'mode-random';
-
-          modeLabel.setAttribute('for', 'mode-random');
-          modeText.innerText = 'Random';
-        }
-
-        if (i === 2) {
-          modeRadio.value = 'chaotic';
-          modeRadio.id = 'mode-chaotic';
-
-          modeLabel.setAttribute('for', 'mode-chaotic');
-          modeText.innerText = 'Chaotic';
-        }
-
-        modeLabel.appendChild(modeRadio);
-        modeLabel.appendChild(modeText);
-        modeLi.appendChild(modeLabel);
-
-        mode.appendChild(modeLi);
-      }
+      modes.forEach(m => {
+        modeContainer.appendChild(this.createModeButton(m.value, m.label));
+      });
 
       start.appendChild(title);
-      start.appendChild(mode);
+      start.appendChild(modeContainer);
       root.appendChild(start);
     },
-    renderGame(root) {
 
+    renderGame(root) {
+      console.log('renderGame');
     },
+
+    createModeButton(modeValue, modeLabel) {
+      const li = document.createElement('li');
+      const label = document.createElement('label');
+      const input = document.createElement('input');
+      const span = document.createElement('span');
+
+      li.classList.add('mode__item');
+      label.classList.add('mode__label');
+
+      input.type = 'radio';
+      input.name = 'mode';
+      input.value = modeValue;
+      input.id = `mode-${modeValue}`;
+      input.classList.add('mode__radio');
+      if (modeValue === 'classic') input.checked = true;
+
+      span.textContent = modeLabel;
+      span.classList.add('mode__text');
+
+      input.addEventListener('change', () => {
+        EventBus.emit('ui:start', { mode: input.value });
+      });
+
+      label.htmlFor = `mode-${modeValue}`;
+      label.appendChild(input);
+      label.appendChild(span);
+      li.appendChild(label);
+
+      return li;
+    }
   };
 })();
