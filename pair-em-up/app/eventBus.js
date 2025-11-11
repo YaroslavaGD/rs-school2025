@@ -1,21 +1,25 @@
-export const EventBus = {
-  events: {},
+export const EventBus = (() =>{
+  const events = {};
 
-  on(event, listener) {
-    if (!this.events[event]) this.events[event] = [];
-
-    this.events[event].push(listener);
-  },
-
-  off(event, listener) {
-    if (!this.events[event]) return;
-
-    this.events[event] = this.events[event].filter((l) => l !== listener);
-  },
-
-  emit(event, data) {
-    if (!this.events[event]) return;
-
-    this.events[event].forEach(listener => listener(data));
-  }
-};
+  return {
+    on(name, listener) {
+      if (!events[name]) events[name] = [];
+  
+      events[name].push(listener);
+    },
+  
+    off(name, listener) {
+      if (!events[name]) return;
+  
+      events[name] = events[name].filter((l) => l !== listener);
+    },
+  
+    emit(name, data) {
+      if (!events[name]) return;
+  
+      events[name].forEach(listener => listener(data));
+      
+      console.debug(`[EventBus] ${name}:`, data);
+    }
+  };
+})();
