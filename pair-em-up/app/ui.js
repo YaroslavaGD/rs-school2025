@@ -30,8 +30,11 @@ export const UI = (() => {
       root.appendChild(start);
     },
 
-    renderGame(root) {
+    renderGame(root, state) {
       console.log('renderGame');
+      const gameDiv = document.createElement('div');
+      gameDiv.textContent = `Mode: ${state.mode}, Score: ${state.score}`;
+      root.appendChild(gameDiv);
     },
 
     createModeButton(modeValue, modeLabel) {
@@ -53,7 +56,7 @@ export const UI = (() => {
       span.textContent = modeLabel;
       span.classList.add('mode__text');
 
-      input.addEventListener('change', () => {
+      input.addEventListener('click', () => {
         EventBus.emit('ui:start', { mode: input.value });
       });
 

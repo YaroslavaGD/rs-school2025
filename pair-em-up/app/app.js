@@ -10,11 +10,11 @@ const App = (() => {
       document.body.appendChild(root);
 
       Store.subscribe((state) => {
+        root.innerHTML = '';
         if (state.screen === 'start') {
           UI.renderStart(root);
         } else if (state.screen === 'game') {
-          //TODO: render game screen
-          console.log('Render game screen');
+          UI.renderGame(root, state);
         } else if (state.screen === 'results') {
           //TODO: render results screen
           console.log('Render results screen');
