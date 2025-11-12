@@ -6,6 +6,7 @@
 - `ui:assist:use` - { name: 'hints' | 'revert' | 'addNumbers' | 'shuffle' | 'eraser' }
 - `ui:save` — {}
 - `ui:continue` - {}
+- `ui:back` - {}
 
 ## Game Events
 - `game:tryPair` - { firstIndex, secondIndex }

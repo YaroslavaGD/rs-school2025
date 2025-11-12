@@ -1,3 +1,4 @@
+import { MODE, UI_EVENTS } from "./constants.js";
 import { EventBus } from "./eventBus.js";
 
 export const UI = (() => {
@@ -16,9 +17,9 @@ export const UI = (() => {
       modeContainer.classList.add('mode');
 
       const modes = [
-        { value: 'classic', label: 'Classic' },
-        { value: 'random', label: 'Random' },
-        { value: 'chaotic', label: 'Chaotic' },
+        { value: MODE.CLASSIC, label: 'Classic' },
+        { value: MODE.RANDOM, label: 'Random' },
+        { value: MODE.CHAOTIC, label: 'Chaotic' },
       ];
 
       modes.forEach(m => {
@@ -32,18 +33,13 @@ export const UI = (() => {
 
     renderGame(root, state) {
       console.log('renderGame');
+      const { mode, score, grid } = state;
       const gameDiv = document.createElement('div');
+      const mainInfoDiv = this.createMainInfo(mode, score);
+      const gridDiv = this.createGrid(grid);
 
-      const info = document.createElement('div');
-      info.textContent = `Mode: ${state.mode}, Score: ${state.score}`;
-      gameDiv.appendChild(info);
-
-      const backBtn = document.createElement('button');
-      backBtn.textContent = 'Back to Menu';
-      backBtn.addEventListener('click', () => {
-        EventBus.emit('ui:back', {}); 
-      });
-      gameDiv.appendChild(backBtn);
+      gameDiv.appendChild(mainInfoDiv);
+      gameDiv.appendChild(gridDiv);
 
       root.appendChild(gameDiv);
     },
@@ -77,6 +73,39 @@ export const UI = (() => {
       li.appendChild(label);
 
       return li;
-    }
+    },
+
+    createMainInfo(mode, score){
+      const header = document.createElement('header');
+      header.classList.add('game__header');
+
+      const info = document.createElement('div');
+      info.textContent = `Mode: ${mode}, Score: ${score}`;
+
+      const backBtn = document.createElement('button');
+      backBtn.textContent = 'Back to Menu';
+      backBtn.addEventListener('click', () => {
+        EventBus.emit(UI_EVENTS.BACK, {}); 
+      });
+
+      header.appendChild(info);
+      header.appendChild(backBtn);
+
+      return header;
+    },
+
+    createGrid(grid){
+      const gridDiv = document.createElement('div');
+      gridDiv.classList.add('grid');
+
+      grid.forEach(num => {
+        const buttonCell = document.createElement('button');
+        buttonCell.classList.add('grid__item');
+        buttonCell.textContent = num;
+        gridDiv.appendChild(buttonCell);
+      });
+
+      return gridDiv;
+    },
   };
 })();

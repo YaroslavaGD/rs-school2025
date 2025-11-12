@@ -1,7 +1,9 @@
+import { SCREEN_TYPE } from "./constants.js";
+
 export const Store = (() => {
   let state = {
     mode: null, // 'classic', 'random', 'chaotic'
-    screen: 'start', // 'start', 'game', 'results'
+    screen: SCREEN_TYPE.START, // 'start', 'game', 'results'
     grid: [],
     score: 0,
     linesCount: 0,
