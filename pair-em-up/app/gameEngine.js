@@ -10,28 +10,55 @@ export const GameEngine = (() => {
         grid = this.generateClassicGrid();
       }
 
+      if (mode === MODE.RANDOM) {
+        grid = this.generateRandomGrid();
+      }
+
       return grid;
     },
 
     generateClassicGrid() {
-      const initGrid = [];
-      for (let num = 1; num < CLASSIC_GRID_LENGTH; num += 1) {
-        if (this.containsZero(num)) continue;
+      let numbers = this.generateFirstNumbers();
+      return this.divideNumbersIntoDigits(numbers);
+    },
 
+    generateRandomGrid() {
+      let numbers = this.generateFirstNumbers();
+      numbers = this.shuffleNumbers(numbers);
+      const resGrid = this.divideNumbersIntoDigits(numbers);
+      return resGrid;
+    },
+
+    generateFirstNumbers() {
+      let numbers = Array.from({ length: 19 }, (_, i) => i + 1);
+      numbers = numbers.filter(num => num !== 10);
+
+      return numbers;
+    },
+
+    divideNumbersIntoDigits(numbers) {
+      return numbers.reduce((arr, num) => {
         if (num <= 9) {
-          initGrid.push(num);
-          continue;
+          arr.push(num);
+          return arr;
         }
 
-        const numArray = String(num).split('').map(Number);
-        initGrid.push(...numArray);
+        const digitsArray = String(num).split('').map(Number);
+        arr.push(...digitsArray);
+        return arr;
+      }, []);
+    },
+
+    shuffleNumbers(numbers) {
+      const shuffledNumbers = [...numbers];
+
+      for (let i = shuffledNumbers.length - 1; i > 0; i -= 1) {
+        let j = Math.floor(Math.random() * (i + 1));
+        [shuffledNumbers[i], shuffledNumbers[j]] = [shuffledNumbers[j], shuffledNumbers[i]];
       }
 
-      return initGrid;
+      return shuffledNumbers;
     },
 
-    containsZero(num) {
-      return String(num).includes('0');
-    },
   };
 })();

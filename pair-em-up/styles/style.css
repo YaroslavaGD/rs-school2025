@@ -71,3 +71,8 @@ html, body {
   background: rgb(0, 109, 217);
   color: #f8f8fa;
 }
+
+.grid {
+  display: grid; 
+  grid-template-columns: repeat(9, 1fr);
+}
