@@ -1,4 +1,4 @@
-import { CLASSIC_GRID_LENGTH, MODE } from "./constants.js";
+import { MODE } from "./constants.js";
 
 export const GameEngine = (() => {
   let grid = [];
@@ -14,6 +14,10 @@ export const GameEngine = (() => {
         grid = this.generateRandomGrid();
       }
 
+      if (mode === MODE.CHAOTIC) {
+        grid = this.generateChaoticGrid();
+      }
+
       return grid;
     },
 
@@ -27,6 +31,13 @@ export const GameEngine = (() => {
       numbers = this.shuffleNumbers(numbers);
       const resGrid = this.divideNumbersIntoDigits(numbers);
       return resGrid;
+    },
+
+    generateChaoticGrid() {
+      return Array.from(
+        { length: 27 }, 
+        () => Math.floor(Math.random() * 9) + 1
+      );
     },
 
     generateFirstNumbers() {
