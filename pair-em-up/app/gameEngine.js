@@ -6,7 +6,7 @@ export const GameEngine = (() => {
     generateGrid(mode) {
       grid = [];
 
-      if (mode = MODE.CLASSIC) {
+      if (mode === MODE.CLASSIC) {
         grid = this.generateClassicGrid();
       }
 

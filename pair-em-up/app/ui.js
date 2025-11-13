@@ -11,7 +11,7 @@ export const UI = (() => {
       
       const title = document.createElement('h1');
       title.classList.add('start-screen__title')
-      title.innerText = `Pair '\em Up`;
+      title.innerText = "Pair 'em Up";
       
       const modeContainer = document.createElement('ul');
       modeContainer.classList.add('mode');
