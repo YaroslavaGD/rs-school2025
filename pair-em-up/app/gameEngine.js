@@ -3,6 +3,7 @@ import { MODE } from "./constants.js";
 export const GameEngine = (() => {
   let grid = [];
   return {
+    //PUBLIC
     generateGrid(mode) {
       grid = [];
 
@@ -21,6 +22,7 @@ export const GameEngine = (() => {
       return grid;
     },
 
+    //PRIVATE
     generateClassicGrid() {
       let numbers = this.generateFirstNumbers();
       return this.divideNumbersIntoDigits(numbers);

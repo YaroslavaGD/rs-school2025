@@ -10,10 +10,10 @@ export const UI = (() => {
       start.classList.add('start-screen');
       
       const title = document.createElement('h1');
-      title.classList.add('start-screen__title')
+      title.classList.add('logo');
       title.innerText = "Pair 'em Up";
       
-      const modeContainer = document.createElement('ul');
+      const modeContainer = document.createElement('div');
       modeContainer.classList.add('mode');
 
       const modes = [
@@ -45,34 +45,22 @@ export const UI = (() => {
     },
 
     createModeButton(modeValue, modeLabel) {
-      const li = document.createElement('li');
-      const label = document.createElement('label');
-      const input = document.createElement('input');
-      const span = document.createElement('span');
+      const button = document.createElement('button');
+      const span = document.createElement('div');
 
-      li.classList.add('mode__item');
-      label.classList.add('mode__label');
-
-      input.type = 'radio';
-      input.name = 'mode';
-      input.value = modeValue;
-      input.id = `mode-${modeValue}`;
-      input.classList.add('mode__radio');
-      if (modeValue === 'classic') input.checked = true;
+      button.classList.add('button');
+      button.dataset.mode = modeValue;
 
       span.textContent = modeLabel;
-      span.classList.add('mode__text');
+      span.classList.add('button__text');
 
-      input.addEventListener('click', () => {
-        EventBus.emit('ui:start', { mode: input.value });
+      button.addEventListener('click', () => {
+        EventBus.emit('ui:start', { mode: button.dataset.mode });
       });
 
-      label.htmlFor = `mode-${modeValue}`;
-      label.appendChild(input);
-      label.appendChild(span);
-      li.appendChild(label);
+      button.appendChild(span);
 
-      return li;
+      return button;
     },
 
     createMainInfo(mode, score){
@@ -83,12 +71,17 @@ export const UI = (() => {
       info.textContent = `Mode: ${mode}, Score: ${score}`;
 
       const backBtn = document.createElement('button');
-      backBtn.textContent = 'Back to Menu';
+      backBtn.classList.add('button');
+      const backBtnText = document.createElement('div');
+      backBtnText.classList.add('button__text');
+      backBtnText.textContent = 'Back to Menu';
+
       backBtn.addEventListener('click', () => {
         EventBus.emit(UI_EVENTS.BACK, {}); 
       });
-
+      backBtn.appendChild(backBtnText);
       header.appendChild(info);
+
       header.appendChild(backBtn);
 
       return header;
@@ -98,9 +91,10 @@ export const UI = (() => {
       const gridDiv = document.createElement('div');
       gridDiv.classList.add('grid');
 
-      grid.forEach(num => {
+      grid.forEach((num, i) => {
         const buttonCell = document.createElement('button');
         buttonCell.classList.add('grid__item');
+        buttonCell.dataset.index = i;
         buttonCell.textContent = num;
         gridDiv.appendChild(buttonCell);
       });
