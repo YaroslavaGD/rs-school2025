@@ -9,6 +9,7 @@ export const UI_EVENTS = {
   START: 'ui:start',
   BACK: 'ui:back',
   CELL_CLICK: 'ui:cell:click',
+  MATCHED: 'ui:matched',
 }
 
 export const SCREEN_TYPE = {

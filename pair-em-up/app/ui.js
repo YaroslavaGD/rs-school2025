@@ -112,3 +112,10 @@ export const UI = (() => {
     },
   };
 })();
+
+EventBus.on(UI_EVENTS.MATCHED, ({ indexes }) => {
+  indexes.forEach(i => {
+    const el = document.querySelector(`.grid__item[data-index="${i}"]`);
+    if (el) el.classList.add('matched');
+  });
+});
