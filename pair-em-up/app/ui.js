@@ -100,36 +100,15 @@ export const UI = (() => {
 
         if (selected.includes(i)) {
           buttonCell.classList.add('selected');
-        } else {
-          buttonCell.classList.remove('selected');
         }
 
         buttonCell.addEventListener('click', () => {
-          if (this.checkSelected(i)) {
-            EventBus.emit(UI_EVENTS.CELL_CLICK, { index: i });
-          } 
+          EventBus.emit(UI_EVENTS.CELL_CLICK, { index: i });
         });
         gridDiv.appendChild(buttonCell);
       });
 
       return gridDiv;
     },
-
-    checkSelected(num) {
-      const { selected } = Store.getState();
-      const selectedIndex = selected.indexOf(num);
-
-      if (selectedIndex !== -1) {
-        selected.splice(selectedIndex, 1);
-        Store.setState({ selected });
-        return false;
-      }
-
-      if (selected.includes(num) || selected.length >= 2) return false;
-
-      selected.push(num);
-      Store.setState({ selected });
-      return true;
-    }
   };
 })();

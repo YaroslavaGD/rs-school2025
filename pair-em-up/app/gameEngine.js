@@ -22,6 +22,14 @@ export const GameEngine = (() => {
       return grid;
     },
 
+    scorePair(a, b) {
+      if (a === 5 && b === 5) return 10;
+      if (a === b) return 1;
+      if ((a + b) === 10) return 2;
+
+      return 0;
+    },
+
     //PRIVATE
     generateClassicGrid() {
       let numbers = this.generateFirstNumbers();

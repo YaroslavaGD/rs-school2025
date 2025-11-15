@@ -40,6 +40,46 @@ const App = (() => {
         Store.setState({ screen: SCREEN_TYPE.START });
       });
 
+      EventBus.on(UI_EVENTS.CELL_CLICK, ({ index }) => {
+        const { selected, grid, score } = Store.getState();
+
+        if (selected.includes(index)) {
+          Store.setState({ selected: selected.filter(i => i !== index) });
+          return;
+        }
+
+        if (selected.length === 0) {
+          Store.setState({ selected: [index] });
+          return;
+        }
+
+        if (selected.length === 1) {
+          const newSelected = [...selected, index];
+          Store.setState({ selected: newSelected });
+
+          const [i1, i2] = newSelected;
+          const a = grid[i1];
+          const b = grid[i2];
+  
+          const pairScore = GameEngine.scorePair(a, b);
+
+          if (pairScore > 0) {
+            const newGrid = [...grid];
+            newGrid[i1] = null;
+            newGrid[i2] = null;
+  
+            Store.setState({
+              grid: newGrid,
+              score: score + pairScore,
+              selected: []
+            });
+          } else {
+            Store.setState({ selected: [] });
+          }
+          return;
+        }
+      });
+
       //TODO: start timer
 
       Store.setState({ screen: SCREEN_TYPE.START });
