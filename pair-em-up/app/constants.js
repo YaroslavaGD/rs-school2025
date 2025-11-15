@@ -7,7 +7,8 @@ export const MODE = {
 
 export const UI_EVENTS = {
   START: 'ui:start',
-  BACK: 'ui:back'
+  BACK: 'ui:back',
+  CELL_CLICK: 'ui:cell:click',
 }
 
 export const SCREEN_TYPE = {

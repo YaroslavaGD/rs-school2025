@@ -1,10 +1,10 @@
 import { MODE, UI_EVENTS } from "./constants.js";
 import { EventBus } from "./eventBus.js";
+import { Store } from "./store.js";
 
 export const UI = (() => {
   return {
     renderStart(root) {
-      console.log('renderStart');
       const start = document.createElement('div');
       start.id = 'start-screen';
       start.classList.add('start-screen');
@@ -32,7 +32,6 @@ export const UI = (() => {
     },
 
     renderGame(root, state) {
-      console.log('renderGame');
       const { mode, score, grid } = state;
       const gameDiv = document.createElement('div');
       const mainInfoDiv = this.createMainInfo(mode, score);
@@ -91,15 +90,46 @@ export const UI = (() => {
       const gridDiv = document.createElement('div');
       gridDiv.classList.add('grid');
 
+      const { selected } = Store.getState();
+
       grid.forEach((num, i) => {
         const buttonCell = document.createElement('button');
         buttonCell.classList.add('grid__item');
         buttonCell.dataset.index = i;
         buttonCell.textContent = num;
+
+        if (selected.includes(i)) {
+          buttonCell.classList.add('selected');
+        } else {
+          buttonCell.classList.remove('selected');
+        }
+
+        buttonCell.addEventListener('click', () => {
+          if (this.checkSelected(i)) {
+            EventBus.emit(UI_EVENTS.CELL_CLICK, { index: i });
+          } 
+        });
         gridDiv.appendChild(buttonCell);
       });
 
       return gridDiv;
     },
+
+    checkSelected(num) {
+      const { selected } = Store.getState();
+      const selectedIndex = selected.indexOf(num);
+
+      if (selectedIndex !== -1) {
+        selected.splice(selectedIndex, 1);
+        Store.setState({ selected });
+        return false;
+      }
+
+      if (selected.includes(num) || selected.length >= 2) return false;
+
+      selected.push(num);
+      Store.setState({ selected });
+      return true;
+    }
   };
 })();

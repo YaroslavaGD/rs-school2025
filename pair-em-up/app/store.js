@@ -5,6 +5,7 @@ export const Store = (() => {
     mode: null, // 'classic', 'random', 'chaotic'
     screen: SCREEN_TYPE.START, // 'start', 'game', 'results'
     grid: [],
+    selected: [],
     score: 0,
     linesCount: 0,
   };
