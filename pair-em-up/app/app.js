@@ -6,6 +6,8 @@ import { Timer } from './timer.js';
 import { UI } from './ui.js';
 
 const App = (() => {
+  let currentScreen = null;
+
   return {
     init() {
       const app = document.createElement('div');
@@ -16,13 +18,24 @@ const App = (() => {
       app.appendChild(root);
 
       Store.subscribe((state) => {
-        root.innerHTML = '';
-        if (state.screen === SCREEN_TYPE.START) {
-          UI.renderStart(root);
+        if (state.screen === SCREEN_TYPE.GAME && state.timer.running) {
+          Timer.start();
+        } else {
+          Timer.stop();
+        }
+
+        if (state.screen !== currentScreen) {
+          currentScreen = state.screen;
+          root.innerHTML = '';
+          if (state.screen === SCREEN_TYPE.START) {
+            UI.renderStart(root);
+          } else if (state.screen === SCREEN_TYPE.GAME) {
+            UI.renderGame(root, state);
+          } else if (state.screen === SCREEN_TYPE.RESULTS) {
+            UI.renderResults(root, state);
+          }
         } else if (state.screen === SCREEN_TYPE.GAME) {
-          UI.renderGame(root, state);
-        } else if (state.screen === SCREEN_TYPE.RESULTS) {
-          UI.renderResults(root, state);
+          UI.updateGameState(state);
         }
       });
 
@@ -38,15 +51,8 @@ const App = (() => {
         });
       });
 
-      Store.subscribe((state) => {
-        if (state.screen === SCREEN_TYPE.GAME && state.timer.running) {
-          Timer.start();
-        } else {
-          Timer.stop();
-        }
-      });
-
       EventBus.on(UI_EVENTS.BACK, () => {
+        Timer.reset();
         Store.setState({ screen: SCREEN_TYPE.START });
       });
 
@@ -67,6 +73,8 @@ const App = (() => {
 
       EventBus.on(UI_EVENTS.CELL_CLICK, ({ index }) => {
         const { selected, grid, score } = Store.getState();
+
+        if (grid[index] === null) return;
 
         if (selected.includes(index)) {
           Store.setState({ selected: selected.filter(i => i !== index) });

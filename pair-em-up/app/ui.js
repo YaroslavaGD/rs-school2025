@@ -51,6 +51,38 @@ export const UI = (() => {
       root.appendChild(gameDiv);
     },
 
+    updateGameState(state) {
+      const { grid, score, selected } = state;
+      
+      const scoreEl = document.querySelector('.info__score-content');
+      if (scoreEl) {
+        scoreEl.textContent = `${score} / 100`;
+      }
+
+      const gridEl = document.querySelector('.grid');
+      if (gridEl) {
+        grid.forEach((num, i) => {
+          const cell = gridEl.querySelector(`.grid__item[data-index="${i}"]`);
+          if (cell) {
+            const currentText = cell.textContent;
+            const newText = num === null ? '' : String(num);
+
+            if (currentText !== newText) {
+              cell.textContent = newText;
+            }
+
+            if (selected.includes(i)) {
+              cell.classList.add('selected');
+            } else {
+              cell.classList.remove('selected');
+            }
+
+            cell.classList.remove('matched', 'unmatched');
+          }
+        });
+      }
+    },
+
     renderResults(root, state) {
       const { resultReason } = state;
       const backBtn = this.createBackBtn();
@@ -117,6 +149,7 @@ export const UI = (() => {
       const scoreContent = document.createElement('span');
       scoreContent.textContent = `${score} / 100`;
       scoreContent.classList.add('info__content');
+      scoreContent.classList.add('info__score-content');
       scoreContent.classList.add('info__number-content');
 
       const timerP = document.createElement('p');
