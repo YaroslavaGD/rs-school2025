@@ -1,4 +1,5 @@
 import { Store } from "./store.js";
+import { formatTime } from "./utils.js";
 
 export const Timer = (() => {
   let intervalId = null;
@@ -10,12 +11,13 @@ export const Timer = (() => {
       const { timer } = Store.getState();
       if (!timer.running) return;
 
-      Store.setState({
-        timer: {
-          ...timer,
-          elapsedMs: timer.elapsedMs + 1000,
-        }
-      });
+      const newElapsed = timer.elapsedMs + 1000;
+      // Store.setState({
+      //   timer: {
+      //     ...timer,
+      //     elapsedMs: newElapsed,
+      //   }
+      // });
 
       setTimeout(() => {
         const el = document.querySelector('.timer-value');

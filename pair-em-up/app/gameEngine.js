@@ -35,18 +35,34 @@ export const GameEngine = (() => {
 
     //PRIVATE
     isValidPair(i1, i2, grid) {
+      const cols = 9;
+
+      const isClearVertical = (from, to, col) => {
+        const start = Math.min(from, to);
+        const end = Math.max(from, to);
+        for (let r = start + 1; r < end; r++) {
+          const idx = r * cols + col;
+          if (grid[idx] !== null) return false;
+        }
+        return true;
+      };
+
       if (i1 === i2) return false;
       if (grid[i1] == null || grid[i2] == null) return false;
 
-      const row1 = Math.floor(i1 / 9);
-      const col1 = i1 % 9; 
+      const row1 = Math.floor(i1 / cols);
+      const col1 = i1 % cols; 
 
-      const row2 = Math.floor(i2 / 9);
-      const col2 = i2 % 9; 
+      const row2 = Math.floor(i2 / cols);
+      const col2 = i2 % cols; 
 
       const isHorizontal = row1 === row2 && Math.abs(col1 - col2) === 1; 
       const isVertical = col1 === col2 && Math.abs(row1 - row2) === 1; 
       if (isHorizontal || isVertical) return true;
+
+      if (col1 === col2) {
+        if (isClearVertical(row1, row2, col1)) return true;
+      }
 
       const min = Math.min(i1, i2);
       const max = Math.max(i1, i2);
