@@ -4,14 +4,22 @@ import { Store } from "./store.js";
 
 export const UI = (() => {
   return {
+    renderHeader(root) {
+      const header = document.createElement('header');
+      header.classList.add('header');
+
+      const title = document.createElement('h1');
+      title.classList.add('logo');
+      title.innerText = "Pair 'em Up";
+
+      header.appendChild(title);
+      root.appendChild(header);
+    },
+
     renderStart(root) {
       const start = document.createElement('div');
       start.id = 'start-screen';
       start.classList.add('start-screen');
-      
-      const title = document.createElement('h1');
-      title.classList.add('logo');
-      title.innerText = "Pair 'em Up";
       
       const modeContainer = document.createElement('div');
       modeContainer.classList.add('mode');
@@ -26,7 +34,6 @@ export const UI = (() => {
         modeContainer.appendChild(this.createModeButton(m.value, m.label));
       });
 
-      start.appendChild(title);
       start.appendChild(modeContainer);
       root.appendChild(start);
     },
@@ -63,11 +70,36 @@ export const UI = (() => {
     },
 
     createMainInfo(mode, score){
-      const header = document.createElement('header');
+      const header = document.createElement('div');
       header.classList.add('game__header');
 
       const info = document.createElement('div');
-      info.textContent = `Mode: ${mode}, Score: ${score}`;
+      info.classList.add('info');
+
+      const modeP = document.createElement('p');
+      modeP.classList.add('info__item');
+      modeP.classList.add('info__mode');
+  
+      const modeTitle = document.createElement('span');
+      modeTitle.textContent = 'mode';
+      modeTitle.classList.add('info__title');
+
+      const modeContent = document.createElement('span');
+      modeContent.textContent = mode;
+      modeContent.classList.add('info__content');
+
+      const scoreP = document.createElement('p');
+      scoreP.classList.add('info__item');
+      scoreP.classList.add('info__score');
+  
+      const scoreTitle = document.createElement('span');
+      scoreTitle.textContent = 'score';
+      scoreTitle.classList.add('info__title');
+
+      const scoreContent = document.createElement('span');
+      scoreContent.textContent = `${score} / 100`;
+      scoreContent.classList.add('info__content');
+      scoreContent.classList.add('info__number-content');
 
       const backBtn = document.createElement('button');
       backBtn.classList.add('button');
@@ -78,10 +110,20 @@ export const UI = (() => {
       backBtn.addEventListener('click', () => {
         EventBus.emit(UI_EVENTS.BACK, {}); 
       });
+
+      modeP.appendChild(modeTitle);
+      modeP.appendChild(modeContent);
+
+      scoreP.appendChild(scoreTitle);
+      scoreP.appendChild(scoreContent);
+
+      info.appendChild(backBtn);
+      info.appendChild(modeP);
+      info.appendChild(scoreP);
+
       backBtn.appendChild(backBtnText);
       header.appendChild(info);
 
-      header.appendChild(backBtn);
 
       return header;
     },

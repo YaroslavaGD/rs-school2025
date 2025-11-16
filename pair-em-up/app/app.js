@@ -7,9 +7,12 @@ import { UI } from './ui.js';
 const App = (() => {
   return {
     init() {
-      const root = document.createElement('div');
-      root.id = 'app';
-      document.body.appendChild(root);
+      const app = document.createElement('div');
+      app.id = 'app';
+      document.body.appendChild(app);
+      UI.renderHeader(app);
+      const root = document.createElement('main');
+      app.appendChild(root);
 
       Store.subscribe((state) => {
         root.innerHTML = '';
