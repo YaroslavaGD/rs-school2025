@@ -1,4 +1,4 @@
-import { SCREEN_TYPE, UI_EVENTS } from './constants.js';
+import { GAME_EVENTS, RESULT_REASON, SCREEN_TYPE, UI_EVENTS } from './constants.js';
 import { EventBus } from './eventBus.js';
 import { GameEngine } from './gameEngine.js';
 import { Store } from './store.js';
@@ -21,8 +21,7 @@ const App = (() => {
         } else if (state.screen === SCREEN_TYPE.GAME) {
           UI.renderGame(root, state);
         } else if (state.screen === SCREEN_TYPE.RESULTS) {
-          //TODO: render results screen
-          console.log('Render results screen');
+          UI.renderResults(root, state);
         }
       });
 
@@ -40,6 +39,12 @@ const App = (() => {
 
       EventBus.on(UI_EVENTS.BACK, () => {
         Store.setState({ screen: SCREEN_TYPE.START });
+      });
+
+      EventBus.on(GAME_EVENTS.WIN, () => {
+        setTimeout(()=> {
+          Store.setState({ screen: SCREEN_TYPE.RESULTS, resultReason: RESULT_REASON.WIN});
+        }, 650);
       });
 
       EventBus.on(UI_EVENTS.CELL_CLICK, ({ index }) => {
@@ -69,12 +74,15 @@ const App = (() => {
                 const newGrid = [...grid];
                 newGrid[i1] = null;
                 newGrid[i2] = null;
-      
+
                 Store.setState({
                   grid: newGrid,
                   score: score + pairScore,
                   selected: []
                 });
+
+                if (score + pairScore >= 100) EventBus.emit(GAME_EVENTS.WIN);
+
               }, 350);
             } else {
               EventBus.emit(UI_EVENTS.UNMATCHED, { indexes: [i1, i2] });

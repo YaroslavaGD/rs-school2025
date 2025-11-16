@@ -8,6 +8,15 @@ export const Store = (() => {
     selected: [],
     score: 0,
     linesCount: 0,
+    resultReason: null, // 'win', 'lose-no-moves', 'lose-50-lines'
+    timer: { running: false, elapsedMs: 0 },
+    assists: {
+      hintsLeft: 999,
+      revertAvailable: false,
+      addNumbersUsed: 0,
+      shuffleUsed: 0,
+      eraserUsed: 0,
+    },
   };
 
   const subscribers = [];

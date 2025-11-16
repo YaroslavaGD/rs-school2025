@@ -11,13 +11,24 @@ export const UI_EVENTS = {
   CELL_CLICK: 'ui:cell:click',
   MATCHED: 'ui:matched',
   UNMATCHED: 'ui:unmatched',
-}
+};
+
+export const GAME_EVENTS = {
+  WIN: 'game: win',
+  LOSE: 'game: lose',
+};
 
 export const SCREEN_TYPE = {
   START: 'start',
   GAME: 'game',
-  RESULTS: 'results'
-}
+  RESULTS: 'results',
+};
+
+export const RESULT_REASON = {
+  WIN: 'win',
+  LOSE_LINES: 'lose: 50-line limit',
+  LOSE_NO_MOVES: 'lose: no valid moves',
+};
 
 export const IS_DEBUG = true;
 export const IS_STORE_DEBUG = false;

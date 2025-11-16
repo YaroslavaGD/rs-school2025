@@ -1,4 +1,4 @@
-import { MODE, UI_EVENTS } from "./constants.js";
+import { MODE, RESULT_REASON, UI_EVENTS } from "./constants.js";
 import { EventBus } from "./eventBus.js";
 import { Store } from "./store.js";
 
@@ -48,6 +48,22 @@ export const UI = (() => {
       gameDiv.appendChild(gridDiv);
 
       root.appendChild(gameDiv);
+    },
+
+    renderResults(root, state) {
+      const { resultReason } = state;
+      const backBtn = this.createBackBtn();
+
+      if (resultReason) {
+        const message = document.createElement('p');
+
+        if (resultReason === RESULT_REASON.WIN) message.textContent = `You win!`;
+        if (resultReason === RESULT_REASON.LOSE_LINES) message.textContent = `You lose! Reason: the 50-line grid limit has been reached`;
+        if (resultReason === RESULT_REASON.LOSE_NO_MOVES) message.textContent = `You lose! Reason: no valid moves remain and all assist tools have been used`;
+
+        root.appendChild(backBtn);
+        root.appendChild(message);
+      }
     },
 
     createModeButton(modeValue, modeLabel) {
@@ -101,15 +117,7 @@ export const UI = (() => {
       scoreContent.classList.add('info__content');
       scoreContent.classList.add('info__number-content');
 
-      const backBtn = document.createElement('button');
-      backBtn.classList.add('button');
-      const backBtnText = document.createElement('div');
-      backBtnText.classList.add('button__text');
-      backBtnText.textContent = 'Back to Menu';
-
-      backBtn.addEventListener('click', () => {
-        EventBus.emit(UI_EVENTS.BACK, {}); 
-      });
+      const backBtn = this.createBackBtn();
 
       modeP.appendChild(modeTitle);
       modeP.appendChild(modeContent);
@@ -121,11 +129,25 @@ export const UI = (() => {
       info.appendChild(modeP);
       info.appendChild(scoreP);
 
-      backBtn.appendChild(backBtnText);
       header.appendChild(info);
 
 
       return header;
+    },
+
+    createBackBtn() {
+      const backBtn = document.createElement('button');
+      backBtn.classList.add('button');
+      const backBtnText = document.createElement('div');
+      backBtnText.classList.add('button__text');
+      backBtnText.textContent = 'Back to Menu';
+
+      backBtn.addEventListener('click', () => {
+        EventBus.emit(UI_EVENTS.BACK, {}); 
+      });
+      backBtn.appendChild(backBtnText);
+
+      return backBtn;
     },
 
     createGrid(grid){

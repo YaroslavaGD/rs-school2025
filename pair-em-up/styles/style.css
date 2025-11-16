@@ -154,6 +154,7 @@ html, body {
 .info__item {
   display: flex;
   flex-direction: column;
+  min-width: 140px;
   color: var(--text);
   text-shadow:
     1px 1px 2px var(--glow-a),
