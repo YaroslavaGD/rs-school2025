@@ -2,6 +2,7 @@ import { GAME_EVENTS, RESULT_REASON, SCREEN_TYPE, UI_EVENTS } from './constants.
 import { EventBus } from './eventBus.js';
 import { GameEngine } from './gameEngine.js';
 import { Store } from './store.js';
+import { Timer } from './timer.js';
 import { UI } from './ui.js';
 
 const App = (() => {
@@ -32,9 +33,17 @@ const App = (() => {
           screen: SCREEN_TYPE.GAME,
           grid,
           score: 0,
+          timer: { running: true, elapsedMs: 0 },
           linesCount: 0,
-          //timer: { running: true, elapsedMs: 0 }
         });
+      });
+
+      Store.subscribe((state) => {
+        if (state.screen === SCREEN_TYPE.GAME && state.timer.running) {
+          Timer.start();
+        } else {
+          Timer.stop();
+        }
       });
 
       EventBus.on(UI_EVENTS.BACK, () => {
@@ -42,8 +51,17 @@ const App = (() => {
       });
 
       EventBus.on(GAME_EVENTS.WIN, () => {
+        Store.setState({
+          timer: {
+            ...Store.getState().timer,
+            running: false
+          }
+        });
         setTimeout(()=> {
-          Store.setState({ screen: SCREEN_TYPE.RESULTS, resultReason: RESULT_REASON.WIN});
+          Store.setState({ 
+            screen: SCREEN_TYPE.RESULTS,
+            resultReason: RESULT_REASON.WIN
+          });
         }, 650);
       });
 
@@ -94,8 +112,6 @@ const App = (() => {
           return;
         }
       });
-
-      //TODO: start timer
 
       Store.setState({ screen: SCREEN_TYPE.START });
     }

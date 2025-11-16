@@ -1,6 +1,7 @@
 import { MODE, RESULT_REASON, UI_EVENTS } from "./constants.js";
 import { EventBus } from "./eventBus.js";
 import { Store } from "./store.js";
+import { formatTime } from "./utils.js";
 
 export const UI = (() => {
   return {
@@ -39,9 +40,9 @@ export const UI = (() => {
     },
 
     renderGame(root, state) {
-      const { mode, score, grid } = state;
+      const { grid } = state;
       const gameDiv = document.createElement('div');
-      const mainInfoDiv = this.createMainInfo(mode, score);
+      const mainInfoDiv = this.createMainInfo(state);
       const gridDiv = this.createGrid(grid);
 
       gameDiv.appendChild(mainInfoDiv);
@@ -85,7 +86,8 @@ export const UI = (() => {
       return button;
     },
 
-    createMainInfo(mode, score){
+    createMainInfo(state){
+      const {mode, score, timer} = state;
       const header = document.createElement('div');
       header.classList.add('game__header');
 
@@ -117,17 +119,35 @@ export const UI = (() => {
       scoreContent.classList.add('info__content');
       scoreContent.classList.add('info__number-content');
 
+      const timerP = document.createElement('p');
+      timerP.classList.add('info__item');
+      timerP.classList.add('info__timer');
+  
+      const timerTitle = document.createElement('span');
+      timerTitle.textContent = 'time';
+      timerTitle.classList.add('info__title');
+
+      const timerContent = document.createElement('span');
+      timerContent.textContent = formatTime(timer.elapsedMs);
+      timerContent.classList.add('info__content');
+      timerContent.classList.add('info__number-content');
+      timerContent.classList.add('timer-value');
+
       const backBtn = this.createBackBtn();
 
       modeP.appendChild(modeTitle);
       modeP.appendChild(modeContent);
-
+      
       scoreP.appendChild(scoreTitle);
       scoreP.appendChild(scoreContent);
+
+      timerP.appendChild(timerTitle);
+      timerP.appendChild(timerContent);
 
       info.appendChild(backBtn);
       info.appendChild(modeP);
       info.appendChild(scoreP);
+      info.appendChild(timerP);
 
       header.appendChild(info);
 
