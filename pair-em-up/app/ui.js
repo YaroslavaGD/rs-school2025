@@ -95,6 +95,11 @@ export const UI = (() => {
           revertBtn.disabled = true;
         }
       }
+
+      const hintsCounter = document.querySelector('.hints-counter');
+      if (hintsCounter && assists?.hintsLeft !== undefined) {
+        hintsCounter.textContent = assists.hintsLeft > 5 ? '5+' : String(assists.hintsLeft);
+      }
     },
 
     updateMatched(indexes) {
@@ -109,6 +114,13 @@ export const UI = (() => {
         const el = document.querySelector(`.grid__item[data-index="${i}"]`);
         if (el) el.classList.add('unmatched');
       });
+    },
+
+    updateHintsCounter(count) {
+      const counter = document.querySelector('.hints-counter');
+      if (counter) {
+        counter.textContent = count > 5 ? '5+' : String(count);
+      }
     },
 
     renderResults(root, state) {
@@ -219,7 +231,11 @@ export const UI = (() => {
     createAssist() {
       const assistDiv = document.createElement('aside');
       assistDiv.classList.add('assist');
+
+      const hintsBtn = this.createHintsBtn();
       const revertBtn = this.createRevertBtn();
+
+      assistDiv.appendChild(hintsBtn);
       assistDiv.appendChild(revertBtn);
       return assistDiv;
     },
@@ -255,6 +271,33 @@ export const UI = (() => {
       revertBtn.appendChild(revertBtnText);
 
       return revertBtn;
+    },
+
+    createHintsBtn() {
+      const hintsBtn = document.createElement('button');
+      hintsBtn.classList.add('button');
+      hintsBtn.classList.add('assist-button');
+      hintsBtn.classList.add('hints-button');
+
+      hintsBtn.disabled = true;
+      hintsBtn.style.cursor = 'default';
+
+      const hintsBtnText = document.createElement('div');
+      hintsBtnText.classList.add('button__text');
+      hintsBtnText.textContent = 'Hints';
+
+      const hintsCounter = document.createElement('div');
+      hintsCounter.classList.add('hints-counter');
+      hintsCounter.textContent = '?';
+
+      hintsBtn.addEventListener('click', () => {
+        EventBus.emit(UI_EVENTS.ASSIST_USE, { name: ASSIST_NAME.HINTS }); 
+      });
+      
+      hintsBtn.appendChild(hintsBtnText);
+      hintsBtn.appendChild(hintsCounter);
+
+      return hintsBtn;
     },
 
     createGrid(grid){

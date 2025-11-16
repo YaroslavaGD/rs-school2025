@@ -33,6 +33,30 @@ export const GameEngine = (() => {
       return 0;
     },
 
+    getAvailablePairsCount(grid) {
+      const pairs = new Set();
+
+      for (let i = 0; i < grid.length; i += 1) {
+        if (grid[i] === null) continue;
+
+        for (let j = i + 1; j < grid.length; j += 1) {
+          if (grid[j] === null) continue;
+
+          const a = grid[i];
+          const b = grid[j];
+
+          const isNumberPair = (a === b) || (a + b === 10);
+          if (!isNumberPair) continue;
+
+          if (this.isValidPair(i, j, grid)) {
+            const pairKey = `${Math.min(i,j)}-${Math.max(i,j)}`;
+            pairs.add(pairKey);
+          }
+        }
+      }
+      return pairs.size;
+    },
+
     //PRIVATE
     isValidPair(i1, i2, grid) {
       const cols = 9;

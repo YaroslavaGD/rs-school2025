@@ -138,7 +138,7 @@ html, body {
 }
 
 .assist-button {
-  min-width: 60px;
+  min-width: 110px;
   min-height: 70px;
   opacity: 1;
   cursor: pointer;
@@ -151,6 +151,34 @@ html, body {
 
 .assist-button.disabled:hover {
   pointer-events: none;
+}
+
+.hints-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.hints-button:disabled {
+  opacity: 1 !important;
+  cursor: default !important;
+}
+
+.hints-button:disabled:hover {
+  transform: none !important;
+  box-shadow: var(--neon-shadow) !important;
+}
+
+.hints-counter {
+  font-family: var(--ff-mono);
+  font-size: 1.4rem;
+  color: var(--neon-a-start);
+  text-align: center;
+  text-shadow:
+    1px 1px 2px var(--glow-a),
+    0 0 1em var(--glow-b),
+    0 0 0.2em var(--glow-b);
 }
 
 .info {
@@ -206,7 +234,8 @@ html, body {
 .assist {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: stretch;
+  gap: 10px;
   min-width: 90px;
   padding: 1rem;
   border: 1px solid var(--glow-a); 

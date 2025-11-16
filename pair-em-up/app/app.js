@@ -41,6 +41,8 @@ const App = (() => {
 
       EventBus.on(UI_EVENTS.START, ({ mode }) => {
         const grid = GameEngine.generateGrid(mode);
+        const availablePairs = GameEngine.getAvailablePairsCount(grid);
+
         Store.setState({
           mode,
           screen: SCREEN_TYPE.GAME,
@@ -51,7 +53,8 @@ const App = (() => {
           linesCount: 0,
           assists: {
             ...Store.getState().assists,
-            revertAvailable: false
+            revertAvailable: false,
+            hintsLeft: availablePairs
           }
         });
       });
@@ -119,10 +122,16 @@ const App = (() => {
                 newGrid[i1] = null;
                 newGrid[i2] = null;
 
+                const availablePairs = GameEngine.getAvailablePairsCount(newGrid);
+
                 Store.setState({
                   grid: newGrid,
                   score: score + pairScore,
-                  selected: []
+                  selected: [],
+                  assists: {
+                    ...Store.getState().assists,
+                    hintsLeft: availablePairs,
+                  }
                 });
 
                 if (score + pairScore >= 100) EventBus.emit(GAME_EVENTS.WIN);
@@ -152,6 +161,8 @@ const App = (() => {
           const { history, assists } = Store.getState();
 
           if (history && assists.revertAvailable) {
+            const availablePairs = GameEngine.getAvailablePairsCount(history.grid);
+
             Store.setState({
               grid: history.grid,
               score: history.score,
@@ -159,10 +170,17 @@ const App = (() => {
               history: null,
               assists: {
                 ...assists,
-                revertAvailable: false
+                revertAvailable: false,
+                hintsLeft: availablePairs
               }
             });
           }
+        }
+
+        if (name === ASSIST_NAME.HINTS) {
+          const { grid } = Store.getState();
+          const count = GameEngine.getAvailablePairsCount(grid);
+          UI.updateHintsCounter(count);
         }
       });
 
