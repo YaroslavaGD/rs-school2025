@@ -1,4 +1,4 @@
-import { MODE, RESULT_REASON, UI_EVENTS } from "./constants.js";
+import { ASSIST_NAME, MODE, RESULT_REASON, UI_EVENTS } from "./constants.js";
 import { EventBus } from "./eventBus.js";
 import { Store } from "./store.js";
 import { formatTime } from "./utils.js";
@@ -42,17 +42,20 @@ export const UI = (() => {
     renderGame(root, state) {
       const { grid } = state;
       const gameDiv = document.createElement('div');
+      gameDiv.classList.add('game__main');
       const mainInfoDiv = this.createMainInfo(state);
       const gridDiv = this.createGrid(grid);
+      const assistDiv = this.createAssist();
 
-      gameDiv.appendChild(mainInfoDiv);
       gameDiv.appendChild(gridDiv);
+      gameDiv.appendChild(assistDiv);
 
+      root.appendChild(mainInfoDiv);
       root.appendChild(gameDiv);
     },
 
     updateGameState(state) {
-      const { grid, score, selected } = state;
+      const { grid, score, selected, assists } = state;
       
       const scoreEl = document.querySelector('.info__score-content');
       if (scoreEl) {
@@ -81,6 +84,31 @@ export const UI = (() => {
           }
         });
       }
+
+      const revertBtn = document.querySelector('.revert-button');
+      if (revertBtn) {
+        if (assists?.revertAvailable) {
+          revertBtn.classList.remove('disabled');
+          revertBtn.disabled = false;
+        } else {
+          revertBtn.classList.add('disabled');
+          revertBtn.disabled = true;
+        }
+      }
+    },
+
+    updateMatched(indexes) {
+      indexes.forEach(i => {
+        const el = document.querySelector(`.grid__item[data-index="${i}"]`);
+        if (el) el.classList.add('matched');
+      });
+    },
+
+    updateUnmatched(indexes) {
+      indexes.forEach(i => {
+        const el = document.querySelector(`.grid__item[data-index="${i}"]`);
+        if (el) el.classList.add('unmatched');
+      });
     },
 
     renderResults(root, state) {
@@ -188,6 +216,14 @@ export const UI = (() => {
       return header;
     },
 
+    createAssist() {
+      const assistDiv = document.createElement('aside');
+      assistDiv.classList.add('assist');
+      const revertBtn = this.createRevertBtn();
+      assistDiv.appendChild(revertBtn);
+      return assistDiv;
+    },
+
     createBackBtn() {
       const backBtn = document.createElement('button');
       backBtn.classList.add('button');
@@ -201,6 +237,24 @@ export const UI = (() => {
       backBtn.appendChild(backBtnText);
 
       return backBtn;
+    },
+
+    createRevertBtn() {
+      const revertBtn = document.createElement('button');
+      revertBtn.classList.add('button');
+      revertBtn.classList.add('assist-button');
+      revertBtn.classList.add('revert-button');
+
+      const revertBtnText = document.createElement('div');
+      revertBtnText.classList.add('button__text');
+      revertBtnText.textContent = 'Revert';
+
+      revertBtn.addEventListener('click', () => {
+        EventBus.emit(UI_EVENTS.ASSIST_USE, { name: ASSIST_NAME.REVERT }); 
+      });
+      revertBtn.appendChild(revertBtnText);
+
+      return revertBtn;
     },
 
     createGrid(grid){
@@ -229,17 +283,3 @@ export const UI = (() => {
     },
   };
 })();
-
-EventBus.on(UI_EVENTS.MATCHED, ({ indexes }) => {
-  indexes.forEach(i => {
-    const el = document.querySelector(`.grid__item[data-index="${i}"]`);
-    if (el) el.classList.add('matched');
-  });
-});
-
-EventBus.on(UI_EVENTS.UNMATCHED, ({ indexes }) => {
-  indexes.forEach(i => {
-    const el = document.querySelector(`.grid__item[data-index="${i}"]`);
-    if (el) el.classList.add('unmatched');
-  });
-});

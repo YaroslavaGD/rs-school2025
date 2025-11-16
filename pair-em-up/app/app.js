@@ -1,4 +1,4 @@
-import { GAME_EVENTS, RESULT_REASON, SCREEN_TYPE, UI_EVENTS } from './constants.js';
+import { ASSIST_NAME, GAME_EVENTS, RESULT_REASON, SCREEN_TYPE, UI_EVENTS } from './constants.js';
 import { EventBus } from './eventBus.js';
 import { GameEngine } from './gameEngine.js';
 import { Store } from './store.js';
@@ -46,8 +46,13 @@ const App = (() => {
           screen: SCREEN_TYPE.GAME,
           grid,
           score: 0,
+          history: null,
           timer: { running: true, elapsedMs: 0 },
           linesCount: 0,
+          assists: {
+            ...Store.getState().assists,
+            revertAvailable: false
+          }
         });
       });
 
@@ -89,12 +94,25 @@ const App = (() => {
         if (selected.length === 1) {
           const newSelected = [...selected, index];
           Store.setState({ selected: newSelected });
+
           setTimeout(() => {
             const [i1, i2] = newSelected;
 
             const pairScore = GameEngine.scorePair(i1, i2, grid);
   
             if (pairScore > 0) {
+              const currentState = Store.getState();
+              Store.setState({ 
+                history: { 
+                  grid: [...currentState.grid],
+                  score: currentState.score,
+                  selected: [] 
+                },
+                assists: {
+                  ...currentState.assists,
+                  revertAvailable: true,
+                }
+              });
               EventBus.emit(UI_EVENTS.MATCHED, { indexes: [i1, i2] });
               setTimeout(() => {
                 const newGrid = [...grid];
@@ -112,12 +130,39 @@ const App = (() => {
               }, 350);
             } else {
               EventBus.emit(UI_EVENTS.UNMATCHED, { indexes: [i1, i2] });
-              setTimeout(() => {
-                Store.setState({ selected: [] });
-              }, 300);
             }
           }, 350);
           return;
+        }
+      });
+
+      EventBus.on(UI_EVENTS.MATCHED, ({ indexes }) => {
+        UI.updateMatched(indexes);
+      });
+
+      EventBus.on(UI_EVENTS.UNMATCHED, ({ indexes }) => {
+        UI.updateUnmatched(indexes);
+        setTimeout(() => {
+          Store.setState({ selected: [] });
+        }, 300);
+      });
+
+      EventBus.on(UI_EVENTS.ASSIST_USE, ({ name }) => {
+        if (name === ASSIST_NAME.REVERT) {
+          const { history, assists } = Store.getState();
+
+          if (history && assists.revertAvailable) {
+            Store.setState({
+              grid: history.grid,
+              score: history.score,
+              selected: [],
+              history: null,
+              assists: {
+                ...assists,
+                revertAvailable: false
+              }
+            });
+          }
         }
       });
 

@@ -11,6 +11,7 @@ export const UI_EVENTS = {
   CELL_CLICK: 'ui:cell:click',
   MATCHED: 'ui:matched',
   UNMATCHED: 'ui:unmatched',
+  ASSIST_USE: 'ui:assist:use',
 };
 
 export const GAME_EVENTS = {
@@ -28,6 +29,14 @@ export const RESULT_REASON = {
   WIN: 'win',
   LOSE_LINES: 'lose: 50-line limit',
   LOSE_NO_MOVES: 'lose: no valid moves',
+};
+
+export const ASSIST_NAME = {
+  HINTS: 'hints',
+  REVERT: 'revert',
+  ADD_NUMBERS: 'addNumbers',
+  SHUFFLE: 'shuffle',
+  ERASER: 'eraser',
 };
 
 export const IS_DEBUG = true;

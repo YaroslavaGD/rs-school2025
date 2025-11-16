@@ -6,6 +6,7 @@ export const Store = (() => {
     screen: SCREEN_TYPE.START, // 'start', 'game', 'results'
     grid: [],
     selected: [],
+    history: null,
     score: 0,
     linesCount: 0,
     resultReason: null, // 'win', 'lose-no-moves', 'lose-50-lines'
