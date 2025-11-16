@@ -15,8 +15,7 @@ const App = (() => {
         root.innerHTML = '';
         if (state.screen === SCREEN_TYPE.START) {
           UI.renderStart(root);
-        } else if (state.screen === SCREEN_TYPE.GAME){
-          console.log()
+        } else if (state.screen === SCREEN_TYPE.GAME) {
           UI.renderGame(root, state);
         } else if (state.screen === SCREEN_TYPE.RESULTS) {
           //TODO: render results screen
@@ -58,10 +57,8 @@ const App = (() => {
           Store.setState({ selected: newSelected });
           setTimeout(() => {
             const [i1, i2] = newSelected;
-            const a = grid[i1];
-            const b = grid[i2];
-    
-            const pairScore = GameEngine.scorePair(a, b);
+
+            const pairScore = GameEngine.scorePair(i1, i2, grid);
   
             if (pairScore > 0) {
               EventBus.emit(UI_EVENTS.MATCHED, { indexes: [i1, i2] });
@@ -77,7 +74,10 @@ const App = (() => {
                 });
               }, 350);
             } else {
-              Store.setState({ selected: [] });
+              EventBus.emit(UI_EVENTS.UNMATCHED, { indexes: [i1, i2] });
+              setTimeout(() => {
+                Store.setState({ selected: [] });
+              }, 300);
             }
           }, 350);
           return;
@@ -87,8 +87,6 @@ const App = (() => {
       //TODO: start timer
 
       Store.setState({ screen: SCREEN_TYPE.START });
-
-      console.log('App initialized');
     }
   };
 })();

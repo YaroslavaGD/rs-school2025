@@ -4,6 +4,7 @@
 - `ui:start` - { mode: 'classic' | 'random' | 'chaotic' }
 - `ui:cell:click` - { index: number }
 - `ui:matched` - { indexes: [i1, i2] }
+- `ui:unmatched` - { indexes: [i1, i2] }
 - `ui:assist:use` - { name: 'hints' | 'revert' | 'addNumbers' | 'shuffle' | 'eraser' }
 
 - `ui:save` — {}

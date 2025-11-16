@@ -10,6 +10,7 @@ export const UI_EVENTS = {
   BACK: 'ui:back',
   CELL_CLICK: 'ui:cell:click',
   MATCHED: 'ui:matched',
+  UNMATCHED: 'ui:unmatched',
 }
 
 export const SCREEN_TYPE = {
@@ -17,3 +18,7 @@ export const SCREEN_TYPE = {
   GAME: 'game',
   RESULTS: 'results'
 }
+
+export const IS_DEBUG = true;
+export const IS_STORE_DEBUG = false;
+export const IS_EVENTS_DEBUG = false;

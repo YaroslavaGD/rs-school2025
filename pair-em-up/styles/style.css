@@ -10,6 +10,8 @@
   --neon-a-end:   #3A86FF;
   --neon-b-start: #FF00E5;
   --neon-b-end:   #6A00FF;
+  --neon-matched: #00ff95;
+  --neon-unmatched: #ff0055;
 
     /* Accent glows */
   --glow-a: rgba(0,245,255,0.45);
@@ -163,7 +165,7 @@ html, body {
     0 0 1em var(--glow-b),
     0 0 0.2em var(--glow-b);
   cursor: pointer;
-  transition: transform .14s ease, box-shadow .14s ease, opacity .18s ease;
+  transition: transform .14s ease, box-shadow .14s ease, opacity .18s ease, border-color .14s ease;
 }
 
 .grid__item:hover { 
@@ -179,13 +181,34 @@ html, body {
 }
 
 .grid__item.matched { 
+  border: 2px solid var(--neon-matched);
   animation: matchedFade .36s forwards; 
 }
 
+.grid__item.unmatched { 
+  border: 2px solid var(--neon-unmatched);
+}
+
 @keyframes matchedFade { 
-  to { 
-    transform: scale(0.6); opacity: 0; 
-  } 
+  0% {
+    opacity: 1;
+    transform: scale(1);
+    border-color: var(--neon-matched);
+  }
+  40% {
+    opacity: 1;
+    transform: scale(1.1);
+    border-color: var(--neon-matched);
+  }
+  60% {
+    opacity: 1;
+    transform: scale(1);
+    border-color: var(--neon-matched);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.6);
+  }
 }
 
 @media (max-width: 520px) {

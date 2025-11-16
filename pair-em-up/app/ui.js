@@ -119,3 +119,10 @@ EventBus.on(UI_EVENTS.MATCHED, ({ indexes }) => {
     if (el) el.classList.add('matched');
   });
 });
+
+EventBus.on(UI_EVENTS.UNMATCHED, ({ indexes }) => {
+  indexes.forEach(i => {
+    const el = document.querySelector(`.grid__item[data-index="${i}"]`);
+    if (el) el.classList.add('unmatched');
+  });
+});

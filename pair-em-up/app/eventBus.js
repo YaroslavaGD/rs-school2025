@@ -1,3 +1,5 @@
+import { IS_DEBUG, IS_EVENTS_DEBUG } from "./constants.js";
+
 export const EventBus = (() =>{
   const events = {};
 
@@ -19,7 +21,7 @@ export const EventBus = (() =>{
   
       events[name].forEach(listener => listener(data));
       
-      console.debug(`[EventBus] ${name}:`, data);
+      if (IS_DEBUG && IS_EVENTS_DEBUG) console.debug(`[EventBus] ${name}:`, data);
     }
   };
 })();
