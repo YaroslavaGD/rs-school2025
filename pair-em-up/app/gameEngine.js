@@ -189,7 +189,7 @@ export const GameEngine = (() => {
     },
 
     generateClassicNewNumbers(currentGrid) {
-      const gridNumbers = [...currentGrid];
+      const grid = [...currentGrid];
       return grid.filter(num => num !== null);
     },
 
