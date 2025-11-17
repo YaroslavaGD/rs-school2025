@@ -1,0 +1,73 @@
+import { Store } from "./store.js";
+import { formatTime } from "./utils.js";
+
+export const Timer = (() => {
+  let intervalId = null;
+  let startTime = null;
+  let pausedElapsedMs = 0;
+
+  function start() {
+    const { timer } = Store.getState();
+    if (!timer.running) return;
+
+    if (intervalId) return;
+
+    startTime = Date.now() - timer.elapsedMs;
+    pausedElapsedMs = timer.elapsedMs;
+      
+
+    intervalId = setInterval(() => {
+      const currentElapsedMs = Date.now() - startTime;
+
+      const el = document.querySelector('.timer-value');
+      if (el) el.textContent = formatTime(currentElapsedMs);
+
+      pausedElapsedMs = currentElapsedMs;
+    }, 1000);
+  }
+
+  function stop() {
+    if (!intervalId) return;
+
+    clearInterval(intervalId);
+    intervalId = null;
+
+    if (startTime) {
+      pausedElapsedMs = Date.now() - startTime;
+
+      Store.setState({
+        timer: {
+          ...Store.getState().timer,
+          elapsedMs: pausedElapsedMs,
+        }
+      });
+    }
+  }
+
+  function reset() {
+    stop();
+    startTime = null;
+    pausedElapsedMs = 0;
+
+    Store.setState({
+      timer: {
+        running: false,
+        elapsedMs: 0,
+      }
+    });
+  }
+
+  function getElapsed() {
+    if (intervalId && startTime) {
+      return Date.now() - startTime;
+    }
+    return pausedElapsedMs;
+  }
+
+  return {
+    start,
+    stop,
+    reset,
+    getElapsed,
+  }
+})();
