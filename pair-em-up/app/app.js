@@ -93,6 +93,14 @@ const App = (() => {
         UI.updateShuffleButton(Store.getState());
       });
 
+      EventBus.on(UI_EVENTS.ERASER_ACTIVATED, () => {
+        UI.updateEraserModeUI(true);
+      });
+
+      EventBus.on(UI_EVENTS.ERASER_CANCELLED, () => {
+        UI.updateEraserModeUI(false);
+      });
+
       Store.setState({ screen: SCREEN_TYPE.START });
     }
   };

@@ -7,7 +7,12 @@ import { UI } from "./ui.js";
 export const GameController = (() => {
   //=== Handle clicks
   const handleCellClick = (index) => {
-    const { selected, grid, score } = Store.getState();
+    const { selected, grid, score, eraserMode } = Store.getState();
+
+    if (eraserMode) {
+      handleEraserClick(index);
+      return;
+    }
 
     if (grid[index] === null) return;
 
@@ -31,6 +36,20 @@ export const GameController = (() => {
       }, ANIMATION_DELAYS.PAIR_CHECK);
       return;
     }
+  };
+
+  const handleEraserClick = (index) => {
+    const { grid, assists } = Store.getState();
+
+    if (assists.eraserUsed >= 5) {
+      Store.setState({ eraserMode: false });
+      EventBus.emit(UI_EVENTS.ERASER_CANCELLED);
+      return;
+    }
+
+    if (grid[index] === null) return;
+
+    useEraser(index);
   };
 
   const processPairAttempt = (i1, i2, grid, score) => {
@@ -169,6 +188,9 @@ export const GameController = (() => {
       case ASSIST_NAME.SHUFFLE:
         useShuffle();
         break;
+      case ASSIST_NAME.ERASER:
+        activateEraserMode();
+        break;
     }
   };
 
@@ -185,6 +207,7 @@ export const GameController = (() => {
       selected: [],
       linesCount: history.linesCount,
       history: null,
+      eraserMode: false,
       assists: {
         ...assists,
         ...history.assists,
@@ -197,6 +220,10 @@ export const GameController = (() => {
 
     UI.updateHintsCounter(availablePairs);
     EventBus.emit(UI_EVENTS.UPDATE_ASSISTS_UI);
+
+    if (eraserMode) {
+      EventBus.emit(UI_EVENTS.ERASER_CANCELLED);
+    }
   };
 
   const updateHints = () => {
@@ -266,6 +293,54 @@ export const GameController = (() => {
 
     UI.updateHintsCounter(availablePairs);
     EventBus.emit(UI_EVENTS.UPDATE_ASSISTS_UI);
+  };
+
+  const useEraser = (index) => {
+    const { grid, assists, score } = Store.getState();
+
+    if (assists.eraserUsed >= 5) return;
+    if (grid[index] === null) return;
+
+    saveHistoryState(grid, score);
+
+    const newGrid = GameEngine.eraseCell(grid, index);
+    const availablePairs = GameEngine.getAvailablePairsCount(newGrid);
+
+    Store.setState({
+      grid: newGrid,
+      linesCount: GameEngine.getGridRowCount(newGrid),
+      eraserMode: false,
+      assists: {
+        ...assists,
+        eraserUsed: assists.eraserUsed + 1,
+        hintsLeft: availablePairs,
+        revertAvailable: true,
+      }
+    });
+
+    UI.updateHintsCounter(availablePairs);
+    EventBus.emit(UI_EVENTS.UPDATE_ASSISTS_UI);
+
+    checkGameConditions(Store.getState().score, newGrid);
+  };
+
+  const activateEraserMode = () => {
+    const { assists } = Store.getState();
+
+    if (assists.eraserUsed >= 5) {
+      if (eraserMode) {
+        Store.setState({ eraserMode: false });
+        EventBus.emit(UI_EVENTS.ERASER_CANCELLED);
+      }
+      return;
+    }
+
+    Store.setState({ 
+      eraserMode: true,
+      selected: []
+    });
+
+    EventBus.emit(UI_EVENTS.ERASER_ACTIVATED);
   };
 
   return {

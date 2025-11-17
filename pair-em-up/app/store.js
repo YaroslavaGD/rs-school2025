@@ -11,6 +11,7 @@ export const Store = (() => {
     linesCount: 0,
     resultReason: null, // 'win', 'lose-no-moves', 'lose-50-lines'
     timer: { running: false, elapsedMs: 0 },
+    eraserMode: false,
     assists: {
       hintsLeft: 999,
       revertAvailable: false,

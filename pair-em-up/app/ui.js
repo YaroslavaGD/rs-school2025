@@ -55,7 +55,7 @@ export const UI = (() => {
     },
 
     updateGameState(state) {
-      const { grid, score, selected, assists } = state;
+      const { grid, score, selected, assists, eraserMode } = state;
       
       const scoreEl = document.querySelector('.info__score-content');
       if (scoreEl) {
@@ -63,6 +63,9 @@ export const UI = (() => {
       }
 
       this.updateAddNumbersButton(state);
+      this.updateShuffleButton(state);
+      this.updateEraserButton(state);
+      this.updateEraserModeUI(eraserMode);
 
       const gridEl = document.querySelector('.grid');
       if (gridEl) {
@@ -83,10 +86,16 @@ export const UI = (() => {
               cell.textContent = newText;
             }
 
-            if (selected.includes(i)) {
-              cell.classList.add('selected');
-            } else {
+            if (eraserMode && num !== null) {
+              cell.classList.add('eraser-target');
               cell.classList.remove('selected');
+            } else {
+              cell.classList.remove('eraser-target');
+              if (selected.includes(i)) {
+                cell.classList.add('selected');
+              } else {
+                cell.classList.remove('selected');
+              }
             }
 
             cell.classList.remove('matched', 'unmatched');
@@ -176,6 +185,81 @@ export const UI = (() => {
       }
   
       triesEl.textContent = `(${assists.shuffleUsed} / 5)`;
+    },
+
+    updateEraserButton(state) {
+      const btn = document.querySelector('.eraser-button');
+      if (!btn) return;
+
+      const { assists, eraserMode } = state;
+      const isLimitReached = assists.eraserUsed >= 5;
+
+      btn.disabled = isLimitReached;
+      btn.classList.toggle('disabled', btn.disabled);
+      
+      if (isLimitReached && eraserMode) {
+        Store.setState({ eraserMode: false });
+        EventBus.emit(UI_EVENTS.ERASER_CANCELLED);
+      }
+
+      let triesEl = btn.querySelector('.button__tries');
+
+      if (!triesEl) {
+        triesEl = document.createElement('div');
+        triesEl.classList.add('button__extra-info', 'button__tries');
+        btn.appendChild(triesEl);
+      }
+  
+      triesEl.textContent = `(${assists.eraserUsed} / 5)`;
+    },
+
+    updateEraserModeUI(eraserMode) {
+      const eraserBtn = document.querySelector('.eraser-button');
+      const gridEl = document.querySelector('.grid');
+
+      if (eraserMode) {
+        if (eraserBtn) {
+          eraserBtn.classList.add('active-mode');
+        }
+
+        if (gridEl) {
+          gridEl.classList.add('eraser-mode');
+        }
+
+        this.showEraserHint();
+      } else {
+        if (eraserBtn) {
+          eraserBtn.classList.remove('active-mode');
+        }
+        
+        if (gridEl) {
+          gridEl.classList.remove('eraser-mode');
+        }
+
+        this.hideEraserHint();
+      }
+    },
+
+    showEraserHint() {
+      let hint = document.querySelector('.eraser-hint');
+
+      if (!hint) {
+        hint = document.createElement('div');
+        hint.classList.add('eraser-hint');
+        hint.textContent = 'Click on a cell to erase it';
+
+        const gameMain = document.querySelector('.game__main');
+        if (gameMain) {
+          gameMain.appendChild(hint);
+        }
+      }
+    },
+
+    hideEraserHint() {
+      const hint = document.querySelector('.eraser-hint');
+      if (hint) {
+        hint.remove();
+      }
     },
 
     renderResults(root, state) {
@@ -291,11 +375,13 @@ export const UI = (() => {
       const revertBtn = this.createRevertBtn();
       const addBtn = this.createAddBtn();
       const shuffleBtn = this.createShuffleBtn();
+      const eraserBtn = this.createEraserBtn();
 
       assistDiv.appendChild(hintsBtn);
       assistDiv.appendChild(revertBtn);
       assistDiv.appendChild(addBtn);
       assistDiv.appendChild(shuffleBtn);
+      assistDiv.appendChild(eraserBtn);
       return assistDiv;
     },
 
@@ -408,6 +494,36 @@ export const UI = (() => {
       shuffleBtn.appendChild(shuffleBtnTries);
 
       return shuffleBtn;
+    },
+
+    createEraserBtn() {
+      const eraserBtn = document.createElement('button');
+      eraserBtn.classList.add('button');
+      eraserBtn.classList.add('assist-button');
+      eraserBtn.classList.add('eraser-button');
+
+      const eraserBtnText = document.createElement('div');
+      eraserBtnText.classList.add('button__text');
+      eraserBtnText.textContent = '✖ Eraser';
+
+      const eraserBtnTries = document.createElement('div');
+      eraserBtnTries.classList.add('button__extra-info', 'button__tries');
+      eraserBtnTries.textContent = '(0 / 5)';
+
+      eraserBtn.addEventListener('click', () => {
+        const { eraserMode } = Store.getState();
+        if (eraserMode) {
+          Store.setState({ eraserMode: false });
+          EventBus.emit(UI_EVENTS.ERASER_CANCELLED);
+        } else {
+          EventBus.emit(UI_EVENTS.ASSIST_USE, { name: ASSIST_NAME.ERASER }); 
+        }
+      });
+
+      eraserBtn.appendChild(eraserBtnText);
+      eraserBtn.appendChild(eraserBtnTries);
+
+      return eraserBtn;
     },
 
     createGrid(grid){
