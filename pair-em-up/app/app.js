@@ -65,20 +65,9 @@ const App = (() => {
         Store.setState({ screen: SCREEN_TYPE.START });
       });
 
-      EventBus.on(GAME_EVENTS.WIN, () => {
-        Store.setState({
-          timer: {
-            ...Store.getState().timer,
-            running: false
-          }
-        });
-        setTimeout(()=> {
-          Store.setState({ 
-            screen: SCREEN_TYPE.RESULTS,
-            resultReason: RESULT_REASON.WIN
-          });
-        }, 650);
-      });
+      EventBus.on(GAME_EVENTS.WIN, GameController.handleWin);
+
+      EventBus.on(GAME_EVENTS.LOSE, GameController.handleLose);
 
       EventBus.on(UI_EVENTS.CELL_CLICK, ({ index }) => GameController.handleCellClick(index));
 

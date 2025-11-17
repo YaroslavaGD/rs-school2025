@@ -1,4 +1,4 @@
-import { ANIMATION_DELAYS, UI_EVENTS } from "./constants.js";
+import { ANIMATION_DELAYS, GAME_EVENTS, RESULT_REASON, SCREEN_TYPE, UI_EVENTS } from "./constants.js";
 import { EventBus } from "./eventBus.js";
 import { GameEngine } from "./gameEngine.js";
 import { Store } from "./store.js";
@@ -102,10 +102,55 @@ export const GameController = (() => {
       return;
     }
 
-    //TODO: lose
+    const { assists } = Store.getState();
+
+    //lose
+    if (GameEngine.isLoseConditionGridLimit(grid)) {
+      EventBus.emit(GAME_EVENTS.LOSE, { reason: RESULT_REASON.LOSE_LINES });
+      return;
+    }
+
+    if (GameEngine.isLoseConditionNoMoves(grid, assists)) {
+      EventBus.emit(GAME_EVENTS.LOSE, { reason: RESULT_REASON.LOSE_NO_MOVES });
+      return;
+    }
+  };
+
+  const handleWin = () => {
+    Store.setState({
+      timer: {
+        ...Store.getState().timer,
+        running: false
+      }
+    });
+
+    setTimeout(() => {
+      Store.setState({
+        screen: SCREEN_TYPE.RESULTS,
+        resultReason: RESULT_REASON.WIN
+      });
+    }, ANIMATION_DELAYS.WIN_SCREEN_DELAY);
+  };
+
+  const handleLose = ({ reason }) => {
+    Store.setState({
+      timer: {
+        ...Store.getState().timer,
+        running: false
+      }
+    });
+
+    setTimeout(() => {
+      Store.setState({
+        screen: SCREEN_TYPE.RESULTS,
+        resultReason: reason
+      });
+    }, ANIMATION_DELAYS.WIN_SCREEN_DELAY);
   };
 
   return {
-    handleCellClick
+    handleCellClick,
+    handleWin,
+    handleLose,
   };
 })();

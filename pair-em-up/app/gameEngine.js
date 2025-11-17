@@ -57,6 +57,10 @@ export const GameEngine = (() => {
       return pairs.size;
     },
 
+    hasAvailableMoves(grid) {
+      return this.getAvailablePairsCount(grid) > 0;
+    },
+
     removePair(grid, i1, i2) {
       const newGrid = [...grid];
       newGrid[i1] = null;
@@ -68,7 +72,37 @@ export const GameEngine = (() => {
       return score >= targetScore;
     },
 
+    isLoseConditionGridLimit(grid) {
+      return this.isGridLimitReached(grid, 50);
+    },
+
+    isLoseConditionNoMoves(grid, assists) {
+      const hasMoves = this.hasAvailableMoves(grid);
+      if (hasMoves) return false;
+
+      //TODO: correctRules
+      // const hasAddNumbers = assists.addNumberUsed < 10;
+      // const hasShuffle = assists.shuffleUsed < 5;
+      // const hasEraser = assists.eraserUsed < 5;
+      const hasAddNumbers = assists.addNumbersUsed !== 0;
+      const hasShuffle = assists.shuffleUsed !== 0;
+      const hasEraser = assists.eraserUsed !== 0;
+
+      const isLose = !hasAddNumbers && !hasShuffle && !hasEraser;
+
+      return isLose;
+    },
+
     //PRIVATE
+
+    getGridRowCount(grid, cols = 9) {
+      return Math.ceil(grid.length / cols);
+    },
+
+    isGridLimitReached(grid, maxRows = 50) {
+      return this.getGridRowCount(grid) >= maxRows;
+    },
+
     isValidPair(i1, i2, grid) {
       const cols = 9;
 
