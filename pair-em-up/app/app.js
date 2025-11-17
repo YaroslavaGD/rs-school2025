@@ -82,33 +82,7 @@ const App = (() => {
         }, 300);
       });
 
-      EventBus.on(UI_EVENTS.ASSIST_USE, ({ name }) => {
-        if (name === ASSIST_NAME.REVERT) {
-          const { history, assists } = Store.getState();
-
-          if (history && assists.revertAvailable) {
-            const availablePairs = GameEngine.getAvailablePairsCount(history.grid);
-
-            Store.setState({
-              grid: history.grid,
-              score: history.score,
-              selected: [],
-              history: null,
-              assists: {
-                ...assists,
-                revertAvailable: false,
-                hintsLeft: availablePairs
-              }
-            });
-          }
-        }
-
-        if (name === ASSIST_NAME.HINTS) {
-          const { grid } = Store.getState();
-          const count = GameEngine.getAvailablePairsCount(grid);
-          UI.updateHintsCounter(count);
-        }
-      });
+      EventBus.on(UI_EVENTS.ASSIST_USE, GameController.handleAssistsUse);
 
       Store.setState({ screen: SCREEN_TYPE.START });
     }

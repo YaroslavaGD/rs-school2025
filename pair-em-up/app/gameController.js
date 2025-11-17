@@ -1,7 +1,8 @@
-import { ANIMATION_DELAYS, GAME_EVENTS, RESULT_REASON, SCREEN_TYPE, UI_EVENTS } from "./constants.js";
+import { ANIMATION_DELAYS, ASSIST_NAME, GAME_EVENTS, RESULT_REASON, SCREEN_TYPE, UI_EVENTS } from "./constants.js";
 import { EventBus } from "./eventBus.js";
 import { GameEngine } from "./gameEngine.js";
 import { Store } from "./store.js";
+import { UI } from "./ui.js";
 
 export const GameController = (() => {
   //=== Handle clicks
@@ -148,9 +149,50 @@ export const GameController = (() => {
     }, ANIMATION_DELAYS.WIN_SCREEN_DELAY);
   };
 
+  const handleAssistsUse = ({ name }) => {
+    switch (name) {
+      case ASSIST_NAME.REVERT:
+        useRevert();
+        break;
+      case ASSIST_NAME.HINTS:
+        updateHints();
+        break;
+        
+    }
+  };
+
+  const useRevert = () => {
+    const { history, assists } = Store.getState();
+
+    if (!history || !assists.revertAvailable) return;
+
+    const availablePairs = GameEngine.getAvailablePairsCount(history.grid);
+
+    Store.setState({
+      grid: history.grid,
+      score: history.score,
+      selected: [],
+      history: null,
+      assists: {
+        ...assists,
+        revertAvailable: false,
+        hintsLeft: availablePairs
+      }
+    });
+
+  };
+
+  const updateHints = () => {
+    const { grid } = Store.getState();
+    const count = GameEngine.getAvailablePairsCount(grid);
+    //TODO: update hints emit
+    UI.updateHintsCounter(count);
+  };
+
   return {
     handleCellClick,
     handleWin,
     handleLose,
+    handleAssistsUse,
   };
 })();
