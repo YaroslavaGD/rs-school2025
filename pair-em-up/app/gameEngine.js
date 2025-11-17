@@ -57,6 +57,17 @@ export const GameEngine = (() => {
       return pairs.size;
     },
 
+    removePair(grid, i1, i2) {
+      const newGrid = [...grid];
+      newGrid[i1] = null;
+      newGrid[i2] = null;
+      return newGrid;
+    },
+
+    isWinCondition(score, targetScore = 100) {
+      return score >= targetScore;
+    },
+
     //PRIVATE
     isValidPair(i1, i2, grid) {
       const cols = 9;

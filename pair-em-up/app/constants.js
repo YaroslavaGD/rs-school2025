@@ -39,6 +39,13 @@ export const ASSIST_NAME = {
   ERASER: 'eraser',
 };
 
+export const ANIMATION_DELAYS = {
+  PAIR_CHECK: 350,
+  PAIR_REMOVE: 350,
+  UNMATCHED_RESET: 300,
+  WIN_SCREEN_DELAY: 650,
+}
+
 export const IS_DEBUG = true;
 export const IS_STORE_DEBUG = false;
 export const IS_EVENTS_DEBUG = false;
