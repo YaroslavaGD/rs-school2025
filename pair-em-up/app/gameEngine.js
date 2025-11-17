@@ -26,7 +26,7 @@ export const GameEngine = (() => {
       const isValid = this.isValidPair(i1, i2, grid);
       if (!isValid || !a || !b) return 0;
 
-      if (a === 5 && b === 5) return 10;
+      if (a === 5 && b === 5) return 3;
       if (a === b) return 1;
       if ((a + b) === 10) return 2;
 
