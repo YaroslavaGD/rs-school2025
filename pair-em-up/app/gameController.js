@@ -190,6 +190,8 @@ export const GameController = (() => {
       }
     });
 
+    Store.setState({ history: null });
+
     UI.updateHintsCounter(availablePairs);
     EventBus.emit(UI_EVENTS.UPDATE_ASSISTS_UI);
   };
@@ -202,9 +204,11 @@ export const GameController = (() => {
   };
 
   const useAddNumbers = () => {
-    const { grid, mode, assists } = Store.getState();
+    const { grid, mode, assists, score } = Store.getState();
 
     if (assists.addNumbersUsed >= 10) return;
+
+    saveHistoryState(grid, score);
 
     const newNumbers = GameEngine.generateNewNumbers(mode, grid);
     const newGrid = GameEngine.addNewNumbersToGrid(grid, newNumbers);
@@ -228,7 +232,6 @@ export const GameController = (() => {
     });
 
     UI.updateHintsCounter(availablePairs);
-
     EventBus.emit(UI_EVENTS.UPDATE_ASSISTS_UI);
   };
 
