@@ -273,8 +273,8 @@ export const UI = (() => {
       const revertBtn = this.createRevertBtn();
 
       assistDiv.appendChild(hintsBtn);
-      assistDiv.appendChild(addBtn);
       assistDiv.appendChild(revertBtn);
+      assistDiv.appendChild(addBtn);
       return assistDiv;
     },
 
@@ -301,7 +301,7 @@ export const UI = (() => {
 
       const revertBtnText = document.createElement('div');
       revertBtnText.classList.add('button__text');
-      revertBtnText.textContent = 'Revert';
+      revertBtnText.textContent = '↶ Revert';
 
       revertBtn.addEventListener('click', () => {
         EventBus.emit(UI_EVENTS.ASSIST_USE, { name: ASSIST_NAME.REVERT }); 
@@ -346,7 +346,7 @@ export const UI = (() => {
 
       const addBtnText = document.createElement('div');
       addBtnText.classList.add('button__text');
-      addBtnText.textContent = 'Add numbers';
+      addBtnText.textContent = '╋ Add';
 
       const addBtnTries = document.createElement('div');
       addBtnTries.classList.add('button__extra-info', 'button__tries');
