@@ -111,6 +111,21 @@ export const GameEngine = (() => {
       return [...grid, ...newNumbers];
     },
 
+    shuffleGrid(grid) {
+      const currentGrid = [...grid];
+      const numbers = currentGrid.filter(num => num !== null);
+      const shuffled = this.shuffleNumbers(numbers);
+
+      let index = 0;
+      return grid.map(cell => cell === null ? null : shuffled[index++]);
+    },
+
+    eraseCell(grid, index) {
+      const newGrid = [...grid];
+      newGrid[index] = null;
+      return newGrid;
+    },
+
     //PRIVATE
 
     getGridRowCount(grid, cols = 9) {

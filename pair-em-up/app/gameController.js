@@ -166,6 +166,9 @@ export const GameController = (() => {
       case ASSIST_NAME.ADD_NUMBERS:
         useAddNumbers();
         break;
+      case ASSIST_NAME.SHUFFLE:
+        useShuffle();
+        break;
     }
   };
 
@@ -226,6 +229,36 @@ export const GameController = (() => {
       assists: {
         ...assists,
         addNumbersUsed: assists.addNumbersUsed + 1,
+        hintsLeft: availablePairs,
+        revertAvailable: true,
+      }
+    });
+
+    UI.updateHintsCounter(availablePairs);
+    EventBus.emit(UI_EVENTS.UPDATE_ASSISTS_UI);
+  };
+
+  const useShuffle = () => {
+    const { grid, mode, assists, score } = Store.getState();
+
+    if (assists.shuffleUsed >= 5) return;
+
+    saveHistoryState(grid, score);
+
+    const newGrid = GameEngine.shuffleGrid(grid);
+    const availablePairs = GameEngine.getAvailablePairsCount(newGrid);
+
+    if (GameEngine.isGridLimitReached(newGrid)) {
+      EventBus.emit(GAME_EVENTS.LOSE, { reason: RESULT_REASON.LOSE_LINES });
+      return;
+    }
+
+    Store.setState({
+      grid: newGrid,
+      linesCount: GameEngine.getGridRowCount(newGrid),
+      assists: {
+        ...assists,
+        shuffleUsed: assists.shuffleUsed + 1,
         hintsLeft: availablePairs,
         revertAvailable: true,
       }

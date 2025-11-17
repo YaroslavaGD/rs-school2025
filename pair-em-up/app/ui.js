@@ -155,8 +155,27 @@ export const UI = (() => {
         btn.appendChild(linesEl); 
       }
   
-      triesEl.textContent = `(${assists.addNumbersUsed}/10)`;
+      triesEl.textContent = `(${assists.addNumbersUsed} / 10)`;
       linesEl.textContent = `lines: ${linesCount} / 50`;
+    },
+
+    updateShuffleButton(state) {
+      const btn = document.querySelector('.shuffle-button');
+      if (!btn) return;
+
+      const { assists } = state;
+
+      btn.disabled = assists.shuffleUsed >= 5;
+      btn.classList.toggle('disabled', btn.disabled);
+      let triesEl = btn.querySelector('.button__tries');
+
+      if (!triesEl) {
+        triesEl = document.createElement('div');
+        triesEl.classList.add('button__extra-info', 'button__tries');
+        btn.appendChild(triesEl);
+      }
+  
+      triesEl.textContent = `(${assists.shuffleUsed} / 5)`;
     },
 
     renderResults(root, state) {
@@ -269,12 +288,14 @@ export const UI = (() => {
       assistDiv.classList.add('assist');
 
       const hintsBtn = this.createHintsBtn();
-      const addBtn = this.createAddBtn();
       const revertBtn = this.createRevertBtn();
+      const addBtn = this.createAddBtn();
+      const shuffleBtn = this.createShuffleBtn();
 
       assistDiv.appendChild(hintsBtn);
       assistDiv.appendChild(revertBtn);
       assistDiv.appendChild(addBtn);
+      assistDiv.appendChild(shuffleBtn);
       return assistDiv;
     },
 
@@ -350,11 +371,11 @@ export const UI = (() => {
 
       const addBtnTries = document.createElement('div');
       addBtnTries.classList.add('button__extra-info', 'button__tries');
-      addBtnTries.textContent = '(0 /10)';
+      addBtnTries.textContent = '(0 / 10)';
       
       const addBtnLines = document.createElement('div');
       addBtnLines.classList.add('button__extra-info', 'button__lines');
-      addBtnLines.textContent = 'lines: 3 /50';
+      addBtnLines.textContent = 'lines: 3 / 50';
 
       addBtn.addEventListener('click', () => {
         EventBus.emit(UI_EVENTS.ASSIST_USE, { name: ASSIST_NAME.ADD_NUMBERS }); 
@@ -364,6 +385,29 @@ export const UI = (() => {
       addBtn.appendChild(addBtnLines);
 
       return addBtn;
+    },
+
+    createShuffleBtn() {
+      const shuffleBtn = document.createElement('button');
+      shuffleBtn.classList.add('button');
+      shuffleBtn.classList.add('assist-button');
+      shuffleBtn.classList.add('shuffle-button');
+
+      const shuffleBtnText = document.createElement('div');
+      shuffleBtnText.classList.add('button__text');
+      shuffleBtnText.textContent = '⇄ Shuffle';
+
+      const shuffleBtnTries = document.createElement('div');
+      shuffleBtnTries.classList.add('button__extra-info', 'button__tries');
+      shuffleBtnTries.textContent = '(0 / 5)';
+
+      shuffleBtn.addEventListener('click', () => {
+        EventBus.emit(UI_EVENTS.ASSIST_USE, { name: ASSIST_NAME.SHUFFLE }); 
+      });
+      shuffleBtn.appendChild(shuffleBtnText);
+      shuffleBtn.appendChild(shuffleBtnTries);
+
+      return shuffleBtn;
     },
 
     createGrid(grid){

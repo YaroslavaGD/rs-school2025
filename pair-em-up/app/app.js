@@ -87,8 +87,10 @@ const App = (() => {
       });
 
       EventBus.on(UI_EVENTS.ASSIST_USE, GameController.handleAssistsUse);
+
       EventBus.on(UI_EVENTS.UPDATE_ASSISTS_UI, () => {
         UI.updateAddNumbersButton(Store.getState());
+        UI.updateShuffleButton(Store.getState());
       });
 
       Store.setState({ screen: SCREEN_TYPE.START });
