@@ -62,6 +62,8 @@ export const UI = (() => {
         scoreEl.textContent = `${score} / 100`;
       }
 
+      this.updateAddNumbersButton(state);
+
       const gridEl = document.querySelector('.grid');
       if (gridEl) {
         const existingCount = gridEl.children.length;
@@ -128,6 +130,33 @@ export const UI = (() => {
       if (counter) {
         counter.textContent = count > 5 ? '5+' : String(count);
       }
+    },
+
+    updateAddNumbersButton(state) {
+      const btn = document.querySelector('.add-button');
+      if (!btn) return;
+
+      const { assists, linesCount } = state;
+
+      btn.disabled = assists.addNumbersUsed >= 10;
+      btn.classList.toggle('disabled', btn.disabled);
+      let triesEl = btn.querySelector('.button__tries');
+      let linesEl = btn.querySelector('.button__lines');
+
+      if (!triesEl) {
+        triesEl = document.createElement('div');
+        triesEl.classList.add('button__extra-info', 'button__tries');
+        btn.appendChild(triesEl);
+      }
+
+      if (!linesEl) {
+        linesEl = document.createElement('div');
+        linesEl.classList.add('button__extra-info', 'button__lines');
+        btn.appendChild(linesEl); 
+      }
+  
+      triesEl.textContent = `(${assists.addNumbersUsed}/10)`;
+      linesEl.textContent = `lines: ${linesCount} / 50`;
     },
 
     renderResults(root, state) {
@@ -319,10 +348,20 @@ export const UI = (() => {
       addBtnText.classList.add('button__text');
       addBtnText.textContent = 'Add numbers';
 
+      const addBtnTries = document.createElement('div');
+      addBtnTries.classList.add('button__extra-info', 'button__tries');
+      addBtnTries.textContent = '(0 /10)';
+      
+      const addBtnLines = document.createElement('div');
+      addBtnLines.classList.add('button__extra-info', 'button__lines');
+      addBtnLines.textContent = 'lines: 3 /50';
+
       addBtn.addEventListener('click', () => {
         EventBus.emit(UI_EVENTS.ASSIST_USE, { name: ASSIST_NAME.ADD_NUMBERS }); 
       });
       addBtn.appendChild(addBtnText);
+      addBtn.appendChild(addBtnTries);
+      addBtn.appendChild(addBtnLines);
 
       return addBtn;
     },

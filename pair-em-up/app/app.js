@@ -43,7 +43,8 @@ const App = (() => {
       EventBus.on(UI_EVENTS.START, ({ mode }) => {
         const grid = GameEngine.generateGrid(mode);
         const availablePairs = GameEngine.getAvailablePairsCount(grid);
-
+        const linesCount = GameEngine.getGridRowCount(grid);
+  
         Store.setState({
           mode,
           screen: SCREEN_TYPE.GAME,
@@ -51,10 +52,13 @@ const App = (() => {
           score: 0,
           history: null,
           timer: { running: true, elapsedMs: 0 },
-          linesCount: 0,
+          linesCount,
           assists: {
             ...Store.getState().assists,
             revertAvailable: false,
+            addNumbersUsed: 0,
+            shuffleUsed: 0,
+            eraserUsed: 0,
             hintsLeft: availablePairs
           }
         });
@@ -83,6 +87,9 @@ const App = (() => {
       });
 
       EventBus.on(UI_EVENTS.ASSIST_USE, GameController.handleAssistsUse);
+      EventBus.on(UI_EVENTS.UPDATE_ASSISTS_UI, () => {
+        UI.updateAddNumbersButton(Store.getState());
+      });
 
       Store.setState({ screen: SCREEN_TYPE.START });
     }

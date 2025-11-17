@@ -12,6 +12,7 @@ export const UI_EVENTS = {
   MATCHED: 'ui:matched',
   UNMATCHED: 'ui:unmatched',
   ASSIST_USE: 'ui:assist:use',
+  UPDATE_ASSISTS_UI: 'ui:assist:update',
 };
 
 export const GAME_EVENTS = {

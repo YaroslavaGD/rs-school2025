@@ -68,16 +68,22 @@ export const GameController = (() => {
   };
 
   const saveHistoryState = (grid, score) => {
-    const currentState = Store.getState();
+    const state = Store.getState();
     
     Store.setState({
       history: {
         grid: [...grid],
         score: score,
-        selected: []
+        selected: [],
+        linesCount: state.linesCount,
+        assists: {
+          addNumbersUsed: state.assists.addNumbersUsed,
+          shuffleUsed: state.assists.shuffleUsed,
+          eraserUsed: state.assists.eraserUsed
+        }
       },
       assists: {
-        ...currentState.assists,
+        ...state.assists,
         revertAvailable: true,
       }
     });
@@ -174,14 +180,18 @@ export const GameController = (() => {
       grid: history.grid,
       score: history.score,
       selected: [],
+      linesCount: history.linesCount,
       history: null,
       assists: {
         ...assists,
+        ...history.assists,
         revertAvailable: false,
         hintsLeft: availablePairs
       }
     });
 
+    UI.updateHintsCounter(availablePairs);
+    EventBus.emit(UI_EVENTS.UPDATE_ASSISTS_UI);
   };
 
   const updateHints = () => {
@@ -197,7 +207,6 @@ export const GameController = (() => {
     if (assists.addNumbersUsed >= 10) return;
 
     const newNumbers = GameEngine.generateNewNumbers(mode, grid);
-    console.log('newNumbers = ', newNumbers);
     const newGrid = GameEngine.addNewNumbersToGrid(grid, newNumbers);
 
     if (GameEngine.isGridLimitReached(newGrid)) {
@@ -213,9 +222,14 @@ export const GameController = (() => {
       assists: {
         ...assists,
         addNumbersUsed: assists.addNumbersUsed + 1,
-        hintsLeft: availablePairs
+        hintsLeft: availablePairs,
+        revertAvailable: true,
       }
     });
+
+    UI.updateHintsCounter(availablePairs);
+
+    EventBus.emit(UI_EVENTS.UPDATE_ASSISTS_UI);
   };
 
   return {
