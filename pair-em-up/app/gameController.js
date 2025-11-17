@@ -157,7 +157,9 @@ export const GameController = (() => {
       case ASSIST_NAME.HINTS:
         updateHints();
         break;
-        
+      case ASSIST_NAME.ADD_NUMBERS:
+        useAddNumbers();
+        break;
     }
   };
 
@@ -187,6 +189,33 @@ export const GameController = (() => {
     const count = GameEngine.getAvailablePairsCount(grid);
     //TODO: update hints emit
     UI.updateHintsCounter(count);
+  };
+
+  const useAddNumbers = () => {
+    const { grid, mode, assists } = Store.getState();
+
+    if (assists.addNumbersUsed >= 10) return;
+
+    const newNumbers = GameEngine.generateNewNumbers(mode, grid);
+    console.log('newNumbers = ', newNumbers);
+    const newGrid = GameEngine.addNewNumbersToGrid(grid, newNumbers);
+
+    if (GameEngine.isGridLimitReached(newGrid)) {
+      EventBus.emit(GAME_EVENTS.LOSE, { reason: RESULT_REASON.LOSE_LINES });
+      return;
+    }
+
+    const availablePairs = GameEngine.getAvailablePairsCount(newGrid);
+
+    Store.setState({
+      grid: newGrid,
+      linesCount: GameEngine.getGridRowCount(newGrid),
+      assists: {
+        ...assists,
+        addNumbersUsed: assists.addNumbersUsed + 1,
+        hintsLeft: availablePairs
+      }
+    });
   };
 
   return {

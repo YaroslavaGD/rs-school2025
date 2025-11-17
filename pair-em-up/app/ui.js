@@ -64,6 +64,13 @@ export const UI = (() => {
 
       const gridEl = document.querySelector('.grid');
       if (gridEl) {
+        const existingCount = gridEl.children.length;
+        if (existingCount !== grid.length) {
+          const newGrid = this.createGrid(grid);
+          gridEl.replaceWith(newGrid);
+          return;
+        }
+
         grid.forEach((num, i) => {
           const cell = gridEl.querySelector(`.grid__item[data-index="${i}"]`);
           if (cell) {
@@ -233,9 +240,11 @@ export const UI = (() => {
       assistDiv.classList.add('assist');
 
       const hintsBtn = this.createHintsBtn();
+      const addBtn = this.createAddBtn();
       const revertBtn = this.createRevertBtn();
 
       assistDiv.appendChild(hintsBtn);
+      assistDiv.appendChild(addBtn);
       assistDiv.appendChild(revertBtn);
       return assistDiv;
     },
@@ -298,6 +307,24 @@ export const UI = (() => {
       hintsBtn.appendChild(hintsCounter);
 
       return hintsBtn;
+    },
+
+    createAddBtn() {
+      const addBtn = document.createElement('button');
+      addBtn.classList.add('button');
+      addBtn.classList.add('assist-button');
+      addBtn.classList.add('add-button');
+
+      const addBtnText = document.createElement('div');
+      addBtnText.classList.add('button__text');
+      addBtnText.textContent = 'Add numbers';
+
+      addBtn.addEventListener('click', () => {
+        EventBus.emit(UI_EVENTS.ASSIST_USE, { name: ASSIST_NAME.ADD_NUMBERS }); 
+      });
+      addBtn.appendChild(addBtnText);
+
+      return addBtn;
     },
 
     createGrid(grid){

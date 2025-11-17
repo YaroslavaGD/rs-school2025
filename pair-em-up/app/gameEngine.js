@@ -80,17 +80,35 @@ export const GameEngine = (() => {
       const hasMoves = this.hasAvailableMoves(grid);
       if (hasMoves) return false;
 
-      //TODO: correctRules
-      // const hasAddNumbers = assists.addNumberUsed < 10;
-      // const hasShuffle = assists.shuffleUsed < 5;
-      // const hasEraser = assists.eraserUsed < 5;
-      const hasAddNumbers = assists.addNumbersUsed !== 0;
-      const hasShuffle = assists.shuffleUsed !== 0;
-      const hasEraser = assists.eraserUsed !== 0;
+      const hasAddNumbers = assists.addNumbersUsed < 10;
+      const hasShuffle = assists.shuffleUsed < 5;
+      const hasEraser = assists.eraserUsed < 5;
 
       const isLose = !hasAddNumbers && !hasShuffle && !hasEraser;
 
       return isLose;
+    },
+
+    generateNewNumbers(mode, currentGrid) {
+      const remainingCount = currentGrid.filter( num => num !== null).length;
+
+      if (mode === MODE.CLASSIC) {
+        return this.generateClassicNewNumbers(currentGrid);
+      }
+      
+      if (mode === MODE.RANDOM) {
+        return this.generateRandomNewNumbers(currentGrid);
+      }
+      
+      if (mode === MODE.CHAOTIC) {
+        return this.generateChaoticNewNumbers(remainingCount);
+      }
+
+      return [];
+    },
+
+    addNewNumbersToGrid(grid, newNumbers) {
+      return [...grid, ...newNumbers];
     },
 
     //PRIVATE
@@ -168,6 +186,24 @@ export const GameEngine = (() => {
       numbers = numbers.filter(num => num !== 10);
 
       return numbers;
+    },
+
+    generateClassicNewNumbers(currentGrid) {
+      const gridNumbers = [...currentGrid];
+      return grid.filter(num => num !== null);
+    },
+
+    generateRandomNewNumbers(currentGrid) {
+      const gridNumbers = [...currentGrid];
+      const shuffled = this.shuffleNumbers(gridNumbers.filter(num => num !== null));
+      return this.divideNumbersIntoDigits(shuffled);
+    },
+
+    generateChaoticNewNumbers(count) {
+      return Array.from(
+        { length: count },
+        () => Math.floor(Math.random() * 9) + 1
+      );
     },
 
     divideNumbersIntoDigits(numbers) {
