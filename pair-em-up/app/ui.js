@@ -4,6 +4,41 @@ import { Store } from "./store.js";
 import { formatTime } from "./utils.js";
 
 export const UI = (() => {
+  const addUniversalClickListener = (element, handler) => {
+    let touchStartX = 0;
+    let touchStartY = 0;
+    let isTouchDevice = false;
+
+    // Touch events
+    element.addEventListener('touchstart', (e) => {
+      isTouchDevice = true;
+      const touch = e.touches[0];
+      touchStartX = touch.clientX;
+      touchStartY = touch.clientY;
+    }, { passive: true });
+
+    element.addEventListener('touchend', (e) => {
+      if (!isTouchDevice) return;
+      
+      const touch = e.changedTouches[0];
+      const touchEndX = touch.clientX;
+      const touchEndY = touch.clientY;
+      const deltaX = Math.abs(touchEndX - touchStartX);
+      const deltaY = Math.abs(touchEndY - touchStartY);
+
+      if (deltaX < 10 && deltaY < 10) {
+        e.preventDefault();
+        handler(e);
+      }
+    });
+
+    // Click events for desktop
+    element.addEventListener('click', (e) => {
+      if (!isTouchDevice) {
+        handler(e);
+      }
+    });
+  };
   return {
     renderHeader(root) {
       const header = document.createElement('header');
@@ -36,6 +71,9 @@ export const UI = (() => {
       });
 
       start.appendChild(modeContainer);
+      const footer = this.createFooter();
+      start.appendChild(footer);
+
       root.appendChild(start);
     },
 
@@ -55,7 +93,7 @@ export const UI = (() => {
     },
 
     updateGameState(state) {
-      const { grid, score, selected, assists } = state;
+      const { grid, score, selected, assists, eraserMode } = state;
       
       const scoreEl = document.querySelector('.info__score-content');
       if (scoreEl) {
@@ -63,6 +101,9 @@ export const UI = (() => {
       }
 
       this.updateAddNumbersButton(state);
+      this.updateShuffleButton(state);
+      this.updateEraserButton(state);
+      this.updateEraserModeUI(eraserMode);
 
       const gridEl = document.querySelector('.grid');
       if (gridEl) {
@@ -83,10 +124,16 @@ export const UI = (() => {
               cell.textContent = newText;
             }
 
-            if (selected.includes(i)) {
-              cell.classList.add('selected');
-            } else {
+            if (eraserMode && num !== null) {
+              cell.classList.add('eraser-target');
               cell.classList.remove('selected');
+            } else {
+              cell.classList.remove('eraser-target');
+              if (selected.includes(i)) {
+                cell.classList.add('selected');
+              } else {
+                cell.classList.remove('selected');
+              }
             }
 
             cell.classList.remove('matched', 'unmatched');
@@ -155,8 +202,102 @@ export const UI = (() => {
         btn.appendChild(linesEl); 
       }
   
-      triesEl.textContent = `(${assists.addNumbersUsed}/10)`;
+      triesEl.textContent = `(${assists.addNumbersUsed} / 10)`;
       linesEl.textContent = `lines: ${linesCount} / 50`;
+    },
+
+    updateShuffleButton(state) {
+      const btn = document.querySelector('.shuffle-button');
+      if (!btn) return;
+
+      const { assists } = state;
+
+      btn.disabled = assists.shuffleUsed >= 5;
+      btn.classList.toggle('disabled', btn.disabled);
+      let triesEl = btn.querySelector('.button__tries');
+
+      if (!triesEl) {
+        triesEl = document.createElement('div');
+        triesEl.classList.add('button__extra-info', 'button__tries');
+        btn.appendChild(triesEl);
+      }
+  
+      triesEl.textContent = `(${assists.shuffleUsed} / 5)`;
+    },
+
+    updateEraserButton(state) {
+      const btn = document.querySelector('.eraser-button');
+      if (!btn) return;
+
+      const { assists, eraserMode } = state;
+      const isLimitReached = assists.eraserUsed >= 5;
+
+      btn.disabled = isLimitReached;
+      btn.classList.toggle('disabled', btn.disabled);
+      
+      if (isLimitReached && eraserMode) {
+        Store.setState({ eraserMode: false });
+        EventBus.emit(UI_EVENTS.ERASER_CANCELLED);
+      }
+
+      let triesEl = btn.querySelector('.button__tries');
+
+      if (!triesEl) {
+        triesEl = document.createElement('div');
+        triesEl.classList.add('button__extra-info', 'button__tries');
+        btn.appendChild(triesEl);
+      }
+  
+      triesEl.textContent = `(${assists.eraserUsed} / 5)`;
+    },
+
+    updateEraserModeUI(eraserMode) {
+      const eraserBtn = document.querySelector('.eraser-button');
+      const gridEl = document.querySelector('.grid');
+
+      if (eraserMode) {
+        if (eraserBtn) {
+          eraserBtn.classList.add('active-mode');
+        }
+
+        if (gridEl) {
+          gridEl.classList.add('eraser-mode');
+        }
+
+        this.showEraserHint();
+      } else {
+        if (eraserBtn) {
+          eraserBtn.classList.remove('active-mode');
+        }
+        
+        if (gridEl) {
+          gridEl.classList.remove('eraser-mode');
+        }
+
+        this.hideEraserHint();
+      }
+    },
+
+    showEraserHint() {
+      let hint = document.querySelector('.eraser-hint');
+
+      if (!hint) {
+        hint = document.createElement('div');
+        hint.classList.add('eraser-hint');
+        hint.textContent = 'Click on a cell to erase it';
+
+        const gameMain = document.querySelector('.game__main');
+        if (gameMain) {
+          gameMain.appendChild(hint);
+        }
+      }
+    },
+
+    hideEraserHint() {
+      const hint = document.querySelector('.eraser-hint');
+      if (hint) {
+        hint.remove();
+      }
     },
 
     renderResults(root, state) {
@@ -185,13 +326,43 @@ export const UI = (() => {
       span.textContent = modeLabel;
       span.classList.add('button__text');
 
-      button.addEventListener('click', () => {
-        EventBus.emit('ui:start', { mode: button.dataset.mode });
+      addUniversalClickListener(button, () => {
+        EventBus.emit(UI_EVENTS.START, { mode: button.dataset.mode });
       });
+
+      // button.addEventListener('click', () => {
+      //   EventBus.emit('ui:start', { mode: button.dataset.mode });
+      // });
 
       button.appendChild(span);
 
       return button;
+    },
+
+    createFooter() {
+      const footer = document.createElement('footer');
+      footer.classList.add('footer');
+
+      const year = document.createElement('span');
+      year.classList.add('footer__year');
+      year.textContent = `© ${new Date().getFullYear()}`;
+
+      const separator = document.createElement('span');
+      separator.classList.add('footer__separator');
+      separator.textContent = '|';
+
+      const githubLink = document.createElement('a');
+      githubLink.classList.add('footer__link');
+      githubLink.href = 'https://github.com/YaroslavaGD';
+      githubLink.target = '_blank';
+      githubLink.rel = 'noopener noreferrer';
+      githubLink.textContent = 'GitHub';
+
+      footer.appendChild(year);
+      footer.appendChild(separator);
+      footer.appendChild(githubLink);
+
+      return footer;
     },
 
     createMainInfo(state){
@@ -253,11 +424,11 @@ export const UI = (() => {
       timerP.appendChild(timerTitle);
       timerP.appendChild(timerContent);
 
-      info.appendChild(backBtn);
       info.appendChild(modeP);
       info.appendChild(scoreP);
       info.appendChild(timerP);
 
+      header.appendChild(backBtn);
       header.appendChild(info);
 
 
@@ -269,12 +440,16 @@ export const UI = (() => {
       assistDiv.classList.add('assist');
 
       const hintsBtn = this.createHintsBtn();
-      const addBtn = this.createAddBtn();
       const revertBtn = this.createRevertBtn();
+      const addBtn = this.createAddBtn();
+      const shuffleBtn = this.createShuffleBtn();
+      const eraserBtn = this.createEraserBtn();
 
       assistDiv.appendChild(hintsBtn);
       assistDiv.appendChild(revertBtn);
       assistDiv.appendChild(addBtn);
+      assistDiv.appendChild(shuffleBtn);
+      assistDiv.appendChild(eraserBtn);
       return assistDiv;
     },
 
@@ -285,9 +460,13 @@ export const UI = (() => {
       backBtnText.classList.add('button__text');
       backBtnText.textContent = 'Back to Menu';
 
-      backBtn.addEventListener('click', () => {
+      addUniversalClickListener(backBtn, () => {
         EventBus.emit(UI_EVENTS.BACK, {}); 
       });
+      // backBtn.addEventListener('click', () => {
+      //   EventBus.emit(UI_EVENTS.BACK, {}); 
+      // });
+
       backBtn.appendChild(backBtnText);
 
       return backBtn;
@@ -303,9 +482,13 @@ export const UI = (() => {
       revertBtnText.classList.add('button__text');
       revertBtnText.textContent = '↶ Revert';
 
-      revertBtn.addEventListener('click', () => {
+      addUniversalClickListener(revertBtn, () => {
         EventBus.emit(UI_EVENTS.ASSIST_USE, { name: ASSIST_NAME.REVERT }); 
       });
+
+      // revertBtn.addEventListener('click', () => {
+      //   EventBus.emit(UI_EVENTS.ASSIST_USE, { name: ASSIST_NAME.REVERT }); 
+      // });
       revertBtn.appendChild(revertBtnText);
 
       return revertBtn;
@@ -328,9 +511,12 @@ export const UI = (() => {
       hintsCounter.classList.add('hints-counter');
       hintsCounter.textContent = '?';
 
-      hintsBtn.addEventListener('click', () => {
+      addUniversalClickListener(hintsBtn, () => {
         EventBus.emit(UI_EVENTS.ASSIST_USE, { name: ASSIST_NAME.HINTS }); 
       });
+      // hintsBtn.addEventListener('click', () => {
+      //   EventBus.emit(UI_EVENTS.ASSIST_USE, { name: ASSIST_NAME.HINTS }); 
+      // });
       
       hintsBtn.appendChild(hintsBtnText);
       hintsBtn.appendChild(hintsCounter);
@@ -350,20 +536,89 @@ export const UI = (() => {
 
       const addBtnTries = document.createElement('div');
       addBtnTries.classList.add('button__extra-info', 'button__tries');
-      addBtnTries.textContent = '(0 /10)';
+      addBtnTries.textContent = '(0 / 10)';
       
       const addBtnLines = document.createElement('div');
       addBtnLines.classList.add('button__extra-info', 'button__lines');
-      addBtnLines.textContent = 'lines: 3 /50';
+      addBtnLines.textContent = 'lines: 3 / 50';
 
-      addBtn.addEventListener('click', () => {
+      addUniversalClickListener(addBtn, () => {
         EventBus.emit(UI_EVENTS.ASSIST_USE, { name: ASSIST_NAME.ADD_NUMBERS }); 
       });
+      // addBtn.addEventListener('click', () => {
+      //   EventBus.emit(UI_EVENTS.ASSIST_USE, { name: ASSIST_NAME.ADD_NUMBERS }); 
+      // });
       addBtn.appendChild(addBtnText);
       addBtn.appendChild(addBtnTries);
       addBtn.appendChild(addBtnLines);
 
       return addBtn;
+    },
+
+    createShuffleBtn() {
+      const shuffleBtn = document.createElement('button');
+      shuffleBtn.classList.add('button');
+      shuffleBtn.classList.add('assist-button');
+      shuffleBtn.classList.add('shuffle-button');
+
+      const shuffleBtnText = document.createElement('div');
+      shuffleBtnText.classList.add('button__text');
+      shuffleBtnText.textContent = '⇄ Shuffle';
+
+      const shuffleBtnTries = document.createElement('div');
+      shuffleBtnTries.classList.add('button__extra-info', 'button__tries');
+      shuffleBtnTries.textContent = '(0 / 5)';
+
+      addUniversalClickListener(shuffleBtn, () => {
+        EventBus.emit(UI_EVENTS.ASSIST_USE, { name: ASSIST_NAME.SHUFFLE }); 
+      });
+      // shuffleBtn.addEventListener('click', () => {
+      //   EventBus.emit(UI_EVENTS.ASSIST_USE, { name: ASSIST_NAME.SHUFFLE }); 
+      // });
+
+      shuffleBtn.appendChild(shuffleBtnText);
+      shuffleBtn.appendChild(shuffleBtnTries);
+
+      return shuffleBtn;
+    },
+
+    createEraserBtn() {
+      const eraserBtn = document.createElement('button');
+      eraserBtn.classList.add('button');
+      eraserBtn.classList.add('assist-button');
+      eraserBtn.classList.add('eraser-button');
+
+      const eraserBtnText = document.createElement('div');
+      eraserBtnText.classList.add('button__text');
+      eraserBtnText.textContent = '✖ Eraser';
+
+      const eraserBtnTries = document.createElement('div');
+      eraserBtnTries.classList.add('button__extra-info', 'button__tries');
+      eraserBtnTries.textContent = '(0 / 5)';
+
+      addUniversalClickListener(eraserBtn, () => {
+        const { eraserMode } = Store.getState();
+        if (eraserMode) {
+          Store.setState({ eraserMode: false });
+          EventBus.emit(UI_EVENTS.ERASER_CANCELLED);
+        } else {
+          EventBus.emit(UI_EVENTS.ASSIST_USE, { name: ASSIST_NAME.ERASER }); 
+        }
+      });
+      // eraserBtn.addEventListener('click', () => {
+      //   const { eraserMode } = Store.getState();
+      //   if (eraserMode) {
+      //     Store.setState({ eraserMode: false });
+      //     EventBus.emit(UI_EVENTS.ERASER_CANCELLED);
+      //   } else {
+      //     EventBus.emit(UI_EVENTS.ASSIST_USE, { name: ASSIST_NAME.ERASER }); 
+      //   }
+      // });
+
+      eraserBtn.appendChild(eraserBtnText);
+      eraserBtn.appendChild(eraserBtnTries);
+
+      return eraserBtn;
     },
 
     createGrid(grid){
@@ -382,9 +637,13 @@ export const UI = (() => {
           buttonCell.classList.add('selected');
         }
 
-        buttonCell.addEventListener('click', () => {
+        addUniversalClickListener(buttonCell, () => {
           EventBus.emit(UI_EVENTS.CELL_CLICK, { index: i });
         });
+        // buttonCell.addEventListener('click', () => {
+        //   EventBus.emit(UI_EVENTS.CELL_CLICK, { index: i });
+        // });
+
         gridDiv.appendChild(buttonCell);
       });
 

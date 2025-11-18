@@ -13,6 +13,8 @@ export const UI_EVENTS = {
   UNMATCHED: 'ui:unmatched',
   ASSIST_USE: 'ui:assist:use',
   UPDATE_ASSISTS_UI: 'ui:assist:update',
+  ERASER_ACTIVATED: 'ui:eraser:activated',
+  ERASER_CANCELLED: 'ui:eraser:cancelled',
 };
 
 export const GAME_EVENTS = {

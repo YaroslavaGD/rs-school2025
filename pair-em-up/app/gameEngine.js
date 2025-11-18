@@ -77,6 +77,11 @@ export const GameEngine = (() => {
     },
 
     isLoseConditionNoMoves(grid, assists) {
+      const nullNumbers = [...grid];
+      const countNulls = nullNumbers.filter(num => num === null).length;
+      const countNumbers = grid.length;
+      if (countNulls === countNumbers) return true;
+
       const hasMoves = this.hasAvailableMoves(grid);
       if (hasMoves) return false;
 
@@ -109,6 +114,21 @@ export const GameEngine = (() => {
 
     addNewNumbersToGrid(grid, newNumbers) {
       return [...grid, ...newNumbers];
+    },
+
+    shuffleGrid(grid) {
+      const currentGrid = [...grid];
+      const numbers = currentGrid.filter(num => num !== null);
+      const shuffled = this.shuffleNumbers(numbers);
+
+      let index = 0;
+      return grid.map(cell => cell === null ? null : shuffled[index++]);
+    },
+
+    eraseCell(grid, index) {
+      const newGrid = [...grid];
+      newGrid[index] = null;
+      return newGrid;
     },
 
     //PRIVATE

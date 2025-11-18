@@ -16,6 +16,7 @@ const App = (() => {
       document.body.appendChild(app);
       UI.renderHeader(app);
       const root = document.createElement('main');
+      root.classList.add('main');
       app.appendChild(root);
 
       Store.subscribe((state) => {
@@ -87,8 +88,18 @@ const App = (() => {
       });
 
       EventBus.on(UI_EVENTS.ASSIST_USE, GameController.handleAssistsUse);
+
       EventBus.on(UI_EVENTS.UPDATE_ASSISTS_UI, () => {
         UI.updateAddNumbersButton(Store.getState());
+        UI.updateShuffleButton(Store.getState());
+      });
+
+      EventBus.on(UI_EVENTS.ERASER_ACTIVATED, () => {
+        UI.updateEraserModeUI(true);
+      });
+
+      EventBus.on(UI_EVENTS.ERASER_CANCELLED, () => {
+        UI.updateEraserModeUI(false);
       });
 
       Store.setState({ screen: SCREEN_TYPE.START });
