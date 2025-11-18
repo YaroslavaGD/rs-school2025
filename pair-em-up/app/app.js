@@ -28,7 +28,7 @@ const App = (() => {
 
         if (state.screen !== currentScreen) {
           currentScreen = state.screen;
-          root.innerHTML = '';
+          root.replaceChildren();
           if (state.screen === SCREEN_TYPE.START) {
             UI.renderStart(root);
           } else if (state.screen === SCREEN_TYPE.GAME) {
