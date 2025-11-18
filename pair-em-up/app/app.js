@@ -1,7 +1,8 @@
-import { ASSIST_NAME, GAME_EVENTS, RESULT_REASON, SCREEN_TYPE, UI_EVENTS } from './constants.js';
+import { GAME_EVENTS, SCREEN_TYPE, UI_EVENTS } from './constants.js';
 import { EventBus } from './eventBus.js';
 import { GameController } from './gameController.js';
 import { GameEngine } from './gameEngine.js';
+import { Storage } from './storage.js';
 import { Store } from './store.js';
 import { Timer } from './timer.js';
 import { UI } from './ui.js';
@@ -20,14 +21,20 @@ const App = (() => {
       app.appendChild(root);
 
       Store.subscribe((state) => {
-        if (state.screen === SCREEN_TYPE.GAME && state.timer.running) {
-          Timer.start();
-        } else {
+
+        const prevScreen = currentScreen;
+        const newScreen = state.screen;
+
+        if (prevScreen === SCREEN_TYPE.GAME && newScreen !== SCREEN_TYPE.GAME) {
           Timer.stop();
         }
 
-        if (state.screen !== currentScreen) {
-          currentScreen = state.screen;
+        if (newScreen === SCREEN_TYPE.GAME && state.timer.running) {
+          Timer.start();
+        }
+
+        if (newScreen !== prevScreen) {
+          currentScreen = newScreen;
           root.replaceChildren();
           if (state.screen === SCREEN_TYPE.START) {
             UI.renderStart(root);
@@ -65,9 +72,46 @@ const App = (() => {
         });
       });
 
+      EventBus.on(UI_EVENTS.CONTINUE, () => {
+        const savedGame = Storage.loadGame();
+
+        if (!savedGame) {
+          console.error('No saved game found');
+          return;
+        }
+
+        Timer.setElapsed(savedGame.timer.elapsedMs);
+        Timer.start();
+
+        const availablePairs = GameEngine.getAvailablePairsCount(savedGame.grid);
+
+        Store.setState({
+          mode: savedGame.mode,
+          screen: SCREEN_TYPE.GAME,
+          grid: savedGame.grid,
+          score: savedGame.score,
+          history: savedGame.history,
+          timer: { running: true, elapsedMs: savedGame.timer.elapsedMs },
+          linesCount: savedGame.linesCount,
+          selected: [],
+          eraserMode: false,
+          assists: {
+            ...savedGame.assists,
+            hintsLeft: availablePairs
+          }
+        });
+
+        setTimeout(() => {
+          UI.updateGameState(Store.getState());
+        }, 0);
+      });
+
       EventBus.on(UI_EVENTS.BACK, () => {
-        Timer.reset();
+        Timer.stop();
+
         Store.setState({ screen: SCREEN_TYPE.START });
+
+        Timer.reset();
       });
 
       EventBus.on(GAME_EVENTS.WIN, GameController.handleWin);

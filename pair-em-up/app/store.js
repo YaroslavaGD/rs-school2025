@@ -1,4 +1,5 @@
 import { IS_DEBUG, IS_STORE_DEBUG, SCREEN_TYPE } from "./constants.js";
+import { Storage } from "./storage.js";
 
 export const Store = (() => {
   let state = {
@@ -33,6 +34,10 @@ export const Store = (() => {
 
       subscribers.forEach((fn) => fn(state));
       if (IS_DEBUG && IS_STORE_DEBUG) console.debug('[Store] State updated:', state);
+
+      if (state.screen === SCREEN_TYPE.GAME) {
+        Storage.saveGame(Store.getState());
+      }
     },
 
     subscribe(fn) {

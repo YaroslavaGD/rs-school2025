@@ -8,6 +8,7 @@ export const MODE = {
 export const UI_EVENTS = {
   START: 'ui:start',
   BACK: 'ui:back',
+  CONTINUE: 'ui:continue',
   CELL_CLICK: 'ui:cell:click',
   MATCHED: 'ui:matched',
   UNMATCHED: 'ui:unmatched',
@@ -43,10 +44,10 @@ export const ASSIST_NAME = {
 };
 
 export const ANIMATION_DELAYS = {
-  PAIR_CHECK: 350,
-  PAIR_REMOVE: 350,
+  PAIR_CHECK: 160,
+  PAIR_REMOVE: 160,
   UNMATCHED_RESET: 300,
-  WIN_SCREEN_DELAY: 650,
+  WIN_SCREEN_DELAY: 350,
 }
 
 export const IS_DEBUG = true;

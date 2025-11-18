@@ -32,9 +32,9 @@ export const Timer = (() => {
     clearInterval(intervalId);
     intervalId = null;
 
-    if (startTime) {
+    // console.log('[Timer.stop] pausedElapsedMs=', pausedElapsedMs, 'store.screen=', Store.getState().screen);
+    if (startTime !== null) {
       pausedElapsedMs = Date.now() - startTime;
-
       Store.setState({
         timer: {
           ...Store.getState().timer,
@@ -49,6 +49,7 @@ export const Timer = (() => {
     startTime = null;
     pausedElapsedMs = 0;
 
+    // console.log('[Timer.reset] writing 0. store.screen=', Store.getState().screen);
     Store.setState({
       timer: {
         running: false,
@@ -64,10 +65,19 @@ export const Timer = (() => {
     return pausedElapsedMs;
   }
 
+  function setElapsed(ms) {
+    startTime = null;
+    pausedElapsedMs = ms;
+
+    const el = document.querySelector('.timer-value');
+    if (el) el.textContent = formatTime(ms);
+  }
+
   return {
     start,
     stop,
     reset,
     getElapsed,
+    setElapsed,
   }
 })();
