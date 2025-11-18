@@ -16,6 +16,7 @@ const App = (() => {
       document.body.appendChild(app);
       UI.renderHeader(app);
       const root = document.createElement('main');
+      root.classList.add('main');
       app.appendChild(root);
 
       Store.subscribe((state) => {

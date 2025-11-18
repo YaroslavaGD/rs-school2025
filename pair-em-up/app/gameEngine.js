@@ -77,6 +77,11 @@ export const GameEngine = (() => {
     },
 
     isLoseConditionNoMoves(grid, assists) {
+      const nullNumbers = [...grid];
+      const countNulls = nullNumbers.filter(num => num === null).length;
+      const countNumbers = grid.length;
+      if (countNulls === countNumbers) return true;
+
       const hasMoves = this.hasAvailableMoves(grid);
       if (hasMoves) return false;
 

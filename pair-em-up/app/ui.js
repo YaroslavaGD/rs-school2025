@@ -4,6 +4,41 @@ import { Store } from "./store.js";
 import { formatTime } from "./utils.js";
 
 export const UI = (() => {
+  const addUniversalClickListener = (element, handler) => {
+    let touchStartX = 0;
+    let touchStartY = 0;
+    let isTouchDevice = false;
+
+    // Touch events
+    element.addEventListener('touchstart', (e) => {
+      isTouchDevice = true;
+      const touch = e.touches[0];
+      touchStartX = touch.clientX;
+      touchStartY = touch.clientY;
+    }, { passive: true });
+
+    element.addEventListener('touchend', (e) => {
+      if (!isTouchDevice) return;
+      
+      const touch = e.changedTouches[0];
+      const touchEndX = touch.clientX;
+      const touchEndY = touch.clientY;
+      const deltaX = Math.abs(touchEndX - touchStartX);
+      const deltaY = Math.abs(touchEndY - touchStartY);
+
+      if (deltaX < 10 && deltaY < 10) {
+        e.preventDefault();
+        handler(e);
+      }
+    });
+
+    // Click events for desktop
+    element.addEventListener('click', (e) => {
+      if (!isTouchDevice) {
+        handler(e);
+      }
+    });
+  };
   return {
     renderHeader(root) {
       const header = document.createElement('header');
@@ -288,9 +323,13 @@ export const UI = (() => {
       span.textContent = modeLabel;
       span.classList.add('button__text');
 
-      button.addEventListener('click', () => {
-        EventBus.emit('ui:start', { mode: button.dataset.mode });
+      addUniversalClickListener(button, () => {
+        EventBus.emit(UI_EVENTS.START, { mode: button.dataset.mode });
       });
+
+      // button.addEventListener('click', () => {
+      //   EventBus.emit('ui:start', { mode: button.dataset.mode });
+      // });
 
       button.appendChild(span);
 
@@ -356,11 +395,11 @@ export const UI = (() => {
       timerP.appendChild(timerTitle);
       timerP.appendChild(timerContent);
 
-      info.appendChild(backBtn);
       info.appendChild(modeP);
       info.appendChild(scoreP);
       info.appendChild(timerP);
 
+      header.appendChild(backBtn);
       header.appendChild(info);
 
 
@@ -392,9 +431,13 @@ export const UI = (() => {
       backBtnText.classList.add('button__text');
       backBtnText.textContent = 'Back to Menu';
 
-      backBtn.addEventListener('click', () => {
+      addUniversalClickListener(backBtn, () => {
         EventBus.emit(UI_EVENTS.BACK, {}); 
       });
+      // backBtn.addEventListener('click', () => {
+      //   EventBus.emit(UI_EVENTS.BACK, {}); 
+      // });
+
       backBtn.appendChild(backBtnText);
 
       return backBtn;
@@ -410,9 +453,13 @@ export const UI = (() => {
       revertBtnText.classList.add('button__text');
       revertBtnText.textContent = '↶ Revert';
 
-      revertBtn.addEventListener('click', () => {
+      addUniversalClickListener(revertBtn, () => {
         EventBus.emit(UI_EVENTS.ASSIST_USE, { name: ASSIST_NAME.REVERT }); 
       });
+
+      // revertBtn.addEventListener('click', () => {
+      //   EventBus.emit(UI_EVENTS.ASSIST_USE, { name: ASSIST_NAME.REVERT }); 
+      // });
       revertBtn.appendChild(revertBtnText);
 
       return revertBtn;
@@ -435,9 +482,12 @@ export const UI = (() => {
       hintsCounter.classList.add('hints-counter');
       hintsCounter.textContent = '?';
 
-      hintsBtn.addEventListener('click', () => {
+      addUniversalClickListener(hintsBtn, () => {
         EventBus.emit(UI_EVENTS.ASSIST_USE, { name: ASSIST_NAME.HINTS }); 
       });
+      // hintsBtn.addEventListener('click', () => {
+      //   EventBus.emit(UI_EVENTS.ASSIST_USE, { name: ASSIST_NAME.HINTS }); 
+      // });
       
       hintsBtn.appendChild(hintsBtnText);
       hintsBtn.appendChild(hintsCounter);
@@ -463,9 +513,12 @@ export const UI = (() => {
       addBtnLines.classList.add('button__extra-info', 'button__lines');
       addBtnLines.textContent = 'lines: 3 / 50';
 
-      addBtn.addEventListener('click', () => {
+      addUniversalClickListener(addBtn, () => {
         EventBus.emit(UI_EVENTS.ASSIST_USE, { name: ASSIST_NAME.ADD_NUMBERS }); 
       });
+      // addBtn.addEventListener('click', () => {
+      //   EventBus.emit(UI_EVENTS.ASSIST_USE, { name: ASSIST_NAME.ADD_NUMBERS }); 
+      // });
       addBtn.appendChild(addBtnText);
       addBtn.appendChild(addBtnTries);
       addBtn.appendChild(addBtnLines);
@@ -487,9 +540,13 @@ export const UI = (() => {
       shuffleBtnTries.classList.add('button__extra-info', 'button__tries');
       shuffleBtnTries.textContent = '(0 / 5)';
 
-      shuffleBtn.addEventListener('click', () => {
+      addUniversalClickListener(shuffleBtn, () => {
         EventBus.emit(UI_EVENTS.ASSIST_USE, { name: ASSIST_NAME.SHUFFLE }); 
       });
+      // shuffleBtn.addEventListener('click', () => {
+      //   EventBus.emit(UI_EVENTS.ASSIST_USE, { name: ASSIST_NAME.SHUFFLE }); 
+      // });
+
       shuffleBtn.appendChild(shuffleBtnText);
       shuffleBtn.appendChild(shuffleBtnTries);
 
@@ -510,7 +567,7 @@ export const UI = (() => {
       eraserBtnTries.classList.add('button__extra-info', 'button__tries');
       eraserBtnTries.textContent = '(0 / 5)';
 
-      eraserBtn.addEventListener('click', () => {
+      addUniversalClickListener(eraserBtn, () => {
         const { eraserMode } = Store.getState();
         if (eraserMode) {
           Store.setState({ eraserMode: false });
@@ -519,6 +576,15 @@ export const UI = (() => {
           EventBus.emit(UI_EVENTS.ASSIST_USE, { name: ASSIST_NAME.ERASER }); 
         }
       });
+      // eraserBtn.addEventListener('click', () => {
+      //   const { eraserMode } = Store.getState();
+      //   if (eraserMode) {
+      //     Store.setState({ eraserMode: false });
+      //     EventBus.emit(UI_EVENTS.ERASER_CANCELLED);
+      //   } else {
+      //     EventBus.emit(UI_EVENTS.ASSIST_USE, { name: ASSIST_NAME.ERASER }); 
+      //   }
+      // });
 
       eraserBtn.appendChild(eraserBtnText);
       eraserBtn.appendChild(eraserBtnTries);
@@ -542,9 +608,13 @@ export const UI = (() => {
           buttonCell.classList.add('selected');
         }
 
-        buttonCell.addEventListener('click', () => {
+        addUniversalClickListener(buttonCell, () => {
           EventBus.emit(UI_EVENTS.CELL_CLICK, { index: i });
         });
+        // buttonCell.addEventListener('click', () => {
+        //   EventBus.emit(UI_EVENTS.CELL_CLICK, { index: i });
+        // });
+
         gridDiv.appendChild(buttonCell);
       });
 

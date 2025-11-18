@@ -195,7 +195,7 @@ export const GameController = (() => {
   };
 
   const useRevert = () => {
-    const { history, assists } = Store.getState();
+    const { history, assists, eraserMode } = Store.getState();
 
     if (!history || !assists.revertAvailable) return;
 
