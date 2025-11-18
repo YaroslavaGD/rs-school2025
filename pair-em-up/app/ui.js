@@ -1,5 +1,6 @@
 import { ASSIST_NAME, MODE, RESULT_REASON, UI_EVENTS } from "./constants.js";
 import { EventBus } from "./eventBus.js";
+import { Storage } from "./storage.js";
 import { Store } from "./store.js";
 import { formatTime } from "./utils.js";
 
@@ -56,6 +57,13 @@ export const UI = (() => {
       const start = document.createElement('div');
       start.id = 'start-screen';
       start.classList.add('start-screen');
+
+      const newGameContainer = document.createElement('div');
+      newGameContainer.classList.add('new-game');
+
+      const newGameTitle = document.createElement('h2');
+      newGameTitle.classList.add('new-game__title');
+      newGameTitle.textContent = 'New Game';
       
       const modeContainer = document.createElement('div');
       modeContainer.classList.add('mode');
@@ -70,7 +78,16 @@ export const UI = (() => {
         modeContainer.appendChild(this.createModeButton(m.value, m.label));
       });
 
-      start.appendChild(modeContainer);
+      newGameContainer.appendChild(newGameTitle);
+      newGameContainer.appendChild(modeContainer);
+      
+      start.appendChild(newGameContainer);
+      const hasSavedGame = Storage.hasSavedGame();
+      if (hasSavedGame) {
+        const continueBtn = this.createContinueBtn();
+        start.appendChild(continueBtn);
+      }
+
       const footer = this.createFooter();
       start.appendChild(footer);
 
@@ -339,6 +356,24 @@ export const UI = (() => {
       return button;
     },
 
+    createContinueBtn() {
+      const continueBtn = document.createElement('button');
+      continueBtn.classList.add('button');
+      continueBtn.classList.add('continue-button');
+
+      const continueBtnText = document.createElement('div');
+      continueBtnText.classList.add('button__text');
+      continueBtnText.textContent = 'Continue Game';
+
+      addUniversalClickListener(continueBtn, () => {
+        EventBus.emit(UI_EVENTS.CONTINUE, {}); 
+      });
+
+      continueBtn.appendChild(continueBtnText);
+
+      return continueBtn;
+    },
+
     createFooter() {
       const footer = document.createElement('footer');
       footer.classList.add('footer');
@@ -463,9 +498,6 @@ export const UI = (() => {
       addUniversalClickListener(backBtn, () => {
         EventBus.emit(UI_EVENTS.BACK, {}); 
       });
-      // backBtn.addEventListener('click', () => {
-      //   EventBus.emit(UI_EVENTS.BACK, {}); 
-      // });
 
       backBtn.appendChild(backBtnText);
 
@@ -486,9 +518,6 @@ export const UI = (() => {
         EventBus.emit(UI_EVENTS.ASSIST_USE, { name: ASSIST_NAME.REVERT }); 
       });
 
-      // revertBtn.addEventListener('click', () => {
-      //   EventBus.emit(UI_EVENTS.ASSIST_USE, { name: ASSIST_NAME.REVERT }); 
-      // });
       revertBtn.appendChild(revertBtnText);
 
       return revertBtn;
