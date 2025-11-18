@@ -71,6 +71,9 @@ export const UI = (() => {
       });
 
       start.appendChild(modeContainer);
+      const footer = this.createFooter();
+      start.appendChild(footer);
+
       root.appendChild(start);
     },
 
@@ -334,6 +337,32 @@ export const UI = (() => {
       button.appendChild(span);
 
       return button;
+    },
+
+    createFooter() {
+      const footer = document.createElement('footer');
+      footer.classList.add('footer');
+
+      const year = document.createElement('span');
+      year.classList.add('footer__year');
+      year.textContent = `© ${new Date().getFullYear()}`;
+
+      const separator = document.createElement('span');
+      separator.classList.add('footer__separator');
+      separator.textContent = '|';
+
+      const githubLink = document.createElement('a');
+      githubLink.classList.add('footer__link');
+      githubLink.href = 'https://github.com/YaroslavaGD';
+      githubLink.target = '_blank';
+      githubLink.rel = 'noopener noreferrer';
+      githubLink.textContent = 'GitHub';
+
+      footer.appendChild(year);
+      footer.appendChild(separator);
+      footer.appendChild(githubLink);
+
+      return footer;
     },
 
     createMainInfo(state){

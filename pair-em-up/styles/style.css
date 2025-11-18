@@ -258,11 +258,6 @@ html, body {
   gap: 50px;
   padding: 1rem;
   margin-bottom: 20px;
-  border: 1px solid var(--glow-a); 
-  border-radius: var(--radius-md);
-  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-  backdrop-filter: blur(var(--glass-blur));
-  box-shadow: var(--neon-shadow);
 }
 
 .info__item {
@@ -314,12 +309,6 @@ html, body {
   align-items: stretch;
   gap: 10px;
   min-width: 90px;
-  padding: 1rem;
-  border: 1px solid var(--glow-a); 
-  border-radius: var(--radius-md);
-  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-  backdrop-filter: blur(var(--glass-blur));
-  box-shadow: var(--neon-shadow);
 }
 
 .grid {
@@ -401,6 +390,47 @@ html, body {
   }
 }
 
+/* Footer стили */
+.footer {
+  margin-top: 40px;
+  padding: 20px;
+  text-align: center;
+  font-family: var(--ff-sans);
+  font-size: 0.9rem;
+  color: var(--muted);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.footer__year {
+  color: var(--text);
+}
+
+.footer__separator {
+  color: var(--muted);
+  margin: 0 8px;
+}
+
+.footer__link {
+  color: var(--neon-a-start);
+  text-decoration: none;
+  transition: all 0.3s ease;
+  text-shadow:
+    1px 1px 2px var(--glow-a),
+    0 0 0.5em var(--glow-b);
+}
+
+.footer__link:hover {
+  color: var(--neon-b-start);
+  text-shadow:
+    1px 1px 2px var(--glow-b),
+    0 0 1em var(--glow-a),
+    0 0 0.5em var(--glow-a);
+}
+
+.footer__link:active {
+  transform: scale(0.98);
+}
+
 @media (max-width: 768px) {
   :root {
     --cell-size-mobile: 36px;
@@ -414,6 +444,16 @@ html, body {
   .logo {
     font-size: 32px;
     margin-bottom: 1rem;
+  }
+
+  .footer {
+    margin-top: 30px;
+    padding: 15px;
+    font-size: 0.85rem;
+  }
+
+  .footer__separator {
+    margin: 0 6px;
   }
 
     /* info panel */
@@ -524,6 +564,16 @@ html, body {
 
   .logo {
     font-size: 28px;
+  }
+
+  .footer {
+    margin-top: 25px;
+    padding: 12px;
+    font-size: 0.8rem;
+  }
+
+  .footer__separator {
+    margin: 0 4px;
   }
 
   .info {
