@@ -1,4 +1,4 @@
-import { ASSIST_NAME, MODE, RESULT_REASON, UI_EVENTS } from "./constants.js";
+import { ASSIST_NAME, MODE, RESULT_REASON, THEME, UI_EVENTS } from "./constants.js";
 import { EventBus } from "./eventBus.js";
 import { Storage } from "./storage.js";
 import { Store } from "./store.js";
@@ -401,7 +401,7 @@ export const UI = (() => {
     },
 
     createMainInfo(state){
-      const {mode, score, timer} = state;
+      const {mode, score, timer, theme} = state;
       const header = document.createElement('div');
       header.classList.add('game__header');
 
@@ -451,8 +451,15 @@ export const UI = (() => {
       const controls = document.createElement('div');
       controls.classList.add('game__controls');
 
+      const controlsMain = document.createElement('div');
+      controlsMain.classList.add('game__controls-main');
+
       const backBtn = this.createBackBtn();
       const resetBtn = this.createResetBtn();
+
+      const controlsSettings = document.createElement('div');
+      controlsSettings.classList.add('game__controls-settings');
+      const lightBtn = this.createLightBtn(theme);
   
       modeP.appendChild(modeTitle);
       modeP.appendChild(modeContent);
@@ -467,8 +474,11 @@ export const UI = (() => {
       info.appendChild(scoreP);
       info.appendChild(timerP);
 
-      controls.appendChild(backBtn);
-      controls.appendChild(resetBtn);
+      controlsMain.appendChild(backBtn);
+      controlsMain.appendChild(resetBtn);
+      controlsSettings.appendChild(lightBtn);
+      controls.appendChild(controlsMain);
+      controls.appendChild(controlsSettings);
       header.appendChild(controls);
       header.appendChild(info);
 
@@ -479,7 +489,7 @@ export const UI = (() => {
     createAssist(state) {
       const assistDiv = document.createElement('aside');
       assistDiv.classList.add('assist');
-      console.log('state', state);
+
       const hintsBtn = this.createHintsBtn(state.assists.hintsLeft);
       const revertBtn = this.createRevertBtn();
       const addBtn = this.createAddBtn();
@@ -684,5 +694,45 @@ export const UI = (() => {
 
       return gridDiv;
     },
+
+    createLightBtn() {
+      const lightBtn = document.createElement('button');
+      lightBtn.classList.add('button');
+      lightBtn.classList.add('light-button');
+
+      
+      addUniversalClickListener(lightBtn, () => {
+        EventBus.emit(UI_EVENTS.THEME);
+      });
+      
+      this.addDecorSVG(lightBtn);
+
+      return lightBtn;
+    },
+
+    switchTheme(theme = THEME.DARK) {
+      document.documentElement.setAttribute('data-theme', theme);
+    },
+
+    addDecorSVG(container) {
+      const svgPath = [
+        './assets/img/light.svg',
+      ];
+
+      fetch(svgPath)
+        .then(res => res.text())
+        .then(svgContent => {
+          const wrapper = document.createElement('div');
+          wrapper.classList.add('decor');
+          wrapper.innerHTML = svgContent;
+
+          wrapper.querySelectorAll('path').forEach(p => {
+            p.style.fill = 'var(--neon-light)';
+            p.style.transition = 'fill 0.3s ease';
+          });
+
+          container.appendChild(wrapper);
+        });
+    }
   };
 })();
