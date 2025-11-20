@@ -448,8 +448,12 @@ export const UI = (() => {
       timerContent.classList.add('info__number-content');
       timerContent.classList.add('timer-value');
 
-      const backBtn = this.createBackBtn();
+      const controls = document.createElement('div');
+      controls.classList.add('game__controls');
 
+      const backBtn = this.createBackBtn();
+      const resetBtn = this.createResetBtn();
+  
       modeP.appendChild(modeTitle);
       modeP.appendChild(modeContent);
       
@@ -463,7 +467,9 @@ export const UI = (() => {
       info.appendChild(scoreP);
       info.appendChild(timerP);
 
-      header.appendChild(backBtn);
+      controls.appendChild(backBtn);
+      controls.appendChild(resetBtn);
+      header.appendChild(controls);
       header.appendChild(info);
 
 
@@ -502,6 +508,23 @@ export const UI = (() => {
       backBtn.appendChild(backBtnText);
 
       return backBtn;
+    },
+
+    createResetBtn() {
+      const resetBtn = document.createElement('button');
+      resetBtn.classList.add('button');
+      resetBtn.classList.add('reset-button');
+      const resetBtnText = document.createElement('div');
+      resetBtnText.classList.add('button__text');
+      resetBtnText.textContent = 'Reset';
+
+      addUniversalClickListener(resetBtn, () => {
+        EventBus.emit(UI_EVENTS.RESET, {}); 
+      });
+
+      resetBtn.appendChild(resetBtnText);
+
+      return resetBtn;
     },
 
     createRevertBtn() {

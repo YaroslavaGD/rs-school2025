@@ -10,6 +10,7 @@
 - `ui:save` — {}
 - `ui:continue` - {}
 - `ui:back` - {}
+- `ui:reset` - {}
 
 ## Game Events
 - `game:tryPair` - { firstIndex, secondIndex }

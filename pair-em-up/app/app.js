@@ -106,6 +106,32 @@ const App = (() => {
         }, 0);
       });
 
+      EventBus.on(UI_EVENTS.RESET, () => {
+        Timer.resetHard();
+        const { mode } = Store.getState();
+        const grid = GameEngine.generateGrid(mode);
+        const availablePairs = GameEngine.getAvailablePairsCount(grid);
+        const linesCount = GameEngine.getGridRowCount(grid);
+  
+        Store.setState({
+          mode,
+          screen: SCREEN_TYPE.GAME,
+          grid,
+          score: 0,
+          history: null,
+          timer: { running: true, elapsedMs: 0 },
+          linesCount,
+          assists: {
+            ...Store.getState().assists,
+            revertAvailable: false,
+            addNumbersUsed: 0,
+            shuffleUsed: 0,
+            eraserUsed: 0,
+            hintsLeft: availablePairs
+          }
+        });
+      });
+
       EventBus.on(UI_EVENTS.BACK, () => {
         Timer.stop();
 

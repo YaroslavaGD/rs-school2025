@@ -8,6 +8,7 @@ export const MODE = {
 export const UI_EVENTS = {
   START: 'ui:start',
   BACK: 'ui:back',
+  RESET: 'ui:reset',
   CONTINUE: 'ui:continue',
   CELL_CLICK: 'ui:cell:click',
   MATCHED: 'ui:matched',

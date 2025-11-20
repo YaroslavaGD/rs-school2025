@@ -73,10 +73,22 @@ export const Timer = (() => {
     if (el) el.textContent = formatTime(ms);
   }
 
+  function resetHard() {
+    if (intervalId) clearInterval(intervalId);
+    intervalId = null;
+
+    startTime = null;
+    pausedElapsedMs = 0;
+
+    const el = document.querySelector('.timer-value');
+    if (el) el.textContent = formatTime(0);
+  }
+
   return {
     start,
     stop,
     reset,
+    resetHard,
     getElapsed,
     setElapsed,
   }

@@ -23,7 +23,7 @@
 
     /* UI tokens */
   --radius-sm: 8px;
-  --radius-md: 12px;
+  --radius-md: 20px;
   --glass-blur: 12px;
 
     /* sizes */
@@ -94,6 +94,7 @@ html, body {
   margin-bottom: var(--m-gutter);
   padding: var(--m-gutter);
   border: 1px solid var(--glow-a);
+  border-radius: var(--radius-md);
   background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
   backdrop-filter: blur(var(--glass-blur));
   box-shadow: var(--neon-shadow);
@@ -159,6 +160,11 @@ html, body {
     1px 1px 2px var(--glow-a),
     0 0 1em var(--glow-b),
     0 0 0.2em var(--glow-b);
+}
+
+.game__controls {
+  display: flex;
+  gap: var(--gutter);
 }
 
 .assist-button {
@@ -345,6 +351,7 @@ html, body {
 
   padding: 10px;
   border: 1px solid var(--glow-a);
+  border-radius: var(--radius-md);
   background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
   backdrop-filter: blur(var(--glass-blur));
   box-shadow: var(--neon-shadow);
@@ -531,7 +538,7 @@ html, body {
     justify-content: center;
     width: 95%;
     padding: 0.75rem;
-    gap: 8px;
+    gap: var(--gutter);
   }
 
   .assist-button {
