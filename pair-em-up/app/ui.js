@@ -1,4 +1,4 @@
-import { ASSIST_NAME, MODE, RESULT_REASON, UI_EVENTS } from "./constants.js";
+import { ASSIST_NAME, MODE, RESULT_REASON, THEME, UI_EVENTS } from "./constants.js";
 import { EventBus } from "./eventBus.js";
 import { Storage } from "./storage.js";
 import { Store } from "./store.js";
@@ -100,7 +100,7 @@ export const UI = (() => {
       gameDiv.classList.add('game__main');
       const mainInfoDiv = this.createMainInfo(state);
       const gridDiv = this.createGrid(grid);
-      const assistDiv = this.createAssist();
+      const assistDiv = this.createAssist(state);
 
       gameDiv.appendChild(gridDiv);
       gameDiv.appendChild(assistDiv);
@@ -401,7 +401,7 @@ export const UI = (() => {
     },
 
     createMainInfo(state){
-      const {mode, score, timer} = state;
+      const {mode, score, timer, theme} = state;
       const header = document.createElement('div');
       header.classList.add('game__header');
 
@@ -448,8 +448,19 @@ export const UI = (() => {
       timerContent.classList.add('info__number-content');
       timerContent.classList.add('timer-value');
 
-      const backBtn = this.createBackBtn();
+      const controls = document.createElement('div');
+      controls.classList.add('game__controls');
 
+      const controlsMain = document.createElement('div');
+      controlsMain.classList.add('game__controls-main');
+
+      const backBtn = this.createBackBtn();
+      const resetBtn = this.createResetBtn();
+
+      const controlsSettings = document.createElement('div');
+      controlsSettings.classList.add('game__controls-settings');
+      const lightBtn = this.createLightBtn(theme);
+  
       modeP.appendChild(modeTitle);
       modeP.appendChild(modeContent);
       
@@ -463,18 +474,23 @@ export const UI = (() => {
       info.appendChild(scoreP);
       info.appendChild(timerP);
 
-      header.appendChild(backBtn);
+      controlsMain.appendChild(backBtn);
+      controlsMain.appendChild(resetBtn);
+      controlsSettings.appendChild(lightBtn);
+      controls.appendChild(controlsMain);
+      controls.appendChild(controlsSettings);
+      header.appendChild(controls);
       header.appendChild(info);
 
 
       return header;
     },
 
-    createAssist() {
+    createAssist(state) {
       const assistDiv = document.createElement('aside');
       assistDiv.classList.add('assist');
 
-      const hintsBtn = this.createHintsBtn();
+      const hintsBtn = this.createHintsBtn(state.assists.hintsLeft);
       const revertBtn = this.createRevertBtn();
       const addBtn = this.createAddBtn();
       const shuffleBtn = this.createShuffleBtn();
@@ -504,6 +520,23 @@ export const UI = (() => {
       return backBtn;
     },
 
+    createResetBtn() {
+      const resetBtn = document.createElement('button');
+      resetBtn.classList.add('button');
+      resetBtn.classList.add('reset-button');
+      const resetBtnText = document.createElement('div');
+      resetBtnText.classList.add('button__text');
+      resetBtnText.textContent = 'Reset';
+
+      addUniversalClickListener(resetBtn, () => {
+        EventBus.emit(UI_EVENTS.RESET, {}); 
+      });
+
+      resetBtn.appendChild(resetBtnText);
+
+      return resetBtn;
+    },
+
     createRevertBtn() {
       const revertBtn = document.createElement('button');
       revertBtn.classList.add('button');
@@ -523,7 +556,7 @@ export const UI = (() => {
       return revertBtn;
     },
 
-    createHintsBtn() {
+    createHintsBtn(count) {
       const hintsBtn = document.createElement('button');
       hintsBtn.classList.add('button');
       hintsBtn.classList.add('assist-button');
@@ -539,13 +572,13 @@ export const UI = (() => {
       const hintsCounter = document.createElement('div');
       hintsCounter.classList.add('hints-counter');
       hintsCounter.textContent = '?';
+      if (count) {
+        hintsCounter.textContent = count > 5 ? '5+' : String(count);
+      }
 
       addUniversalClickListener(hintsBtn, () => {
         EventBus.emit(UI_EVENTS.ASSIST_USE, { name: ASSIST_NAME.HINTS }); 
       });
-      // hintsBtn.addEventListener('click', () => {
-      //   EventBus.emit(UI_EVENTS.ASSIST_USE, { name: ASSIST_NAME.HINTS }); 
-      // });
       
       hintsBtn.appendChild(hintsBtnText);
       hintsBtn.appendChild(hintsCounter);
@@ -561,7 +594,7 @@ export const UI = (() => {
 
       const addBtnText = document.createElement('div');
       addBtnText.classList.add('button__text');
-      addBtnText.textContent = '╋ Add';
+      addBtnText.textContent = '+ Add';
 
       const addBtnTries = document.createElement('div');
       addBtnTries.classList.add('button__extra-info', 'button__tries');
@@ -574,9 +607,7 @@ export const UI = (() => {
       addUniversalClickListener(addBtn, () => {
         EventBus.emit(UI_EVENTS.ASSIST_USE, { name: ASSIST_NAME.ADD_NUMBERS }); 
       });
-      // addBtn.addEventListener('click', () => {
-      //   EventBus.emit(UI_EVENTS.ASSIST_USE, { name: ASSIST_NAME.ADD_NUMBERS }); 
-      // });
+
       addBtn.appendChild(addBtnText);
       addBtn.appendChild(addBtnTries);
       addBtn.appendChild(addBtnLines);
@@ -601,9 +632,6 @@ export const UI = (() => {
       addUniversalClickListener(shuffleBtn, () => {
         EventBus.emit(UI_EVENTS.ASSIST_USE, { name: ASSIST_NAME.SHUFFLE }); 
       });
-      // shuffleBtn.addEventListener('click', () => {
-      //   EventBus.emit(UI_EVENTS.ASSIST_USE, { name: ASSIST_NAME.SHUFFLE }); 
-      // });
 
       shuffleBtn.appendChild(shuffleBtnText);
       shuffleBtn.appendChild(shuffleBtnTries);
@@ -634,15 +662,6 @@ export const UI = (() => {
           EventBus.emit(UI_EVENTS.ASSIST_USE, { name: ASSIST_NAME.ERASER }); 
         }
       });
-      // eraserBtn.addEventListener('click', () => {
-      //   const { eraserMode } = Store.getState();
-      //   if (eraserMode) {
-      //     Store.setState({ eraserMode: false });
-      //     EventBus.emit(UI_EVENTS.ERASER_CANCELLED);
-      //   } else {
-      //     EventBus.emit(UI_EVENTS.ASSIST_USE, { name: ASSIST_NAME.ERASER }); 
-      //   }
-      // });
 
       eraserBtn.appendChild(eraserBtnText);
       eraserBtn.appendChild(eraserBtnTries);
@@ -669,14 +688,51 @@ export const UI = (() => {
         addUniversalClickListener(buttonCell, () => {
           EventBus.emit(UI_EVENTS.CELL_CLICK, { index: i });
         });
-        // buttonCell.addEventListener('click', () => {
-        //   EventBus.emit(UI_EVENTS.CELL_CLICK, { index: i });
-        // });
 
         gridDiv.appendChild(buttonCell);
       });
 
       return gridDiv;
     },
+
+    createLightBtn() {
+      const lightBtn = document.createElement('button');
+      lightBtn.classList.add('button');
+      lightBtn.classList.add('light-button');
+
+      
+      addUniversalClickListener(lightBtn, () => {
+        EventBus.emit(UI_EVENTS.THEME);
+      });
+      
+      this.addDecorSVG(lightBtn);
+
+      return lightBtn;
+    },
+
+    switchTheme(theme = THEME.DARK) {
+      document.documentElement.setAttribute('data-theme', theme);
+    },
+
+    addDecorSVG(container) {
+      const svgPath = [
+        './assets/img/light.svg',
+      ];
+
+      fetch(svgPath)
+        .then(res => res.text())
+        .then(svgContent => {
+          const wrapper = document.createElement('div');
+          wrapper.classList.add('decor');
+          wrapper.innerHTML = svgContent;
+
+          wrapper.querySelectorAll('path').forEach(p => {
+            p.style.fill = 'var(--neon-light)';
+            p.style.transition = 'fill 0.3s ease';
+          });
+
+          container.appendChild(wrapper);
+        });
+    }
   };
 })();

@@ -23,7 +23,6 @@ export const Storage = (() => {
         };
         localStorage.setItem(KEYS.CURRENT_GAME, JSON.stringify(gameData));
 
-        // console.log('Saved timer:', gameData.timer);
       } catch (error) {
         console.error('Failed to save game', error);
       }
@@ -45,6 +44,35 @@ export const Storage = (() => {
 
     removeGame() {
       localStorage.removeItem(KEYS.CURRENT_GAME);
+    },
+
+    saveSettings(state) {
+      try {
+        const settings = {
+          theme: state.theme,
+        };
+        localStorage.setItem(KEYS.SETTINGS, JSON.stringify(settings));
+      } catch (error) {
+        console.error('Failed to load settings', error);
+      }
+    },
+
+    loadSettings() {
+      try {
+        const saved = localStorage.getItem(KEYS.SETTINGS);
+        return saved ? JSON.parse(saved) : null;
+      } catch (error) {
+        console.error('Failed to load settings:', error);
+        return null;
+      }
+    },
+
+    hasSettings() {
+      return localStorage.getItem(KEYS.SETTINGS) !== null;
+    },
+
+    removeSettings() {
+      localStorage.removeItem(KEYS.SETTINGS);
     }
   }
 })();

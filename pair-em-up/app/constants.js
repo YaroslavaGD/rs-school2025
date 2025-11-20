@@ -8,7 +8,9 @@ export const MODE = {
 export const UI_EVENTS = {
   START: 'ui:start',
   BACK: 'ui:back',
+  RESET: 'ui:reset',
   CONTINUE: 'ui:continue',
+  THEME: 'ui:theme',
   CELL_CLICK: 'ui:cell:click',
   MATCHED: 'ui:matched',
   UNMATCHED: 'ui:unmatched',
@@ -48,6 +50,11 @@ export const ANIMATION_DELAYS = {
   PAIR_REMOVE: 160,
   UNMATCHED_RESET: 300,
   WIN_SCREEN_DELAY: 350,
+}
+
+export const THEME = {
+  LIGHT: 'light',
+  DARK: 'dark'
 }
 
 export const IS_DEBUG = true;

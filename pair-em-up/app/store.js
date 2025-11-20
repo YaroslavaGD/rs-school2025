@@ -1,4 +1,4 @@
-import { IS_DEBUG, IS_STORE_DEBUG, SCREEN_TYPE } from "./constants.js";
+import { IS_DEBUG, IS_STORE_DEBUG, SCREEN_TYPE, THEME } from "./constants.js";
 import { Storage } from "./storage.js";
 
 export const Store = (() => {
@@ -8,6 +8,7 @@ export const Store = (() => {
     grid: [],
     selected: [],
     history: null,
+    theme: THEME.DARK,
     score: 0,
     linesCount: 0,
     resultReason: null, // 'win', 'lose-no-moves', 'lose-50-lines'
@@ -33,11 +34,14 @@ export const Store = (() => {
       state = { ...state, ...patch };
 
       subscribers.forEach((fn) => fn(state));
-      if (IS_DEBUG && IS_STORE_DEBUG) console.debug('[Store] State updated:', state);
-
+      
       if (state.screen === SCREEN_TYPE.GAME) {
         Storage.saveGame(Store.getState());
       }
+
+      Storage.saveSettings({ theme: state.theme });
+
+      if (IS_DEBUG && IS_STORE_DEBUG) console.debug('[Store] State updated:', state);
     },
 
     subscribe(fn) {

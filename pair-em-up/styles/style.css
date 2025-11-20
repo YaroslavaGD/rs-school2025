@@ -10,8 +10,10 @@
   --neon-a-end:   #3A86FF;
   --neon-b-start: #FF00E5;
   --neon-b-end:   #6A00FF;
+  --neon-light: #ff9100;
   --neon-matched: #00ff95;
   --neon-unmatched: #ff0055;
+  --neon-light:#00F5FF;
 
     /* Accent glows */
   --glow-a: rgba(0,245,255,0.45);
@@ -23,7 +25,7 @@
 
     /* UI tokens */
   --radius-sm: 8px;
-  --radius-md: 12px;
+  --radius-md: 20px;
   --glass-blur: 12px;
 
     /* sizes */
@@ -41,14 +43,23 @@
 
 
 [data-theme="light"]{
-  --bg: #F7F8FA;
+  --bg: #dbdbdb;
   --panel: rgba(255,255,255,0.7);
   --text: #0F172A;
   --muted: #6B7280;
-  --glow-a: rgba(0,245,255,0.22);
+  --glow-a: rgba(255, 145, 0, 0.6);
   --glow-b: rgba(160,112,255,0.22);
-  --neon-shadow: 0 6px 18px rgba(58,134,255,0.04);
-  --glow-strong: 0 0 10px rgba(0,245,255,0.18);
+  --neon-shadow:  0 6px 24px rgba(58,134,255,0.08), 0 2px 8px var(--glow-a);
+  --glow-strong: 0 0 10px rgba(255, 145, 0, 1);
+
+  --neon-a-start: #128185;
+  --neon-a-end:   #3A86FF;
+  --neon-b-start: #FF00E5;
+  --neon-b-end:   #6A00FF;
+  --neon-matched: #20be28;
+  --neon-unmatched: #ff0055;
+  
+  --neon-light: rgba(255, 145, 0, 1);
 }
 
 html, body {
@@ -94,6 +105,7 @@ html, body {
   margin-bottom: var(--m-gutter);
   padding: var(--m-gutter);
   border: 1px solid var(--glow-a);
+  border-radius: var(--radius-md);
   background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
   backdrop-filter: blur(var(--glass-blur));
   box-shadow: var(--neon-shadow);
@@ -159,6 +171,33 @@ html, body {
     1px 1px 2px var(--glow-a),
     0 0 1em var(--glow-b),
     0 0 0.2em var(--glow-b);
+}
+
+.decor {
+  width: var(--cell-size-mobile);
+}
+
+.light-button {
+  min-width: var(--cell-size-mobile);
+  min-height: var(--cell-size-mobile);
+  box-shadow: var(--neon-shadow); 
+  border-radius: 50%;
+}
+
+.game__controls {
+  display: flex;
+  gap: var(--gutter);
+  justify-content: space-between;
+  width: 100%;
+}
+
+.game__controls-main {
+  display: flex;
+  gap: var(--gutter);
+}
+.game__controls-settings {
+  display: flex;
+  gap: var(--gutter);
 }
 
 .assist-button {
@@ -250,7 +289,7 @@ html, body {
   top: 35%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background: rgba(0, 0, 0, 0.9);
+  background: var(--bg);
   color: var(--neon-unmatched);
   padding: 1rem 2rem;
   border: 2px solid var(--neon-unmatched);
@@ -345,6 +384,7 @@ html, body {
 
   padding: 10px;
   border: 1px solid var(--glow-a);
+  border-radius: var(--radius-md);
   background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
   backdrop-filter: blur(var(--glass-blur));
   box-shadow: var(--neon-shadow);
@@ -373,6 +413,7 @@ html, body {
 .grid__item:hover { 
   transform: translateY(-4px);
   box-shadow: 0 0 14px var(--glow-a);
+  border-color: var(--glow-a);
 }
 
 .grid__item:active, 
@@ -531,7 +572,7 @@ html, body {
     justify-content: center;
     width: 95%;
     padding: 0.75rem;
-    gap: 8px;
+    gap: var(--gutter);
   }
 
   .assist-button {

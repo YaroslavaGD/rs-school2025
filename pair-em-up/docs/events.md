@@ -10,6 +10,8 @@
 - `ui:save` — {}
 - `ui:continue` - {}
 - `ui:back` - {}
+- `ui:reset` - {}
+- `ui:theme` - { theme: 'light' | 'dark' }
 
 ## Game Events
 - `game:tryPair` - { firstIndex, secondIndex }
@@ -17,10 +19,6 @@
 - `game:pair:fail` - { firstIndex, secondIndex }
 - `game:win` - { score, elapsedMs }
 - `game:lose` - { reason }
-
-## Storage Events
-- `storage:saved` - { timestamp }
-- `storage:loaded` - { state }
 
 ---
 

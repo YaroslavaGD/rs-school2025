@@ -1,4 +1,4 @@
-import { GAME_EVENTS, SCREEN_TYPE, UI_EVENTS } from './constants.js';
+import { GAME_EVENTS, SCREEN_TYPE, THEME, UI_EVENTS } from './constants.js';
 import { EventBus } from './eventBus.js';
 import { GameController } from './gameController.js';
 import { GameEngine } from './gameEngine.js';
@@ -20,8 +20,13 @@ const App = (() => {
       root.classList.add('main');
       app.appendChild(root);
 
-      Store.subscribe((state) => {
+      const savedSettings = Storage.loadSettings();
+      if (savedSettings && savedSettings.theme) {
+        Store.setState({ theme: savedSettings.theme });
+        UI.switchTheme(savedSettings.theme);
+      }
 
+      Store.subscribe((state) => {
         const prevScreen = currentScreen;
         const newScreen = state.screen;
 
@@ -106,6 +111,32 @@ const App = (() => {
         }, 0);
       });
 
+      EventBus.on(UI_EVENTS.RESET, () => {
+        Timer.resetHard();
+        const { mode } = Store.getState();
+        const grid = GameEngine.generateGrid(mode);
+        const availablePairs = GameEngine.getAvailablePairsCount(grid);
+        const linesCount = GameEngine.getGridRowCount(grid);
+  
+        Store.setState({
+          mode,
+          screen: SCREEN_TYPE.GAME,
+          grid,
+          score: 0,
+          history: null,
+          timer: { running: true, elapsedMs: 0 },
+          linesCount,
+          assists: {
+            ...Store.getState().assists,
+            revertAvailable: false,
+            addNumbersUsed: 0,
+            shuffleUsed: 0,
+            eraserUsed: 0,
+            hintsLeft: availablePairs
+          }
+        });
+      });
+
       EventBus.on(UI_EVENTS.BACK, () => {
         Timer.stop();
 
@@ -144,6 +175,16 @@ const App = (() => {
 
       EventBus.on(UI_EVENTS.ERASER_CANCELLED, () => {
         UI.updateEraserModeUI(false);
+      });
+
+      EventBus.on(UI_EVENTS.THEME, () => {
+        const store = Store.getState();
+        const newTheme = store.theme === THEME.DARK ? THEME.LIGHT : THEME.DARK;
+        Store.setState({
+          ...store,
+          theme: newTheme,
+        });
+        UI.switchTheme(newTheme);
       });
 
       Store.setState({ screen: SCREEN_TYPE.START });
