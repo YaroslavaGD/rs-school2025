@@ -1,4 +1,4 @@
-Video: [link]https://youtu.be/TKzoQ47MPKY)
+Video: [link](https://youtu.be/TKzoQ47MPKY)
 
 Hello! My name is Yaroslava. I’m 33, I'm from Ukraine, and now I live in Berlin. I came here because of the war, and like many people I had to start almost from zero. But one thing never changed - I've always loved programming. It helped me stay focused when everything else was unstable.
 
