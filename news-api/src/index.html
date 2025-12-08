@@ -4,20 +4,28 @@
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <link rel="shortcut icon" href="./img/earth.svg" type="image/svg+xml">
         <title>NewsPortal</title>
     </head>
     <body>
         <header>
-            <h1>News Portal</h1>
+            <a class="logo" href="#">
+                <img src="./img/earth.svg" alt="">
+                <h1>News Portal</h1>
+            </a>
         </header>
         <main>
-            <div class="sources buttons"></div>
+            <div class="sources-wrap">
+                <div class="sources buttons"></div>
+            </div>
             <div class="news"></div>
         </main>
         <footer>
+            <a class="footer__link" href="https://rs.school/js/" rel="noreferrer nofollow" target="_blank" title="Rolling Scopes School">Rolling Scopes School</a>
             <p class="copyright">
                 Copyright <a href="https://newsapi.org">NewsAPI</a>
             </p>
+            <a class="footer__link" href="https://github.com/YaroslavaGD" rel="noreferrer nofollow" target="_blank" title="My Github">github</a>
         </footer>
 
         <template id="sourceItemTemp">
