@@ -10,9 +10,9 @@ export type Endpoint = keyof typeof EndpointValues;
 export type ArraySources = Array<Source>;
 export type ArrayArticles = Array<Article>;
 
-enum EndpointValues {
-  'sources',
-  'everything',
+export enum EndpointValues {
+  sources = 'sources',
+  everything = 'everything',
 }
 
 interface Status {
