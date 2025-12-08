@@ -25,7 +25,7 @@ class AppController extends AppLoader {
             newsContainer.setAttribute('data-source', sourceId);
             super.getResp(
               {
-                endpoint: EndpointValues.sources,
+                endpoint: EndpointValues.everything,
                 options: {
                   sources: sourceId,
                 },
