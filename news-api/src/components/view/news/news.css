@@ -53,6 +53,8 @@
 }
 
 .news__item .news__description {
+    display: flex;
+    flex-direction: column;
     padding: 1rem;
     background: #fff;
     position: relative;
@@ -99,6 +101,7 @@
 }
 
 .news__item p {
+    flex: 1 0 auto;
     margin: 1rem 0 0;
 }
 
@@ -162,5 +165,16 @@
 
     .news__item.alt .news__meta-details {
         padding-left: 25px;
+    }
+
+    @media (min-width: 768px) {
+        .news {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            align-items: stretch;
+            gap: 10px;
+            justify-content: space-evenly;
+        }
     }
 }

@@ -1,3 +1,7 @@
+.sources-wrap {
+    padding: 1em;
+}
+
 .sources {
     display: flex;
     flex-wrap: nowrap;
@@ -8,10 +12,15 @@
     font: 300 1em 'Fira Sans', sans-serif;
 }
 
+.sources::-webkit-scrollbar {
+    width: 0;
+}
+
 .source__item {
     background: none;
     border: 2px solid #30c5ff;
     font: inherit;
+    font-size: 0.8rem;
     line-height: 1;
     margin: 0.5em;
     padding: 1em 2em;
@@ -22,13 +31,39 @@
 
 .source__item:hover,
 .source__item:focus {
-    border-color: #3fcc59;
+    color: #fff;
+    box-shadow: 0px 0px 5px #30c5ff, 
+                0px 0px 10px #30c5ff, 
+                0px 0px 10px #30c5ff, 
+                0px 0px 20px #30c5ff;
+    /* border-color: #3fcc59;
     color: #69db7e;
     box-shadow: 0 0.5em 0.5em -0.4em #3fcc59;
-    transform: translateY(-0.25em);
+    transform: translateY(-0.25em); */
 }
 
 .source__item-name {
     font-weight: 400;
     white-space: nowrap;
+}
+
+@media (min-width: 640px) {
+    .source__item {
+        font-size: inherit;
+    }
+    .sources::-webkit-scrollbar {
+        width: 10px;
+      }
+
+    .sources::-webkit-scrollbar-track {
+        /* -webkit-box-shadow: 5px 5px 5px -5px rgba(34, 60, 80, 0.2) inset; */
+        background-color: transparent;
+    }
+
+    .sources::-webkit-scrollbar-thumb {
+        background-color: #356184;
+        background-image: -webkit-gradient(linear, 0 0, 0 100%,
+                            color-stop(.5, rgba(255, 255, 255, .25)),
+                            color-stop(.5, transparent), to(transparent));
+    }
 }

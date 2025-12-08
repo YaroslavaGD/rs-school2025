@@ -11,7 +11,7 @@ class Sources {
 
         if (sourceClone && sourceClone instanceof DocumentFragment) {
           const itemName: Element | null = sourceClone.querySelector('.source__item-name');
-          const itemSource: Element | null = sourceClone.querySelector('.sources');
+          const itemSource: Element | null = sourceClone.querySelector('.source__item');
 
           if (!itemName || !itemSource) return;
           itemName.textContent = item.name;
