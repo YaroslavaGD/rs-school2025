@@ -1,4 +1,4 @@
-import type { IEverything, ISources } from '../../types';
+import type { DataNews, DataSources } from '../../types';
 import AppController from '../controller/controller';
 import { AppView } from '../view/appView';
 
@@ -15,9 +15,9 @@ class App {
     const sourceContainer: Element | null = document.querySelector('.sources');
     if (sourceContainer && sourceContainer instanceof HTMLElement) {
       sourceContainer.addEventListener('click', (e: MouseEvent): void =>
-        this.controller.getNews(e, (data) => this.view.drawNews(data as IEverything))
+        this.controller.getNews(e, (data) => this.view.drawNews(data as DataNews))
       );
-      this.controller.getSources((data) => this.view.drawSources(data as ISources));
+      this.controller.getSources((data) => this.view.drawSources(data as DataSources));
     }
   }
 }

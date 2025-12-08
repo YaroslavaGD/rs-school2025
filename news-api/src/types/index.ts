@@ -1,16 +1,23 @@
-export interface IEverything {
-  status: string;
+export interface DataNews extends Status {
   totalResults: number;
   articles: ArrayArticles;
 }
 
-export interface ISources {
-  status: string;
+export interface DataSources extends Status {
   sources: ArraySources;
 }
-
+export type Endpoint = keyof typeof EndpointValues;
 export type ArraySources = Array<Source>;
 export type ArrayArticles = Array<Article>;
+
+enum EndpointValues {
+  'sources',
+  'everything',
+}
+
+interface Status {
+  status: string;
+}
 
 type Article = {
   source: {
@@ -32,7 +39,6 @@ type Source = {
 };
 
 export type APIKey = { apiKey: string };
-export type Endpoint = { endpoint: string };
 
 export type Options =
   | {
