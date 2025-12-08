@@ -9,6 +9,7 @@
     // See also https://aka.ms/tsconfig/module
     "module": "es2022",
     "target": "es2024",
+    "moduleResolution": "node",
     "types": [],
     // For nodejs:
     // "lib": ["esnext"],
@@ -44,5 +45,8 @@
     "noUncheckedSideEffectImports": true,
     "moduleDetection": "force",
     "skipLibCheck": true,
-  }
+    "allowJs": false
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist"]
 }
