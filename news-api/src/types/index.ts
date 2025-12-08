@@ -1,7 +1,7 @@
 export interface Everything {
   status: string;
   totalResults: number;
-  articles: Array<Article>;
+  articles: ArrayArticles;
 }
 
 export interface ISources {
@@ -10,6 +10,7 @@ export interface ISources {
 }
 
 export type ArraySources = Array<Source>;
+export type ArrayArticles = Array<Article>;
 
 type Article = {
   source: {
