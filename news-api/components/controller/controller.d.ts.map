@@ -1,0 +1,1 @@
+{"version":3,"file":"controller.d.ts","sourceRoot":"","sources":["../../../src/components/controller/controller.ts"],"names":[],"mappings":"AAAA,OAAO,EAAkB,KAAK,QAAQ,EAAE,MAAM,aAAa,CAAC;AAC5D,OAAO,SAAS,MAAM,aAAa,CAAC;AAEpC,cAAM,aAAc,SAAQ,SAAS;IACnC,UAAU,CAAC,QAAQ,EAAE,QAAQ;IAS7B,OAAO,CAAC,CAAC,EAAE,KAAK,EAAE,QAAQ,EAAE,QAAQ,GAAG,IAAI;CA6B5C;AAED,eAAe,aAAa,CAAC"}
