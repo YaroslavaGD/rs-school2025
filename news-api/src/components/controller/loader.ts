@@ -1,4 +1,4 @@
-import type { Options } from '../../types';
+import type { Callback, Options } from '../../types';
 
 class Loader {
   constructor(
@@ -41,7 +41,7 @@ class Loader {
     return url.slice(0, -1);
   }
 
-  private load<T = unknown>(method: string, endpoint: string, callback: (data: T) => void, options: Options) {
+  private load(method: string, endpoint: string, callback: Callback, options: Options) {
     fetch(this.makeUrl(options, endpoint), { method })
       .then(this.errorHandler)
       .then((res) => res.json())

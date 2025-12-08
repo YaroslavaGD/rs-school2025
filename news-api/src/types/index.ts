@@ -43,3 +43,5 @@ export type Options =
       // language?: string;
     }
   | undefined;
+
+export type Callback = <T>(data?: T) => void;
