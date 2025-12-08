@@ -1,4 +1,4 @@
-export interface Everything {
+export interface IEverything {
   status: string;
   totalResults: number;
   articles: ArrayArticles;
