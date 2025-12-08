@@ -30,3 +30,16 @@ type Source = {
   id: string | null;
   name: string;
 };
+
+export type APIKey = { apiKey: string };
+export type Endpoint = { endpoint: string };
+
+export type Options =
+  | {
+      sources?: string;
+      apiKey?: string;
+      // sources?: string;
+      // category?: string;
+      // language?: string;
+    }
+  | undefined;
