@@ -1,0 +1,5 @@
+#!/usr/bin/env sh
+cd rss-puzzle
+
+npm run lint
+npx validate-branch-name
