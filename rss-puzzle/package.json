@@ -2,6 +2,7 @@
   "name": "rss-puzzle",
   "private": true,
   "version": "0.0.0",
+  "homepage": "https://rolling-scopes-school.github.io/yaroslavagd-JSFE2025Q3/rss-puzzle/",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -11,6 +12,8 @@
     "ci:format": "prettier . --check",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
+    "serve": "vite preview --port 8080",
+    "deploy": "gh-pages -d dist --dest rss-puzzle",
     "prepare": "cd .. && husky rss-puzzle/.husky"
   },
   "devDependencies": {
@@ -23,6 +26,7 @@
     "eslint-plugin-import": "^2.31.0",
     "eslint-plugin-prettier": "^5.5.4",
     "eslint-plugin-simple-import-sort": "^12.1.1",
+    "gh-pages": "^6.3.0",
     "husky": "^9.1.7",
     "prettier": "^3.7.4",
     "typescript": "~5.9.3",

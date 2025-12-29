@@ -18,6 +18,12 @@ module.exports = {
   },
   ignorePatterns: ['**/.history', '**/.husky', '**/.vscode', '**/coverage', '**/dist', '**/node_modules'],
   rules: {
+    'import/no-extraneous-dependencies': [
+      'error',
+      {
+        devDependencies: ['**/vite.config.*', '**/*.config.*', '**/*.test.*', '**/*.spec.*'],
+      },
+    ],
     'class-methods-use-this': 'off',
     'import/prefer-default-export': 'off',
     'import/first': 'error',
