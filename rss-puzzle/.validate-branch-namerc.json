@@ -1,0 +1,4 @@
+{
+  "pattern": "^(feat|fix|docs|style|refactor|test|chore)/RSS-PZ-[0-9]+_[a-zA-Z0-9_-]+$",
+  "errorMsg": "Branch name must follow format: feat/RSS-PZ-01_featureName"
+}
