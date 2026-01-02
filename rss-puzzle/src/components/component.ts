@@ -1,8 +1,9 @@
 import { isNotNullable } from '../utils/isNotNullable';
 
+export type ElementFnProps<T extends HTMLElement = HTMLElement> = Omit<Props<T>, 'tag'>;
+export type Props<T extends HTMLElement = HTMLElement> = ComponentProps & ElementProps<T>;
 type ComponentProps = { tag?: keyof HTMLElementTagNameMap; text?: string };
 type ElementProps<T extends HTMLElement> = Partial<Omit<T, 'style' | 'dataset' | 'classList' | 'children' | 'tagName'>>;
-export type Props<T extends HTMLElement = HTMLElement> = ComponentProps & ElementProps<T>;
 
 export class Component<T extends HTMLElement = HTMLElement> {
   protected node: T;
