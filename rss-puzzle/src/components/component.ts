@@ -15,7 +15,9 @@ export class Component<T extends HTMLElement = HTMLElement> {
   constructor(props: Props<T>, ...children: (Component | HTMLElement | null)[]) {
     const { text, tag, ...rest } = props;
     this.node = document.createElement(tag || 'div') as T;
+
     if (text !== undefined) this.node.textContent = text;
+
     Object.assign(this.node, rest);
     this.appendChildren(children.filter(isNotNullable));
   }
@@ -28,6 +30,7 @@ export class Component<T extends HTMLElement = HTMLElement> {
     if (this.destroyed) {
       throw new Error('Cannot mount a destroyed component.');
     }
+
     if (!this.mounted) {
       parent.append(this.node);
       this.mounted = true;
@@ -47,10 +50,11 @@ export class Component<T extends HTMLElement = HTMLElement> {
 
   public destroy(): void {
     if (this.destroyed) return;
+
     this.destroyed = true;
     this.unmount();
     this.destroyAllChildren();
-    // this.node.remove();
+    this.node.remove();
   }
 
   // -- CHILDREN
